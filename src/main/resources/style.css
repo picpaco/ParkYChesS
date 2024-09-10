@@ -1,0 +1,13 @@
+.dark-square-color { -fx-background-color: #A97A65; }
+.light-square-color { -fx-background-color: #F1D9C0; }
+.top-color { -fx-background-color: #EB8274; }
+.left-color { -fx-background-color: #84CA7B; }
+.bottom-color { -fx-background-color: #CBAFED; }
+.right-color { -fx-background-color: #EDE9AF; }
+.center-color { -fx-background-color: #74B4EB; }
+.root-color { -fx-background-color: #DDBEA9; }
+.alpha-label-grid-color { -fx-background-color: #00FF00; }
+.left-numeric-label-grid-color { -fx-background-color: #FF0000; }
+.move-to-white { -fx-background-color: #FFFFFF; }
+.move-to-black { -fx-background-color: #000000; }
+.scene-background-color { -fx-background-color: #00FF00; }
