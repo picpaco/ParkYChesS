@@ -347,4 +347,8 @@ public class ChessGame {
     public void setNumberOfHalfMovesSinceLastCaptureOrPawnMove(int numberOfHalfMovesSinceLastCaptureOrPawnMove) {
         this.numberOfHalfMovesSinceLastCaptureOrPawnMove = numberOfHalfMovesSinceLastCaptureOrPawnMove;
     }
+
+    public List<Move> generateMoves() {
+        return  (List<Move>) getLegalMovesForColor(currentPlayerColor);
+    }
 }

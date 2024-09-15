@@ -2,6 +2,7 @@ package com.marcopiccionitraining.parkychess;
 
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.PieceName;
+import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
@@ -10,11 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Component("objectFactory")
 public class ObjectFactory {
-
     private static final HashMap<PieceName, String> blackPiecesImagePaths = new HashMap<>();
     private static final HashMap<PieceName, String> whitePiecesImagePaths = new HashMap<>();
     private static final String IMG_DIR = "";

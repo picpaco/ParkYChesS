@@ -53,11 +53,10 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     private final HashMap<Position, Move> movesCache = new HashMap<>();
     private final Rectangle[][] highlights = new Rectangle[64][64];
     private Board chessboard;
-    @Autowired
     private ObjectFactory objectFactory;
     private ChessGame gameState;
     private Position selectedPos = null;
- //   private final Logger LOGGER = LoggerFactory.getLogger(StageListener.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(StageListener.class);
 
     public StageListener (@Value("${spring.application.ui.title}") String applicationTitle,
                        //   @Value("${spring.application.ui.main.window.width}") String applicationWindowWidth,
@@ -66,16 +65,13 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                           @Value("classpath:ui.fxml") Resource fxmlUIResource,
                           ApplicationContext applicationContext){
         if (executeTestsOnly) {
-   //         LOGGER.trace("Executing StageListener (Tests only)...");
-      //      this.applicationTitle = applicationTitle;
-      //      this.fxmlUI = fxmlUIResource;
-      //      this.applicationContext = applicationContext;
-       //     chessboard = new Board();
+            LOGGER.info("Executing StageListener (Tests only)...");
         } else {
      //       LOGGER.trace("Executing StageListener (GUI app)...");
             this.applicationTitle = applicationTitle;
             this.fxmlUI = fxmlUIResource;
             this.applicationContext = applicationContext;
+            objectFactory = applicationContext.getBean(ObjectFactory.class);
             chessboard = new Board();
             gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         }

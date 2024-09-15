@@ -1,446 +1,97 @@
-2024-09-10 11:16:40 [main] INFO  c.m.p.BishopTests.logStarting - Starting BishopTests using Java 22.0.1 with PID 82869 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 11:16:40 [main] INFO  c.m.p.BishopTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 11:16:40 [main] INFO  c.m.p.BishopTests.logStarted - Started BishopTests in 0.394 seconds (process running for 1.038)
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth0 - MoveGeneratorStatistics: 
-numberOfLeafNodes=1
-moves map: {}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1g1=1, h2h3=1, h2h4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1g1=1, h1g2=1, h2h3=1, h2h4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=4
-moves map: {h1g1=1, h1g2=1, h2h3=1, h2h4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=3}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=3, h2h4=3}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1g1=3, h2h3=3, h2h4=3}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1g1=3, h1g2=3, h2h3=3, h2h4=3}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=12
-moves map: {h1g1=3, h1g2=3, h2h3=3, h2h4=3}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=5
-moves map: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, a2a3=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=5, a2a3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, a2a4=5, a2a3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, a2a4=5, a2a3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, h1g2=5, a2a4=5, a2a3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=25
-moves map: {h1h2=5, h1g1=5, h1g2=5, a2a4=5, a2a3=5}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {b2b3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {b2b3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, b2b3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, b2b3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, b2b3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=5
-moves map: {h1h2=1, h1g1=1, h1g2=1, b2b3=1, b2b4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {b2b3=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {b2b3=5, b2b4=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, b2b3=5, b2b4=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, b2b3=5, b2b4=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, h1g2=5, b2b3=5, b2b4=5}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=25
-moves map: {h1h2=5, h1g1=5, h1g2=5, b2b3=5, b2b4=5}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.twoBlackTwoWhitePawnsAllAtHomeDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=7
-moves map: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, a2a3=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, b2b3=7, a2a3=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, h1g1=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, h1g1=7, h1g2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.twoBlackTwoWhitePawnsAllAtHomeDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=49
-moves map: {h1h2=7, h1g1=7, h1g2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, d2d3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, d2d3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, d2d3=1, e2e3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=16, a2a3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=16, b2b3=16, a2a3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=16, b2b3=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=16, a2a4=16, b2b3=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=16, d2d3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=16, c2c3=16, d2d3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=16, c2c3=16, d2d3=16, e2e3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f4=16, f2f3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16, d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f4=16, f2f3=16, g2g3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16, d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f4=16, f2f3=16, g2g4=16, g2g3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16, d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f4=16, f2f3=16, g2g4=16, g2g3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=16, h2h4=16, a2a4=16, b2b3=16, c2c4=16, a2a3=16, b2b4=16, d2d4=16, c2c3=16, e2e4=16, d2d3=16, e2e3=16, f2f4=16, f2f3=16, g2g4=16, g2g3=16}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a3=288}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=304, a2a3=288}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=304, b2b3=272, a2a3=288}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=304, b2b3=272, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=320, a2a4=304, b2b3=272, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=320, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=320, d2d3=351, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=368, c2c3=320, d2d3=351, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=368, c2c3=320, d2d3=351, e2e3=399, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f3=288, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f4=289, f2f3=288, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273, d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f4=289, f2f3=288, g2g3=272}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273, d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f4=289, f2f3=288, g2g4=273, g2g3=272}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=288, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273, d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f4=289, f2f3=288, g2g4=273, g2g3=272}
-2024-09-10 11:16:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=288, h2h4=304, a2a4=304, b2b3=272, c2c4=321, a2a3=288, b2b4=273, d2d4=368, c2c3=320, e2e4=400, d2d3=351, e2e3=399, f2f4=289, f2f3=288, g2g4=273, g2g3=272}
-2024-09-10 11:16:42 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a3=5636}
-2024-09-10 11:16:42 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=5932, a2a3=5636}
-2024-09-10 11:16:42 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=5932, b2b3=5321, a2a3=5636}
-2024-09-10 11:16:43 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=5932, b2b3=5321, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:43 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=6199, a2a4=5932, b2b3=5321, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:43 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=6199, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:44 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=6199, d2d3=6842, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:44 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=7183, c2c3=6199, d2d3=6842, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:45 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=7183, c2c3=6199, d2d3=6842, e2e3=7649, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:45 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f3=5636, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f4=5657, f2f3=5636, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316}
-2024-09-10 11:16:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316, d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f4=5657, f2f3=5636, g2g3=5321}
-2024-09-10 11:16:47 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316, d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f4=5657, f2f3=5636, g2g4=5312, g2g3=5321}
-2024-09-10 11:16:47 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=5636, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316, d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f4=5657, f2f3=5636, g2g4=5312, g2g3=5321}
-2024-09-10 11:16:47 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=5636, h2h4=5932, a2a4=5932, b2b3=5321, c2c4=6220, a2a3=5636, b2b4=5316, d2d4=7183, c2c3=6199, e2e4=7672, d2d3=6842, e2e3=7649, f2f4=5657, f2f3=5636, g2g4=5312, g2g3=5321}
-2024-09-10 11:16:54 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a3=117524}
-2024-09-10 11:17:02 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=130235, a2a3=117524}
-2024-09-10 11:17:09 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=130235, b2b3=108214, a2a3=117524}
-2024-09-10 11:17:15 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=130235, b2b3=108214, a2a3=117524, b2b4=108937}
-2024-09-10 11:17:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=146076, a2a4=130235, b2b3=108214, a2a3=117524, b2b4=108937}
-2024-09-10 11:17:33 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=146076, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:17:43 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=146076, d2d3=161398, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:17:56 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=182285, c2c3=146076, d2d3=161398, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:18:10 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=182285, c2c3=146076, d2d3=161398, e2e3=206510, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:18:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:18:31 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f3=117947, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:18:38 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f4=119343, f2f3=117947, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937}
-2024-09-10 11:18:44 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937, d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f4=119343, f2f3=117947, g2g3=109607}
-2024-09-10 11:18:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937, d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f4=119343, f2f3=117947, g2g4=107424, g2g3=109607}
-2024-09-10 11:18:58 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=117524, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937, d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f4=119343, f2f3=117947, g2g4=107424, g2g3=109607}
-2024-09-10 11:19:06 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=117524, h2h4=130954, a2a4=130235, b2b3=108214, c2c4=144509, a2a3=117524, b2b4=108937, d2d4=182285, c2c3=146076, e2e4=208523, d2d3=161398, e2e3=206510, f2f4=119343, f2f3=117947, g2g4=107424, g2g3=109607}
-2024-09-10 13:40:44 [main] INFO  c.m.p.KnightTests.logStarting - Starting KnightTests using Java 22.0.1 with PID 83474 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 13:40:44 [main] INFO  c.m.p.KnightTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 13:40:45 [main] INFO  c.m.p.KnightTests.logStarted - Started KnightTests in 0.4 seconds (process running for 0.911)
-2024-09-10 14:32:28 [main] INFO  c.m.p.KnightTests.logStarting - Starting KnightTests using Java 22.0.1 with PID 83716 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 14:32:28 [main] INFO  c.m.p.KnightTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 14:32:28 [main] INFO  c.m.p.KnightTests.logStarted - Started KnightTests in 0.402 seconds (process running for 0.916)
-2024-09-10 14:32:50 [main] INFO  c.m.p.KnightTests.logStarting - Starting KnightTests using Java 22.0.1 with PID 83719 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 14:32:50 [main] INFO  c.m.p.KnightTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 14:32:50 [main] INFO  c.m.p.KnightTests.logStarted - Started KnightTests in 0.396 seconds (process running for 0.903)
-2024-09-10 14:33:06 [main] INFO  c.m.p.BishopTests.logStarting - Starting BishopTests using Java 22.0.1 with PID 83722 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 14:33:06 [main] INFO  c.m.p.BishopTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 14:33:06 [main] INFO  c.m.p.BishopTests.logStarted - Started BishopTests in 0.385 seconds (process running for 0.938)
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth0 - MoveGeneratorStatistics: 
-numberOfLeafNodes=1
-moves map: {}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1g1=1, h2h3=1, h2h4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1g1=1, h1g2=1, h2h3=1, h2h4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=4
-moves map: {h1g1=1, h1g2=1, h2h3=1, h2h4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=3}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=3, h2h4=3}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1g1=3, h2h3=3, h2h4=3}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1g1=3, h1g2=3, h2h3=3, h2h4=3}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.numberOfMovesAtSimplestPlayablePositionDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=12
-moves map: {h1g1=3, h1g2=3, h2h3=3, h2h4=3}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=5
-moves map: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, a2a3=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=5, a2a3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, a2a4=5, a2a3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, a2a4=5, a2a3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, h1g2=5, a2a4=5, a2a3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=25
-moves map: {h1h2=5, h1g1=5, h1g2=5, a2a4=5, a2a3=5}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {b2b3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {b2b3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, b2b3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, b2b3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, b2b3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=5
-moves map: {h1h2=1, h1g1=1, h1g2=1, b2b3=1, b2b4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {b2b3=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {b2b3=5, b2b4=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, b2b3=5, b2b4=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, b2b3=5, b2b4=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=5, h1g1=5, h1g2=5, b2b3=5, b2b4=5}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=25
-moves map: {h1h2=5, h1g1=5, h1g2=5, b2b3=5, b2b4=5}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.twoBlackTwoWhitePawnsAllAtHomeDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=7
-moves map: {h1h2=1, h1g1=1, h1g2=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, a2a3=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, b2b3=7, a2a3=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, h1g1=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h1h2=7, h1g1=7, h1g2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.twoBlackTwoWhitePawnsAllAtHomeDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=49
-moves map: {h1h2=7, h1g1=7, h1g2=7, a2a4=7, b2b3=7, a2a3=7, b2b4=7}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, a2a4=1, b2b3=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {c2c3=1, d2d3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, d2d3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, d2d3=1, e2e3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, b1c3=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, b1a3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, b1c3=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, b1a3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, b1c3=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1, g1h3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 1: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, b1a3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, b1c3=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1, g1f3=1, g1h3=1}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth1 - MoveGeneratorStatistics: 
-numberOfLeafNodes=20
-moves map: {h2h3=1, h2h4=1, a2a4=1, b2b3=1, b1a3=1, c2c4=1, a2a3=1, b2b4=1, d2d4=1, c2c3=1, e2e4=1, b1c3=1, d2d3=1, e2e3=1, f2f4=1, f2f3=1, g2g4=1, g2g3=1, g1f3=1, g1h3=1}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=20, a2a3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=20, b2b3=20, a2a3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=20, b2b3=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=20, a2a4=20, b2b3=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {c2c3=20, d2d3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=20, c2c3=20, d2d3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=20, c2c3=20, d2d3=20, e2e3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, b1c3=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, b1a3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, b1c3=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, b1a3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, b1c3=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20, g1h3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 2: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, b1a3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, b1c3=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20, g1f3=20, g1h3=20}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth2 - MoveGeneratorStatistics: 
-numberOfLeafNodes=400
-moves map: {h2h3=20, h2h4=20, a2a4=20, b2b3=20, b1a3=20, c2c4=20, a2a3=20, b2b4=20, d2d4=20, c2c3=20, e2e4=20, b1c3=20, d2d3=20, e2e3=20, f2f4=20, f2f3=20, g2g4=20, g2g3=20, g1f3=20, g1h3=20}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a3=380}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=420, a2a3=380}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=420, b2b3=420, a2a3=380}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=420, b2b3=420, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=420, a2a4=420, b2b3=420, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=420, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {c2c3=420, d2d3=539, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=560, c2c3=420, d2d3=539, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=560, c2c3=420, d2d3=539, e2e3=599, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f3=380, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f4=401, f2f3=380, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421}
-2024-09-10 14:33:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, b1c3=440, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, b1a3=400, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, b1c3=440, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, b1a3=400, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, b1c3=440, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420, g1h3=400}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 3: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, b1a3=400, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, b1c3=440, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420, g1f3=440, g1h3=400}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth3 - MoveGeneratorStatistics: 
-numberOfLeafNodes=8902
-moves map: {h2h3=380, h2h4=420, a2a4=420, b2b3=420, b1a3=400, c2c4=441, a2a3=380, b2b4=421, d2d4=560, c2c3=420, e2e4=600, b1c3=440, d2d3=539, e2e3=599, f2f4=401, f2f3=380, g2g4=421, g2g3=420, g1f3=440, g1h3=400}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:08 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a3=8457}
-2024-09-10 14:33:09 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, a2a3=8457}
-2024-09-10 14:33:09 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457}
-2024-09-10 14:33:10 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:13 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:14 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:14 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:15 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:15 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-10 14:33:16 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g3=9345}
-2024-09-10 14:33:17 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-10 14:33:17 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-10 14:33:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-10 14:33:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-10 14:33:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-10 14:33:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1h3=8881}
-2024-09-10 14:33:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748, g1h3=8881}
-2024-09-10 14:33:20 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth4 - MoveGeneratorStatistics: 
+2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStarting - Starting KnightTests using Java 22.0.1 with PID 23799 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:05:41 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStarted - Started KnightTests in 0.387 seconds (process running for 0.874)
+2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23811 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:06:16 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.427 seconds (process running for 0.94)
+2024-09-14 08:06:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a3=8457}
+2024-09-14 08:06:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, a2a3=8457}
+2024-09-14 08:06:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457}
+2024-09-14 08:06:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:21 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:22 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:23 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:23 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
+2024-09-14 08:06:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g3=9345}
+2024-09-14 08:06:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
+2024-09-14 08:06:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
+2024-09-14 08:06:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
+2024-09-14 08:06:27 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
+2024-09-14 08:06:28 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
+2024-09-14 08:06:28 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748}
+2024-09-14 08:06:29 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748, g1h3=8881}
+2024-09-14 08:06:29 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAtInitialPositionDepth4 - MoveGeneratorStatistics: 
 numberOfLeafNodes=197281
 moves map: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748, g1h3=8881}
 numberOfCaptures=0, numberOfEnPassantCaptures=0,
 numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
 numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:33:31 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a3=181046}
-2024-09-10 14:33:45 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, a2a3=181046}
-2024-09-10 14:33:58 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046}
-2024-09-10 14:34:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-10 14:34:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-10 14:34:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:35:03 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:35:31 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:36:00 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:36:31 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:36:41 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:36:53 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:37:07 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g3=217210}
-2024-09-10 14:37:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:37:31 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:37:45 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:38:00 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:38:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:38:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1h3=198502}
-2024-09-10 14:38:39 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
-2024-09-10 14:38:39 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth5 - MoveGeneratorStatistics: 
+2024-09-14 08:06:47 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23819 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:06:47 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:06:48 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:06:48 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.414 seconds (process running for 0.905)
+2024-09-14 08:06:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a3=181046}
+2024-09-14 08:07:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, a2a3=181046}
+2024-09-14 08:07:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046}
+2024-09-14 08:07:38 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
+2024-09-14 08:07:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
+2024-09-14 08:08:06 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:08:27 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:08:52 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:09:21 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:09:49 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:09:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:10:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
+2024-09-14 08:10:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g3=217210}
+2024-09-14 08:10:37 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
+2024-09-14 08:10:47 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
+2024-09-14 08:11:00 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
+2024-09-14 08:11:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
+2024-09-14 08:11:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
+2024-09-14 08:11:40 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491}
+2024-09-14 08:11:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
+2024-09-14 08:11:51 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAtInitialPositionDepth5 - MoveGeneratorStatistics: 
 numberOfLeafNodes=4865609
 moves map: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
 numberOfCaptures=0, numberOfEnPassantCaptures=0,
 numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
 numberOfCastles=0, numberOfPromotions=0}
-2024-09-10 14:40:32 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 83762 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-10 14:40:32 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-10 14:40:32 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.429 seconds (process running for 1.847)
-2024-09-10 14:40:45 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a3=181046}
-2024-09-10 14:40:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, a2a3=181046}
-2024-09-10 14:41:13 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046}
-2024-09-10 14:41:27 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-10 14:41:43 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-10 14:41:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:42:23 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:42:50 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:43:22 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:43:54 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:44:05 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:44:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-10 14:44:32 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g3=217210}
-2024-09-10 14:44:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:44:57 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:45:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:45:28 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:45:42 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-10 14:45:55 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1h3=198502}
-2024-09-10 14:46:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
-2024-09-10 14:46:11 [main] INFO  c.m.parkychess.PerftTests.numberOfPositionsAtInitialPositionDepth5 - MoveGeneratorStatistics: 
-numberOfLeafNodes=4865609
-moves map: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
+2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStarting - Starting BishopTests using Java 22.0.1 with PID 23865 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:24 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStarted - Started BishopTests in 0.418 seconds (process running for 0.901)
+2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStarting - Starting FENTests using Java 22.0.1 with PID 23873 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:31 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStarted - Started FENTests in 0.417 seconds (process running for 0.934)
+2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStarting - Starting KingTests using Java 22.0.1 with PID 23883 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:38 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStarted - Started KingTests in 0.383 seconds (process running for 0.889)
+2024-09-14 08:18:45 [main] INFO  c.m.parkychess.PawnTests.logStarting - Starting PawnTests using Java 22.0.1 with PID 23890 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:45 [main] INFO  c.m.parkychess.PawnTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:46 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:46 [main] INFO  c.m.parkychess.PawnTests.logStarted - Started PawnTests in 0.383 seconds (process running for 0.874)
+2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStarting - Starting QueenTests using Java 22.0.1 with PID 23897 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:53 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStarted - Started QueenTests in 0.383 seconds (process running for 0.878)
+2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStarting - Starting RookTests using Java 22.0.1 with PID 23904 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:18:59 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStarted - Started RookTests in 0.398 seconds (process running for 0.896)
+2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23911 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-14 08:19:09 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.377 seconds (process running for 0.855)
+2024-09-14 08:23:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a3=4463267}
+2024-09-14 08:29:22 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, a2a3=4463267}
+2024-09-14 08:35:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, b2b3=5310358, a2a3=4463267}
+2024-09-14 08:49:40 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, b2b3=5310358, a2a3=4463267, b2b4=5293555}
+2024-09-14 09:20:02 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {c2c3=5417640, a2a4=5363555, b2b3=5310358, a2a3=4463267, b2b4=5293555}

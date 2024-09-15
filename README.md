@@ -1,37 +1,20 @@
 An attempt at programming a chess bot using JavaFX integrated within the Spring framework.
 
-To compile the app (Linux/Mac): 
-javac --module-path <path_to_JDK_FX/lib> --add-modules javafx.controls,javafx.fxml,javafx.base com.marcopiccionitraining.javaspringfx.BootifulFxApplication.java  
-
-To launch the app: Linux/Mac):
-java --module-path <path_to_JDK_FX/lib> --add-modules javafx.controls,javafx.fxml,javafx.base com.marcopiccionitraining.javaspringfx.BootifulFxApplication
-
-Stockfish basic command line commands;
-To input a FEN position in stockfish: position fen <FENposition>
-To display the chessboard: d
-To compute the moves at depth n in a previously entered position: go perft <n>
-
-Progress Log
-2023-4-4: Now the GUI behaves reasonably well when resizing the app main window. 
-GUI is made of:
-- a chessboard;
-- a text field to input positions in fen format;
-- a button to load a position from a .fen file;
-- clickable piece figurines to set up a position;
-- clear board button;
-- flip board button;
-- initial position button;
-2024
-Programming tasks
-1. Chessboard representation
-   1.1 Object-oriented representation
-   1.2 Bitboard representation
-   2. Moves generation (depth 1, current color, no metadata)
-      2.1 King moves generation
-         A king cannot move to tiles controlled by enemy pieces or occupied by friendly pieces.
-         A king cannot be captured.
-      2.1.1 Exit generation if checkmate
-      2.1.2 Exit generation if stalemate
+# Progress Log
+2024-9-10: The GUI allows two humans to play a game of chess according to the rules.
+There is a legal moves generator that to generate all moves at depth 5 takes 5m:25s (uses Perft).
+I'll try to improve on this, ideally < 1s.
+2024-9-12
+# Programming tasks
+## Chessboard representation
+### Object-oriented representation
+### Bitboard representation
+## Moves generation (depth 1, current color, no metadata)
+### King moves generation
+A king cannot move to tiles controlled by enemy pieces or occupied by friendly pieces.
+A king cannot be captured.
+Exit generation if checkmate
+Exit generation if stalemate
       2.1.3 Restrict number of moves if in double check
       2.1.4 Restrict number of moves if in check
       2.1.5 Discovered checks and pins

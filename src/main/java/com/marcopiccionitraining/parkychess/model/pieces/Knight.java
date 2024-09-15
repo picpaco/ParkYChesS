@@ -1,23 +1,27 @@
 package com.marcopiccionitraining.parkychess.model.pieces;
 
+import com.marcopiccionitraining.parkychess.ObjectFactory;
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 public class Knight extends Piece {
-  //  private final Logger LOGGER = LoggerFactory.getLogger(Knight.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(Knight.class);
 
     public Knight(PlayerColor playerColor){
         super(playerColor);
         setName(PieceName.KNIGHT);
     }
-   // private Collection<Optional<Position>> getPotentialDestinationPositions(Position from){
+
+    // private Collection<Optional<Position>> getPotentialDestinationPositions(Position from){
     private Collection<Position> getPotentialDestinationPositions(Position from){
     //    LOGGER.trace("Entering getPotentialDestinationPositions (from = {}", from);
       //  Collection<Optional<Position>> allJumpSquares = new ArrayList<>();
@@ -108,16 +112,20 @@ public class Knight extends Piece {
     //    LOGGER.trace("Entering getLegalDestinationPositions, from = {} chessboard)", from);
         //Collection<Optional<Position>> tiles = new ArrayList<>();
         Collection<Position> tiles = new ArrayList<>();
-        for (Position position : getPotentialDestinationPositions(from)) {
+        for (Position position : chessboard.getPotentialKnightDestinations(from)) {
+   //     for (Position position : getPotentialDestinationPositions(from)) {
            // for (Optional<Position> position : getPotentialDestinationPositions(from)) {
-            if (position != null && !(chessboard.isInside((position)))){
-                continue;
-            }
-            if (position != null && chessboard.isEmpty(position)){
+         //   if (position != null && !(chessboard.isInside((position)))){
+         //       continue;
+         //   }
+        //    assert position != null;
+            if (chessboard.isEmpty(position)){
+              //  if (position != null && chessboard.isEmpty(position)){
                 tiles.add(position);
                 continue;
             }
-            if (position != null && !(chessboard.getPiece(position).getColor().equals(getColor()))){
+            if (!(chessboard.getPiece(position).getColor().equals(getColor()))){
+            //    if (position != null && !(chessboard.getPiece(position).getColor().equals(getColor()))){
                 tiles.add(position);
             }
        /*     if (position.isPresent() && !(chessboard.isInside(position.get()))) {

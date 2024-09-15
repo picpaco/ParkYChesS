@@ -6,7 +6,9 @@ import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.Knight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,10 +18,28 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class KnightTests {
     private Board chessboard;
+    @Autowired
+    private ObjectFactory factory;
 
     @BeforeEach
     void setup(){
         chessboard = new Board();
+    }
+
+    @Test
+    void contextLoaded(){
+        assertNotNull(factory, "Object factory should not be null");
+    }
+
+    @Test
+    void whiteKnightInACornerInitializedUsingCache(){
+        Knight knight = new Knight(PlayerColor.WHITE);
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2)  );
+        destinations.add(new Position(2, 1)  );
+        assertTrue(chessboard.getPotentialKnightDestinations(new Position(0,0)).containsAll(destinations) &&
+                destinations.containsAll(chessboard.getPotentialKnightDestinations(new Position(0,0))),
+                "The content of the potential destinations lists should be the same.");
     }
     @Test
     void blackKnightAtG8StartingPosition() {
@@ -52,7 +72,6 @@ public class KnightTests {
     @Test
     void whiteKnightAtB1StartingPosition() {
         ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
-        assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(7, 1)).size());
         Collection<Move> knightLegalMoves = new ArrayList<>();
         knightLegalMoves.add(new StandardMove(new Position(7, 1), new Position(5, 0)));
         knightLegalMoves.add(new StandardMove(new Position(7, 1), new Position(5, 2)));
