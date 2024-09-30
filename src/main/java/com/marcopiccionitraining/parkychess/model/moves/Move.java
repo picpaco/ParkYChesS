@@ -4,29 +4,21 @@ import com.marcopiccionitraining.parkychess.model.Board;
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.Command;
 import com.marcopiccionitraining.parkychess.model.Position;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+@Getter
 public abstract class Move implements Command {
     private Position from;
     private Position to;
     private MoveNames name;
  //   private final Logger LOGGER = LoggerFactory.getLogger(Move.class);
 
-    public MoveNames getName(){
-        return name;
-    }
     void setName (MoveNames name){
         this.name = name;
-    }
-    public Position getFrom () {
-        return from;
-    }
-
-    public Position getTo() {
-        return to;
     }
 
     void setFrom (Position from) {

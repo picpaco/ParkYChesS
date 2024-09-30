@@ -118,19 +118,19 @@ public class PerftTests {
         LOGGER.info(stats.toString());
     }
 
-/*    @Test
-    void perft2NumberOfPositionsAtInitialPositionDepth1() {
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth1() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
-        long result = perft2(1, 1, stats);
+        long result = bulkPerft(1);
         assertEquals(20, result, "From the initial position there are 20 possible legal moves at depth 1");
     }
 
     @Test
-    void perft3NumberOfPositionsAtInitialPositionDepth1() {
+    void perftLegalMovesNumberOfPositionsAtInitialPositionDepth1() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
-        long result = perft3(1);
+        long result = perftLegalMoves(1);
         assertEquals(20, result, "From the initial position there are 20 possible legal moves at depth 1");
-    }*/
+    }
 
     @Test
     void perftNumberOfPositionsAtInitialPositionDepth2() {
@@ -141,12 +141,18 @@ public class PerftTests {
         LOGGER.info(stats.toString());
     }
 
-/*@Test
-    void perft2NumberOfPositionsAtInitialPositionDepth2() {
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth2() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
-        long result = perft2(2, 2, stats);
+        long result = bulkPerft(2);
         assertEquals(400, result, "From the initial position there are 400 possible legal moves at depth 2");
-    }*/
+    }
+    @Test
+    void legalMovesPerftNumberOfPositionsAtInitialPositionDepth2() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        long result = perftLegalMoves(2);
+        assertEquals(400, result, "From the initial position there are 400 possible legal moves at depth 2");
+    }
 
     @Test
     void perftNumberOfPositionsAtInitialPositionDepth3() {
@@ -157,67 +163,104 @@ public class PerftTests {
         LOGGER.info(stats.toString());
     }
 
-   /* @Test
-    void perft2NumberOfPositionsAtInitialPositionDepth3() {
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth3() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
-        long result = perft2(3, 3, stats);
+        long result = bulkPerft(3);
         assertEquals(8902, result, "From the initial position there are 8902 possible legal moves at depth 3");
-    }*/
+    }
 
     @Test
     void perftNumberOfPositionsAtInitialPositionDepth4() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         long result = perft(4, 4, stats);
-        assertEquals(197281, result, "From the initial position there are 197281 possible positions at depth 4");
+        assertEquals(197_281L, result, "From the initial position there are 197_281 possible positions at depth 4");
         stats.setNumberOfLeaves(result);
         LOGGER.info(stats.toString());
-        //takes 12s
+        //takes 11s
     }
-
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth4() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        long result = bulkPerft(4);
+        assertEquals(197_281L, result, "From the initial position there are 197_281 possible legal moves at depth 3");
+        //takes 1.5s
+    }
     @Test
     void perftNumberOfPositionsAtInitialPositionDepth5() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         long result = perft(5, 5, stats);
-        assertEquals(4865609, result, "From the initial position there are 4865609 possible positions at depth 5");
         stats.setNumberOfLeaves(result);
-        LOGGER.info(stats.toString());
-        //takes 5m
+        LOGGER.info(stats.getMovesMap().toString());
+        assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible positions at depth 5");
+        //   LOGGER.info(stats.toString());
+        //takes 4m51s
     }
 
     @Test
+    void perftNumberOfPositionsAfterE3() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_POSITION_AFTER_E3));
+        long result = perft(4, 4, stats);
+        stats.setNumberOfLeaves(result);
+        LOGGER.info(stats.getMovesMap().toString());
+        assertEquals(402_988L, result, "From the initial position there are 402_988 possible positions at depth 4");
+    }
+
+    @Test
+    void perftNumberOfPositionsAfterE3_D6() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_POSITION_AFTER_E3_D6));
+        long result = perft(3, 3, stats);
+        stats.setNumberOfLeaves(result);
+        LOGGER.info(stats.getMovesMap().toString());
+        assertEquals(23_960L, result, "From the initial position there are 23_960L possible positions at depth 3");
+    }
+
+    @Test
+    void perftNumberOfPositionsAfterE3_D6_Bb5() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_POSITION_AFTER_E3_D6_BB5));
+        long result = perft(2, 2, stats);
+        stats.setNumberOfLeaves(result);
+        LOGGER.info(stats.getMovesMap().toString());
+        assertEquals(168, result, "From the initial position there are 168 possible positions at depth 2");
+    }
+
+    @Test
+    void perftNumberOfPositionsAfterE3_D6_Bb5_Bd7() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_POSITION_AFTER_E3_D6_BB5_BD7));
+        long result = perft(1, 1, stats);
+        stats.setNumberOfLeaves(result);
+        LOGGER.info(stats.getMovesMap().toString());
+        assertEquals(34, result, "From the initial position there are 34 possible positions at depth 1");
+    }
+
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth5() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        long result = bulkPerft(5);
+        assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible legal moves at depth 5");
+        //takes 19s
+    }
+    @Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth6() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        long result = bulkPerft(6);
+        assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
+        //takes 8m26s
+    }
+    //@Test
     void perftNumberOfPositionsAtInitialPositionDepth6() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         long result = perft(6, 6, stats);
-        assertEquals(119060324, result, "From the initial position there are 119060324 possible positions at depth 6");
-        //  stats.setNumberOfLeaves(result);
-        //  LOGGER.info(stats.toString());
+        assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible positions at depth 6");
         //takes too long > 24h
-        /*
-Stockfish 15:
-a2a3: 4463267
-b2b3: 5310358
-c2c3: 5417640
-d2d3: 8073082
-e2e3: 9726018
-f2f3: 4404141
-g2g3: 5346260
-h2h3: 4463070
-a2a4: 5363555
-b2b4: 5293555
-c2c4: 5866666
-d2d4: 8879566
-e2e4: 9771632
-f2f4: 4890429
-g2g4: 5239875
-h2h4: 5385554
-b1a3: 4856835
-b1c3: 5708064
-g1f3: 5723523
-g1h3: 4877234
-Nodes searched: 119060324
-*/
     }
-
+    //@Test
+    void bulkPerftNumberOfPositionsAtInitialPositionDepth7() {
+        gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        long result = bulkPerft(7);
+        assertEquals(3_195_901_860L, result, "From the initial position there are 3_195_901_860 possible legal moves at depth 3");
+        //takes too long > 12h
+    }
     /**
      * Compare the result of this function applied to your moves generator to the
      * established results at the various depths.
@@ -245,67 +288,60 @@ Nodes searched: 119060324
             totalNumberOfPositions = totalNumberOfPositions + numberOfNodesFromPosition;
             //     LOGGER.debug("Back to depth {}", currentDepth);
             //   stats.addNumberOfCapturesPerDepth(currentDepth, stats.getNumberOfCaptures());
-            //stats.addMoveNodes(moves.get(i).getKey(), stats.getNumberOfDepthRelatedLeaves(currentDepth));
+            //stats.addMoveNodes(move.toString(), numberOfNodesFromPosition);//stats.getNumberOfDepthRelatedLeaves(currentDepth));
             //      LOGGER.debug("{} will now undo move {}: {} at depth {}", gameState.getCurrentColor(), i,
             //            movesList.get(i), currentDepth);
             gameState.undo(move);
             if (startingDepth == currentDepth) {
                 stats.addMoveNodes(move.toString(), numberOfNodesFromPosition);
                 //       LOGGER.info("Number of captures at depth " + currentDepth + ": " + stats.getNumberOfCaptures());
-                LOGGER.info("Moves map for {} at depth {}: {}", gameState.getCurrentColor(), currentDepth, stats.getMovesMap());
+                //LOGGER.info("Moves map for {} at depth {}: {}", gameState.getCurrentColor(), currentDepth, stats.getMovesMap());
                 //       LOGGER.info("Number of checks at depth " + currentDepth + ": " + stats.getNumberOfChecks());
-                //        LOGGER.info("moves map at depth " + currentDepth + ": " + stats.getMovesMap());
             }
         }
-        stats.resetNumberOfCapturesAtDepth(currentDepth);
+        //stats.resetNumberOfCapturesAtDepth(currentDepth);
         gameState.switchCurrentPlayerColor();
         //    LOGGER.debug("Exiting perft at current depth: {}",currentDepth);
         return totalNumberOfPositions;
     }
-/*
-    private long perft2(int startingDepth, int currentDepth, MoveGeneratorStatistics stats) {
-        if (currentDepth == 0) {
-            gameState.switchCurrentPlayerColor();
-            return 1L;
-        }
-        List<Move> movesList = gameState.generateMoves();
+
+    private long bulkPerft (int depth) {
         long totalNumberOfPositions = 0;
-        long numberOfNodesFromPosition = 0;
+        List<Move> movesList = gameState.generateMoves();
+        long numberOfNodesFromPosition = movesList.size();
+        if (depth == 1) {
+            gameState.switchCurrentPlayerColor();
+            return numberOfNodesFromPosition;
+        }
+       // LOGGER.info("Depth: {}, {}: {}", depth, gameState.getCurrentColor().toString(), movesList);
         for (Move move : movesList) {
-            //     LOGGER.info("{} will now execute move: {} at depth {}", gameState.getCurrentColor(), move, depth);
             gameState.makeMove(move);
             gameState.switchCurrentPlayerColor();
-            if (!(chessboard.isInCheck(gameState.getCurrentColor()))) {
-                //     if (!(chessboard.isInCheck(PlayerColor.getOpponentColor(gameState.getCurrentColor())))) {
-                numberOfNodesFromPosition = perft2(startingDepth, currentDepth - 1, stats);
-                totalNumberOfPositions = totalNumberOfPositions + numberOfNodesFromPosition;
-            }
+            numberOfNodesFromPosition = bulkPerft(depth - 1);
+            totalNumberOfPositions += numberOfNodesFromPosition;
             gameState.undo(move);
-            if (startingDepth == currentDepth) {
-                stats.addMoveNodes(move.toString(), numberOfNodesFromPosition);
-                LOGGER.info("Moves map for {} at depth {}: {}", gameState.getCurrentColor(), currentDepth, stats.getMovesMap());
-            }
         }
         gameState.switchCurrentPlayerColor();
         return totalNumberOfPositions;
     }
 
-    public long perft3(int depth) {
-        long moveCount = 0;
+    public long perftLegalMoves(int depth) {
+        long nodes = 0;
         if (depth == 0) {
-            return moveCount;
+            gameState.switchCurrentPlayerColor();
+            return 1L;
         }
         List<Move> moves = gameState.generateMoves();
-        for (int i = 0; i < moves.size(); i++) {
-            gameState.makeMove(moves.get(i));
-         //   if (moves.get(i).isLegal(chessboard)) {
-                long subPerftMoveCount = perft3(depth - 1);
-                gameState.undo(moves.get(i));
-                moveCount += subPerftMoveCount;
-           // }
+        for (Move move : moves) {
+            LOGGER.info("About to check if move {} is legal", move);
+            if (move.isLegal(chessboard)) {
+                gameState.makeMove(move);
+                gameState.switchCurrentPlayerColor();
+                nodes += perftLegalMoves(depth - 1);
+                gameState.undo(move);
+            }
         }
-        return moveCount;
+        gameState.switchCurrentPlayerColor();
+        return nodes;
     }
-*/
 }
-

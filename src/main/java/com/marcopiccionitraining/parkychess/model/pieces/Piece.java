@@ -19,8 +19,17 @@ import java.util.Optional;
 public abstract class Piece {
 
     private final PlayerColor playerColor;
+    private boolean isChecker;
     private PieceName name;
  //   private final Logger LOGGER = LoggerFactory.getLogger(Piece.class);
+
+    public boolean isChecker() {
+        return isChecker;
+    }
+
+    public void setChecker(boolean checker) {
+        isChecker = checker;
+    }
 
     public PieceName getName() {
         return name;
@@ -71,8 +80,6 @@ public abstract class Piece {
         Collection<Position> positions = new ArrayList<>();
         for (Position position = from.stepTowardsDirection(direction); position != null && chessboard.isInside(position);
              position = position.stepTowardsDirection(direction)){
-        //    for (Optional<Position> position = from.stepTowardsDirection(direction); position.isPresent() && chessboard.isInside(position.get());
-        //         position = position.get().stepTowardsDirection(direction)){
             if (chessboard.isEmpty(position)){
                 positions.add(position);
                 continue;
@@ -93,7 +100,7 @@ public abstract class Piece {
         }
         return positions;
     }
-
+//TODO make it polymorphic: each piece implementation will invoke the ad hoc precomputed code.
     Collection<Position> positionsInDirections(Position from, Direction[] directions, Board chessboard){
         Collection<Position> tiles = new ArrayList<>();
         for (Direction direction : directions) {

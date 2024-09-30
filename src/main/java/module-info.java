@@ -8,6 +8,7 @@ module parkychess {
     requires spring.beans;
     requires spring.core;
     requires java.desktop;
+    requires static lombok;
     opens com.marcopiccionitraining.parkychess to spring.core, javafx.fxml;
     opens com.marcopiccionitraining.parkychess.controller to spring.core, javafx.fxml;
     exports com.marcopiccionitraining.parkychess to javafx.fxml, spring.core, spring.beans, spring.context, javafx.graphics;

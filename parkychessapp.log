@@ -1,97 +1,53 @@
-2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStarting - Starting KnightTests using Java 22.0.1 with PID 23799 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:05:41 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:05:41 [main] INFO  c.m.p.KnightTests.logStarted - Started KnightTests in 0.387 seconds (process running for 0.874)
-2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23811 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:06:16 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:06:16 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.427 seconds (process running for 0.94)
-2024-09-14 08:06:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a3=8457}
-2024-09-14 08:06:18 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, a2a3=8457}
-2024-09-14 08:06:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457}
-2024-09-14 08:06:19 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:20 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:21 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:22 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:23 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:23 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332}
-2024-09-14 08:06:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g3=9345}
-2024-09-14 08:06:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-14 08:06:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-14 08:06:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-14 08:06:27 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-14 08:06:28 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345}
-2024-09-14 08:06:28 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748}
-2024-09-14 08:06:29 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 4: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748, g1h3=8881}
-2024-09-14 08:06:29 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAtInitialPositionDepth4 - MoveGeneratorStatistics: 
-numberOfLeafNodes=197281
-moves map: {h2h3=8457, h2h4=9329, a2a4=9329, b2b3=9345, b1a3=8885, c2c4=9744, a2a3=8457, b2b4=9332, d2d4=12435, c2c3=9272, e2e4=13160, b1c3=9755, d2d3=11959, e2e3=13134, f2f4=8929, f2f3=8457, g2g4=9328, g2g3=9345, g1f3=9748, g1h3=8881}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-14 08:06:47 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23819 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:06:47 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:06:48 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:06:48 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.414 seconds (process running for 0.905)
-2024-09-14 08:06:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a3=181046}
-2024-09-14 08:07:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, a2a3=181046}
-2024-09-14 08:07:25 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046}
-2024-09-14 08:07:38 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-14 08:07:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, a2a3=181046, b2b4=216145}
-2024-09-14 08:08:06 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:08:27 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:08:52 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:09:21 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:09:49 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:09:59 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:10:11 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145}
-2024-09-14 08:10:24 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g3=217210}
-2024-09-14 08:10:37 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-14 08:10:47 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-14 08:11:00 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-14 08:11:12 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-14 08:11:26 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210}
-2024-09-14 08:11:40 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491}
-2024-09-14 08:11:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 5: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
-2024-09-14 08:11:51 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAtInitialPositionDepth5 - MoveGeneratorStatistics: 
-numberOfLeafNodes=4865609
-moves map: {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
-numberOfCaptures=0, numberOfEnPassantCaptures=0,
-numberOfChecks=0, numberOfDiscoveryChecks=0, numberOfDoubleChecks=0, numberOfCheckmates=0, numberOfStalemates=0,
-numberOfCastles=0, numberOfPromotions=0}
-2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStarting - Starting BishopTests using Java 22.0.1 with PID 23865 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:24 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:24 [main] INFO  c.m.p.BishopTests.logStarted - Started BishopTests in 0.418 seconds (process running for 0.901)
-2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStarting - Starting FENTests using Java 22.0.1 with PID 23873 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:31 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:31 [main] INFO  c.m.parkychess.FENTests.logStarted - Started FENTests in 0.417 seconds (process running for 0.934)
-2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStarting - Starting KingTests using Java 22.0.1 with PID 23883 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:38 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:38 [main] INFO  c.m.parkychess.KingTests.logStarted - Started KingTests in 0.383 seconds (process running for 0.889)
-2024-09-14 08:18:45 [main] INFO  c.m.parkychess.PawnTests.logStarting - Starting PawnTests using Java 22.0.1 with PID 23890 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:45 [main] INFO  c.m.parkychess.PawnTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:46 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:46 [main] INFO  c.m.parkychess.PawnTests.logStarted - Started PawnTests in 0.383 seconds (process running for 0.874)
-2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStarting - Starting QueenTests using Java 22.0.1 with PID 23897 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:53 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:53 [main] INFO  c.m.parkychess.QueenTests.logStarted - Started QueenTests in 0.383 seconds (process running for 0.878)
-2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStarting - Starting RookTests using Java 22.0.1 with PID 23904 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:18:59 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:18:59 [main] INFO  c.m.parkychess.RookTests.logStarted - Started RookTests in 0.398 seconds (process running for 0.896)
-2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 23911 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
-2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
-2024-09-14 08:19:09 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
-2024-09-14 08:19:09 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.377 seconds (process running for 0.855)
-2024-09-14 08:23:46 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a3=4463267}
-2024-09-14 08:29:22 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, a2a3=4463267}
-2024-09-14 08:35:51 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, b2b3=5310358, a2a3=4463267}
-2024-09-14 08:49:40 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {a2a4=5363555, b2b3=5310358, a2a3=4463267, b2b4=5293555}
-2024-09-14 09:20:02 [main] INFO  c.m.parkychess.PerftTests.perft - Moves map for WHITE at depth 6: {c2c3=5417640, a2a4=5363555, b2b3=5310358, a2a3=4463267, b2b4=5293555}
+2024-09-30 06:21:19 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 5924 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 06:21:19 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 06:21:19 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 06:21:20 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.399 seconds (process running for 0.887)
+2024-09-30 06:21:20 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6_Bb5 - {b8d7=35, b8c6=34, c8d7=35, d8d7=35, c7c6=34}
+2024-09-30 06:32:53 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6019 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 06:32:53 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 06:32:53 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 06:32:53 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.393 seconds (process running for 0.873)
+2024-09-30 06:32:53 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6_Bb5_Bd7 - {a2a4=1, b5d7=1, b2b3=1, c2c4=1, b5d3=1, a2a3=1, b2b4=1, b1c3=1, d1e2=1, d1g4=1, g1f3=1, e1f1=1, g1h3=1, b5a6=1, h2h3=1, h2h4=1, b5a3=1, b5c4=1, b5a4=1, b5c6=1, b1a3=1, b5e2=1, d2d4=1, c2c3=1, b5f1=1, e3e4=1, d2d3=1, d1f3=1, d1h5=1, f2f4=1, f2f3=1, g2g4=1, e1e2=1, g2g3=1, g1e2=1}
+2024-09-30 09:20:48 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6716 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 09:20:48 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 09:20:48 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 09:20:48 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.441 seconds (process running for 1.204)
+2024-09-30 09:20:49 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6_Bb5_Bd7 - {a2a4=1, b5d7=1, b2b3=1, c2c4=1, b5d3=1, a2a3=1, b2b4=1, b1c3=1, d1e2=1, d1g4=1, g1f3=1, e1f1=1, g1h3=1, b5a6=1, h2h3=1, h2h4=1, b5c4=1, b5a4=1, b5c6=1, b1a3=1, b5e2=1, d2d4=1, c2c3=1, b5f1=1, e3e4=1, d2d3=1, d1f3=1, d1h5=1, f2f4=1, f2f3=1, g2g4=1, e1e2=1, g2g3=1, g1e2=1}
+2024-09-30 09:21:19 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6724 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 09:21:19 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 09:21:19 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 09:21:19 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.396 seconds (process running for 0.947)
+2024-09-30 09:21:20 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6_Bb5_Bd7 - {a2a4=1, b5d7=1, b2b3=1, c2c4=1, b5d3=1, a2a3=1, b2b4=1, b1c3=1, d1e2=1, d1g4=1, g1f3=1, e1f1=1, g1h3=1, b5a6=1, h2h3=1, h2h4=1, b5c4=1, b5a4=1, b5c6=1, b1a3=1, b5e2=1, d2d4=1, c2c3=1, b5f1=1, e3e4=1, d2d3=1, d1f3=1, d1h5=1, f2f4=1, f2f3=1, g2g4=1, e1e2=1, g2g3=1, g1e2=1}
+2024-09-30 09:21:59 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6733 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 09:21:59 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 09:21:59 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 09:21:59 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.399 seconds (process running for 0.903)
+2024-09-30 09:22:00 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6_Bb5 - {b8d7=34, b8c6=33, c8d7=34, d8d7=34, c7c6=33}
+2024-09-30 09:22:28 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6741 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 09:22:28 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 09:22:29 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 09:22:29 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.387 seconds (process running for 0.876)
+2024-09-30 09:22:31 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3_D6 - {a2a4=832, b2b3=832, c2c4=780, a2a3=778, b2b4=833, b1c3=886, f1c4=911, d1e2=752, d1g4=1111, f1e2=752, g1f3=753, g1h3=777, h2h3=782, h2h4=834, b1a3=805, f1a6=814, d2d4=914, f1b5=168, c2c3=832, e3e4=807, d2d3=779, d1f3=1014, d1h5=1024, f2f4=805, f1d3=881, f2f3=700, g2g4=754, e1e2=600, g2g3=831, g1e2=619}
+2024-09-30 09:23:05 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 6753 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 09:23:05 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 09:23:05 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 09:23:05 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.398 seconds (process running for 0.874)
+2024-09-30 09:23:33 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3 - {b8c6=20156, b7b6=19216, b7b5=18231, b8a6=18272, a7a5=19290, a7a6=17510, c7c6=19223, d7d5=24772, c7c5=20014, d7d6=23960, e7e5=27278, h7h5=19300, e7e6=27280, h7h6=17380, g8f6=20132, f7f6=16717, f7f5=17578, g8h6=18276, g7g6=19314, g7g5=19091}
+2024-09-30 13:44:21 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 8137 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 13:44:21 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 13:44:21 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 13:44:21 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.423 seconds (process running for 0.977)
+2024-09-30 13:44:48 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAfterE3 - {b8c6=20156, b7b6=19215, b7b5=18230, b8a6=18272, a7a5=19290, a7a6=17510, c7c6=19223, d7d5=24772, c7c5=20014, d7d6=23960, e7e5=27278, h7h5=19300, e7e6=27280, h7h6=17380, g8f6=20132, f7f6=16717, f7f5=17578, g8h6=18276, g7g6=19314, g7g5=19091}
+2024-09-30 13:45:43 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 8157 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 13:45:43 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 13:45:44 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 13:45:44 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.402 seconds (process running for 0.898)
+2024-09-30 13:50:39 [main] INFO  c.m.parkychess.PerftTests.perftNumberOfPositionsAtInitialPositionDepth5 - {h2h3=181044, h2h4=218829, a2a4=217832, b2b3=215255, b1a3=198572, c2c4=240082, a2a3=181046, b2b4=216145, d2d4=361790, c2c3=222861, e2e4=405385, b1c3=234656, d2d3=328511, e2e3=402988, f2f4=198473, f2f3=178889, g2g4=214048, g2g3=217210, g1f3=233491, g1h3=198502}
+2024-09-30 13:53:39 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 8316 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 13:53:39 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 13:53:39 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 13:53:39 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.424 seconds (process running for 0.989)
+2024-09-30 13:54:20 [main] INFO  c.m.parkychess.PerftTests.logStarting - Starting PerftTests using Java 22.0.1 with PID 8329 (started by marcopiccioni in /Users/marcopiccioni/Downloads/parkychess)
+2024-09-30 13:54:20 [main] INFO  c.m.parkychess.PerftTests.logStartupProfileInfo - No active profile set, falling back to 1 default profile: "default"
+2024-09-30 13:54:20 [main] INFO  c.m.p.StageListener.<init> - Executing StageListener (Tests only)...
+2024-09-30 13:54:20 [main] INFO  c.m.parkychess.PerftTests.logStarted - Started PerftTests in 0.418 seconds (process running for 0.914)

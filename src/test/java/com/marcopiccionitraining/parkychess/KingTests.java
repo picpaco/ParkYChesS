@@ -77,6 +77,21 @@ public class KingTests {
                 " is not the same as the produced one: " + computedKingMoves);
     }
     @Test
+    void blackKingLegalMovesBishopCheckInterposePossible() {
+        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KING_BISHOP_CHECK_INTERPOSE_POSITION));
+        Collection<Move> blackLegalMoves = new ArrayList<>();
+        blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
+        blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,4)));
+        blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,5)));
+        blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,5)));
+        blackLegalMoves.add(new StandardMove(new Position(0,2), new Position(1,3)));
+        Collection<Move> computedBlackMoves = gameState.getLegalMovesForColor(PlayerColor.BLACK);
+        assertTrue(blackLegalMoves.size() == computedBlackMoves.size() &&
+                blackLegalMoves.containsAll(computedBlackMoves) &&
+                computedBlackMoves.containsAll(blackLegalMoves), "The expected list of moves: " + blackLegalMoves +
+                " is not the same as the produced one: " + computedBlackMoves);
+    }
+    @Test
     void blackKingLegalMovesWhiteRookCheckNoQueensideCastleFromFEN() {
         ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_WHITE_ROOK_CHECK_NO_QUEENSIDE_CASTLE_POSITION));
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
@@ -319,6 +334,25 @@ public class KingTests {
                 " is not the same as the produced one: " + computedBishopMoves);
     }
     @Test
+    void blackBishopNotPinnedByWhiteBishopBecauseOfInterposingKnight() {
+        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_BISHOP_NOT_PINNED_BY_WHITE_BISHOP_BECAUSE_OF_INTERPOSING_KNIGHT));
+        Collection<Move> blackBishopLegalMoves = new ArrayList<>();
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(1,3)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(3,5)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(1,5)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(0,6)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(3,3)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(4,2)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(5,1)));
+        blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(6,0)));
+
+        Collection<Move> computedBishopMoves = gameState.getLegalMovesForPieceAtPosition(new Position(2, 4));
+        assertTrue(blackBishopLegalMoves.size() == computedBishopMoves.size() &&
+                blackBishopLegalMoves.containsAll(computedBishopMoves) &&
+                computedBishopMoves.containsAll(blackBishopLegalMoves), "The expected list of moves: " + blackBishopLegalMoves +
+                " is not the same as the produced one: " + computedBishopMoves);
+    }
+    @Test
     void whiteBishopPinnedByBlackBishop() {
         ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_BISHOP_PINNED_BY_BLACK_BISHOP));
         Collection<Move> whiteBishopLegalMoves = new ArrayList<>();
@@ -332,6 +366,7 @@ public class KingTests {
                 computedBishopMoves.containsAll(whiteBishopLegalMoves), "The expected list of moves: " + whiteBishopLegalMoves +
                 " is not the same as the produced one: " + computedBishopMoves);
     }
+
     @Test
     void whiteKnightPinnedByBlackRookOnRow() {
         ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KNIGHT_PINNED_BY_BLACK_ROOK_ON_ROW));

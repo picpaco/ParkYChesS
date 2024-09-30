@@ -24,14 +24,11 @@ public record Position(int row, int column) {
     }
 
     public Position stepTowardsDirection (Direction direction) {
-    //    public Optional<Position> stepTowardsDirection (Direction direction) {
-            int expectedRow = row + direction.rowDelta();
+        int expectedRow = row + direction.rowDelta();
         int expectedColumn = column + direction.columnDelta();
         if (expectedRow >= 0 && expectedRow <= 7 && expectedColumn >= 0 && expectedColumn <= 7) {
-          //  return Optional.of(new Position(expectedRow, expectedColumn));
             return new Position(expectedRow, expectedColumn);
         } else {
-            //return Optional.empty();
             return null;
         }
     }

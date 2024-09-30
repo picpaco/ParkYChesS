@@ -4,9 +4,11 @@ import com.marcopiccionitraining.parkychess.model.Board;
 import com.marcopiccionitraining.parkychess.model.PieceName;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Getter
 public class StandardMove extends Move {
 
     private Piece capturedPiece;
@@ -18,9 +20,6 @@ public class StandardMove extends Move {
         setName(MoveNames.STANDARD);
     }
 
-    public Piece getCapturedPiece() {
-        return capturedPiece;
-    }
     @Override
     public boolean execute(Board chessBoard){
      //   LOGGER.trace("Entering Standard move.execute");

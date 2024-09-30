@@ -22,11 +22,30 @@ public class Bishop extends Piece {
 
     public Collection<Move> getPseudoLegalMoves(Position from , Board chessboard){
         Collection<Move> bishopPseudoLegalMoves = new ArrayList<>();
-        Collection<Position> allowedTiles = positionsInDirections(from, allowedDirections, chessboard);
-        for (Position pos : allowedTiles) {
-            StandardMove move = new StandardMove(from, pos);
-            bishopPseudoLegalMoves.add(move);
+        ArrayList<ArrayList<Position>> existingDiagonals = chessboard.getPotentialBishopDestinations(from);
+        for (ArrayList<Position> diagonalPositions : existingDiagonals) {
+            bishopPseudoLegalMoves.addAll(pseudoLegalMovesOnDiagonal(diagonalPositions, from, chessboard));
         }
+     //   System.out.println(chessboard);
+     //   System.out.println("bishopPseudoLegalMoves: " + bishopPseudoLegalMoves);
+        return bishopPseudoLegalMoves;
+          //    LOGGER.trace("Exiting getPseudoLegalMoves(Position from = {}, Board chessboard). Moves found: {}", from, moves);
+    }
+
+    private Collection<Move> pseudoLegalMovesOnDiagonal (Collection<Position> diagonalSquares, Position from, Board chessboard){
+        Collection<Move> bishopPseudoLegalMoves = new ArrayList<>();
+            for (Position position : diagonalSquares) {
+                if (chessboard.isEmpty(position)){
+                    bishopPseudoLegalMoves.add(new StandardMove(from, position));
+                } else {
+                    Piece pieceFound = chessboard.getPiece(position);
+                    if (!(pieceFound.getColor().equals(chessboard.getPiece(from).getColor()))) {
+                        bishopPseudoLegalMoves.add(new StandardMove(from, position));
+                        return bishopPseudoLegalMoves;
+                    }
+                    return bishopPseudoLegalMoves;
+                }
+            }
         return bishopPseudoLegalMoves;
     }
     @Override

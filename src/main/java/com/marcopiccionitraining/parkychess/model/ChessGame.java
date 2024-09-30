@@ -249,7 +249,6 @@ public class ChessGame {
     //    LOGGER.trace("history immediately after executing a move:{}", commandHistory);
         Move lastMove = (Move) listOfExecutedMoves.getLast();
         chessboard.setLastExecutedMove(lastMove);
-    //    switchCurrentPlayerColor();
         updateStateString();
         checkGameEnd();
         if (isGameOver()){
