@@ -1,7 +1,7 @@
 package com.marcopiccionitraining.parkychess.model;
 
 public interface FENPositions {
-    String FEN_SIMPLEST_LEGAL = "7k/8/8/8/8/8/8/7K w - - 0 0";
+    String FEN_SIMPLEST_LEGAL = "7k/8/8/8/8/8/6Q1/7K w - - 0 0";
     String FEN_SIMPLEST_PLAYABLE = "7k/8/8/8/8/8/7P/7K w - - 0 0";
     String FEN_TWO_BLACK_TWO_WHITE_PAWNS_AT_STARTING_SQUARE = "7k/pp6/8/8/8/8/PP6/7K w - - 0 0";
     String FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE = "7k/p7/8/8/8/8/P7/7K w - - 0 0";
@@ -76,6 +76,7 @@ public interface FENPositions {
     String FEN_KING_DOUBLE_CHECKED_AND_MATED_BY_WHITE_KNIGHT = "R6k/6pp/6N1/8/8/8/8/7K b - - 0 0";
     String FEN_KNIGHT_DOUBLE_CHECKS_AND_MATES_WHITE_KING = "R4n1k/3P2pp/4P3/r7/8/8/8/7K w - - 0 0";
     String FEN_INITIAL_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_INITIAL_POSITION_NA3 = "rnbqkbnr/pppppppp/8/8/8/N7/PPPPPPPP/R1BQKBNR b KQkq - 0 1";
     String FEN_INITIAL_POSITION_C3 = "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1";
     String FEN_INITIAL_POSITION_C3_C6 = "rnbqkbnr/pp1ppppp/2p5/8/8/2P5/PP1PPPPP/RNBQKBNR w KQkq - 0 1";
     String FEN_INITIAL_POSITION_C3_C6_E3 = "rnbqkbnr/pp1ppppp/2p5/8/8/2P1P3/PP1P1PPP/RNBQKBNR b KQkq - 0 1";
@@ -100,6 +101,18 @@ public interface FENPositions {
     String FEN_POSITION_AFTER_E3_B5 = "rnbqkbnr/p1pppppp/8/1p6/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
     String FEN_POSITION_AFTER_E3_B5_QH5 = "rnbqkbnr/p1pppppp/8/1p5Q/8/4P3/PPPP1PPP/RNB1KBNR b KQkq - 0 1";
     String FEN_POSITION_AFTER_E3_D6 = "rnbqkbnr/ppp1pppp/3p4/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_E3_D6_QG4 = "rnbqkbnr/ppp1pppp/3p4/8/6Q1/4P3/PPPP1PPP/RNB1KBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4 = "rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_C6 = "rnbqkbnr/pp1ppppp/2p5/8/P7/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_C6_A5 = "rnbqkbnr/pp1ppppp/2p5/P7/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_E5 = "rnbqkbnr/pppp1ppp/8/4p3/P7/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_E5_D4 = "rnbqkbnr/pppp1ppp/8/4p3/P2P4/8/1PP1PPPP/RNBQKBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_A5 = "rnbqkbnr/1ppppppp/8/p7/P7/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_NC6 = "r1bqkbnr/pppppppp/2n5/8/P7/8/1PPPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_NC6_A5 = "r1bqkbnr/pppppppp/2n5/P7/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_A5_B4 = "rnbqkbnr/1ppppppp/8/p7/PP6/8/2PPPPPP/RNBQKBNR b KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_A5_B4_RA6 = "1nbqkbnr/1ppppppp/r7/p7/PP6/8/2PPPPPP/RNBQKBNR w KQkq - 0 1";
+    String FEN_POSITION_AFTER_A4_A5_B4_RA6_PA4B5 = "1nbqkbnr/1ppppppp/r7/P7/P7/8/2PPPPPP/RNBQKBNR b KQkq - 0 1";
     String FEN_POSITION_AFTER_C3 = "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1";
     String FEN_POSITION_AFTER_C3_D6 = "rnbqkbnr/ppp1pppp/3p4/8/8/2P5/PP1PPPPP/RNBQKBNR w KQkq - 0 1";
     String FEN_POSITION_AFTER_E3_D6_BB5 = "rnbqkbnr/ppp1pppp/3p4/1B6/8/4P3/PPPP1PPP/RNBQK1NR b KQkq - 0 1";
@@ -128,4 +141,5 @@ public interface FENPositions {
     String FEN_DISCOVERY_CHECK_FROM_ROOK_DUE_TO_PAWN_ADVANCE_MOVE = "8/8/8/8/R3P2k/8/8/5K2 w - - 0 0";
     String FEN_NO_DISCOVERY_CHECK_FROM_ROOK = "6k1/8/8/6N1/8/8/6R1/5K2 b - - 0 0";
     String FEN_PAWN_CAPTURE_CHECK_FROM_BISHOP = "4kb2/8/8/8/8/8/P7/4K3 w - - 0 0";
+    String FEN_ROOK_A1_PSEUDO_LEGAL_MOVES = "7k/8/8/8/8/8/7K/R7 w - - 0 0";
 }

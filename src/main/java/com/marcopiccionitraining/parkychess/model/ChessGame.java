@@ -3,6 +3,8 @@ package com.marcopiccionitraining.parkychess.model;
 import com.marcopiccionitraining.parkychess.ObjectFactory;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,28 +12,23 @@ import java.util.*;
 
 public class ChessGame {
 
+    @Getter
     private final Board chessboard;
     private PlayerColor currentPlayerColor;
+    @Getter
     private GameResult gameResult;
     private int numberOfNoCaptureNoPawnMoves = 0;
     private String stateString;
     private final HashMap<String, Integer> gameStateHistory = new HashMap<>();
 //    private static final Logger LOGGER = LoggerFactory.getLogger(ChessGame.class);
+    @Setter
+    @Getter
     private int numberOfHalfMovesSinceLastCaptureOrPawnMove;
+    @Getter
     private int numberOfFullMoves = 1;
     private final LinkedList<Command> listOfExecutedMoves = new LinkedList<>();
     private final LinkedList<Command> listOfReExecutableMoves = new LinkedList<>();
     private final LinkedList<String> commandHistory = new LinkedList<>();
-
-  //  public ChessGame(Board chessboard){
-      //  LOGGER.trace("In ChessGame 1-arg constructor");
-      //  this.chessboard = chessboard;
-    //    currentPlayerColor = PlayerColor.WHITE;
-    //    stateString = FEN_INITIAL_POSITION;
-    //    setPositionFromFen(new FENString(stateString));
-    //    gameStateHistory.put(stateString, 1);
-     //   LOGGER.trace("Exiting ChessGame 1-arg constructor");
-   // }
 
     public ChessGame(Board chessboard, FENString externalFEN){
      //   LOGGER.trace("In ChessGame 2-args constructor");
@@ -46,19 +43,7 @@ public class ChessGame {
         currentPlayerColor = PlayerColor.getOpponentColor(currentPlayerColor);
      //   LOGGER.trace("Switched color to {}", currentPlayerColor);
     }
-    public int getNumberOfHalfMovesSinceLastCaptureOrPawnMove() {
-        return numberOfHalfMovesSinceLastCaptureOrPawnMove;
-    }
 
-    public int getNumberOfFullMoves() {
-        return numberOfFullMoves;
-    }
-    public GameResult getGameResult() {
-        return gameResult;
-    }
-    public Board getChessboard() {
-        return chessboard;
-    }
     public PlayerColor getCurrentColor(){
         return currentPlayerColor;
     }
@@ -231,7 +216,7 @@ public class ChessGame {
     //    LOGGER.trace("Legal moves for {}: {}", playerColor, legalMovesForColor);
         return legalMovesForColor;
     }
-    public void makeMove(Move move){
+    public void makeMove(Move move, Collection<Move> legalMovesforColor ){
       //  LOGGER.trace("Entering makeMove ({}", move);
         chessboard.setEnPassantCapturePositionForColor(currentPlayerColor, null);
         boolean captureOrPawnMove = move.execute(chessboard);
@@ -250,7 +235,8 @@ public class ChessGame {
         Move lastMove = (Move) listOfExecutedMoves.getLast();
         chessboard.setLastExecutedMove(lastMove);
         updateStateString();
-        checkGameEnd();
+        //Collection<Move>legalMovesforColor = getLegalMovesForColor(currentPlayerColor);
+        checkGameEnd(legalMovesforColor);
         if (isGameOver()){
         //    LOGGER.info("Game over. {}", gameResult);
             System.exit(0);
@@ -285,9 +271,8 @@ public class ChessGame {
         }
     }
 
-    public void checkGameEnd(){
+    public void checkGameEnd(Collection<Move> legalMovesforColor){
      //   LOGGER.trace("In checkGameEnd");
-        Collection<Move> legalMovesforColor = getLegalMovesForColor(currentPlayerColor);
         if (legalMovesforColor.isEmpty()) {
         //    LOGGER.trace("Checking for checkmate and stalemate...");
             if (chessboard.isInCheck(currentPlayerColor)) {
@@ -341,13 +326,5 @@ public class ChessGame {
 
     public void setCurrentColor(PlayerColor playerColor) {
         currentPlayerColor = playerColor;
-    }
-
-    public void setNumberOfHalfMovesSinceLastCaptureOrPawnMove(int numberOfHalfMovesSinceLastCaptureOrPawnMove) {
-        this.numberOfHalfMovesSinceLastCaptureOrPawnMove = numberOfHalfMovesSinceLastCaptureOrPawnMove;
-    }
-
-    public List<Move> generateMoves() {
-        return  (List<Move>) getLegalMovesForColor(currentPlayerColor);
     }
 }

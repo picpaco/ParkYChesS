@@ -4,11 +4,11 @@ import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.Knight;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collection;

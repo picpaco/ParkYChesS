@@ -1,12 +1,10 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.Board;
-import com.marcopiccionitraining.parkychess.model.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Getter
 public class StandardMove extends Move {

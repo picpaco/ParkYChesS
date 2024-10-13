@@ -4,6 +4,7 @@ import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.Bishop;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

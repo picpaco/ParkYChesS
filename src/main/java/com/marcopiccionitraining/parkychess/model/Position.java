@@ -1,5 +1,6 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Optional;
  * 2. rows increase from top (0) to bottom (7).
  * 3. columns increase from left (0) to right (7).
  */
+//TODO check everywhere else if you can avoid creating Position objects
 public record Position(int row, int column) {
     public Position {
         assert row >= 0 && row <= 7 : "invalid row: " + row;
@@ -65,6 +67,11 @@ public record Position(int row, int column) {
         }
         algebraicForm.append(8 - row);
         return algebraicForm.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, column);
     }
 
     @Override

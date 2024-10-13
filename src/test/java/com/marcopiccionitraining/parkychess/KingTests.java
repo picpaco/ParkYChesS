@@ -5,6 +5,7 @@ import com.marcopiccionitraining.parkychess.model.moves.DoublePawnMove;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.King;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -432,7 +433,8 @@ public class KingTests {
         ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KING_DOUBLE_CHECKED_AND_MATED_BY_WHITE_KNIGHT));
         Collection<Move> computedKingMoves = gameState.getLegalMovesForPieceAtPosition(new Position(0, 7));
         assertTrue(computedKingMoves.isEmpty(), "King should have no moves.");
-        gameState.checkGameEnd();
+        Collection<Move> legalMovesforColor = gameState.getLegalMovesForColor(gameState.getCurrentColor());
+        gameState.checkGameEnd(legalMovesforColor);
         assertTrue(gameState.isGameOver(), "Game should be over.");
         assertTrue(chessboard.isInCheck(PlayerColor.BLACK), "Black should be in check.");
         assertEquals(gameState.getGameResult().winner(), PlayerColor.WHITE, "Winner should be white.");

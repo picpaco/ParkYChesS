@@ -46,12 +46,8 @@ public class CastlingMove extends Move {
         Board copy = chessboard.copy();
         Position kingPositionInCopy = getFrom();
         for (int i = 0; i < 2; i++) {
-        //    Optional<Position> castlingKingStep = kingPositionInCopy.stepTowardsDirection(kingCastlingSide);
-        //    if (castlingKingStep.isPresent()) {
-            Position castlingKingStep = kingPositionInCopy.stepTowardsDirection(kingCastlingSide);
+             Position castlingKingStep = kingPositionInCopy.stepTowardsDirection(kingCastlingSide);
             if (castlingKingStep != null) {
-                //new StandardMove(kingPositionInCopy, castlingKingStep.get()).execute(copy);
-                //kingPositionInCopy = castlingKingStep.get();
                 new StandardMove(kingPositionInCopy, castlingKingStep).execute(copy);
                 kingPositionInCopy = castlingKingStep;
             } else {

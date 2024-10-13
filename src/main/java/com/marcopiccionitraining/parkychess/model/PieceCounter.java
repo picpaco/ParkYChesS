@@ -1,10 +1,14 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import lombok.Getter;
+
 import java.util.HashMap;
 
 public class PieceCounter {
     private final HashMap<PieceName, Integer> blackPiecesCounter = new HashMap<>();
     private final HashMap<PieceName, Integer> whitePiecesCounter = new HashMap<>();
+    @Getter
     private int totalNumberOfPieces;
 
     public PieceCounter(){
@@ -21,9 +25,6 @@ public class PieceCounter {
         whitePiecesCounter.put(PieceName.QUEEN, 0);
         whitePiecesCounter.put(PieceName.KING, 0);
         assert checkInvariant() : "Class invariant failure. Total number of pieces is wrong or there is some wrong key or value.";
-    }
-    public int getTotalNumberOfPieces() {
-        return totalNumberOfPieces;
     }
 
     public void incrementNumberOfPiecesForColor (PlayerColor playerColor, PieceName pieceKey){

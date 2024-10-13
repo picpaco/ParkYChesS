@@ -15,24 +15,22 @@
             styleClass="root-color">
     <padding><Insets left="12.0" right="12.0"/></padding>
     <top>
-     <MenuBar fx:id="menuBar" styleClass="root-color">
-         <menus>
-             <Menu fx:id="fileMenu" text="File" >
-                 <MenuItem fx:id="loadFromFEN" text="Load from FEN..." onAction="#handleLoadFromFENAction" />
-                 <SeparatorMenuItem/>
-                 <MenuItem fx:id="exit" text="Exit" onAction="#handleExit"/>
-             </Menu>
-             <Menu fx:id="viewMenu" text="View">
-                 <MenuItem fx:id="flipBoard" text="Flip board"/>
-             </Menu>
-             <Menu fx:id="infoMenu" text="Info">
-                <MenuItem fx:id="searchMenuItem" text="Search" disable="true"/>
+        <MenuBar fx:id="menuBar" styleClass="root-color">
+            <Menu fx:id="fileMenu" text="File">
+                <MenuItem fx:id="loadFromFEN" text="Load from FEN..." onAction="#handleLoadFromFENAction"/>
                 <SeparatorMenuItem/>
-                <MenuItem fx:id="manualMenuItem" text="User Manual"/>
-                <MenuItem fx:id="aboutMenuItem" text="About" onAction="#handleAboutAction"/>
-             </Menu>
-         </menus>
-     </MenuBar>
+                <MenuItem fx:id="exit" text="Exit" onAction="#handleExit"/>
+            </Menu>
+            <Menu fx:id="viewMenu" text="View">
+                <MenuItem fx:id="flipBoard" text="Flip board"/>
+            </Menu>
+            <Menu fx:id="infoMenu" text="Info">
+               <MenuItem fx:id="searchMenuItem" text="Search" disable="true"/>
+               <SeparatorMenuItem/>
+               <MenuItem fx:id="manualMenuItem" text="User Manual"/>
+               <MenuItem fx:id="aboutMenuItem" text="About" onAction="#handleAboutAction"/>
+            </Menu>
+        </MenuBar>
     </top>
     <center>
         <StackPane fx:id="centerPane">

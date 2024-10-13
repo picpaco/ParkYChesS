@@ -1,19 +1,14 @@
 package com.marcopiccionitraining.parkychess;
 
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
-import com.marcopiccionitraining.parkychess.model.PieceName;
-import com.marcopiccionitraining.parkychess.model.Position;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Component("objectFactory")
 public class ObjectFactory {

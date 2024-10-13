@@ -2,13 +2,12 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Chess pieces representation.
@@ -19,21 +18,9 @@ import java.util.Optional;
 public abstract class Piece {
 
     private final PlayerColor playerColor;
-    private boolean isChecker;
+    @Getter
     private PieceName name;
  //   private final Logger LOGGER = LoggerFactory.getLogger(Piece.class);
-
-    public boolean isChecker() {
-        return isChecker;
-    }
-
-    public void setChecker(boolean checker) {
-        isChecker = checker;
-    }
-
-    public PieceName getName() {
-        return name;
-    }
 
     void setName(PieceName name) {
         this.name = name;
@@ -43,8 +30,6 @@ public abstract class Piece {
         this.playerColor = playerColor;
     }
 
-  //  public abstract Collection<? extends Move> generateMoves(Board chessboard);
-
     public PlayerColor getColor(){
         return playerColor;
     }
@@ -53,10 +38,7 @@ public abstract class Piece {
         return hasMoved;
     }
 
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
-    }
-
+    @Setter
     private boolean hasMoved = false;
 
     public abstract Piece copy();
@@ -74,39 +56,6 @@ public abstract class Piece {
         }
        // LOGGER.trace("canCaptureEnemyKing? No");
         return false;
-    }
-
-    Collection<Position> positionsInDirection(Position from, Direction direction, Board chessboard){
-        Collection<Position> positions = new ArrayList<>();
-        for (Position position = from.stepTowardsDirection(direction); position != null && chessboard.isInside(position);
-             position = position.stepTowardsDirection(direction)){
-            if (chessboard.isEmpty(position)){
-                positions.add(position);
-                continue;
-            }
-            Piece piece = chessboard.getPiece(position);
-            if (!(piece.playerColor.equals(playerColor))){
-                positions.add(position);
-            }
-            /*if (chessboard.isEmpty(position.get())){
-                positions.add(position.get());
-                continue;
-            }
-            Piece piece = chessboard.getPiece(position.get());
-            if (!(piece.playerColor.equals(playerColor))){
-                positions.add(position.get());
-            }*/
-            break;
-        }
-        return positions;
-    }
-//TODO make it polymorphic: each piece implementation will invoke the ad hoc precomputed code.
-    Collection<Position> positionsInDirections(Position from, Direction[] directions, Board chessboard){
-        Collection<Position> tiles = new ArrayList<>();
-        for (Direction direction : directions) {
-            tiles.addAll(positionsInDirection(from, direction, chessboard));
-        }
-        return tiles;
     }
 
     @Override

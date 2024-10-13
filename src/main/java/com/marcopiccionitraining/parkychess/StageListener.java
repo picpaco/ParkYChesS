@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -34,6 +33,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
+import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_SIMPLEST_LEGAL;
 
 @Component
 public class StageListener implements ApplicationListener<ParkychessApplication.StageReadyEvent> {
@@ -95,7 +95,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             controller.centerPane.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.centerPane.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             initializeBoard(controller);
-            gameState.setPositionFromFen(new FENString(FEN_INITIAL_POSITION));
+            gameState.setPositionFromFen(new FENString(FEN_SIMPLEST_LEGAL));
             displayChessboard(gameState.getChessboard(), controller);
             controller.piecesGrid.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.piecesGrid.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
@@ -154,8 +154,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             selectedPos = pos;
             cacheMoves(legalMoves);
             showHighlights();
-        } else {
-      //      LOGGER.debug("No moves possible for piece at square {}", pos);
         }
     }
 
@@ -182,7 +180,8 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
 
     private void handleMove (Move aMove, GUIController guiController) {
      //   LOGGER.trace ("In handleMove({}", aMove);
-        gameState.makeMove (aMove);
+        Collection<Move> generatedMoves = gameState.getLegalMovesForColor(gameState.getCurrentColor());//generateMoves();
+        gameState.makeMove (aMove, generatedMoves);
         displayChessboard (gameState.getChessboard(), guiController);
         if (gameState.isGameOver()) {
         //    LOGGER.debug("Game over!");
