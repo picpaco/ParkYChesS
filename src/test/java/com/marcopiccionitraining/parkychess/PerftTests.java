@@ -368,9 +368,9 @@ public class PerftTests {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         long result = perft(6, 6, stats);
         assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible positions at depth 6");
-        //started at 16:24; takes too long
+        //takes too long
     }
-    @Test
+    //@Test
     void bulkPerftNumberOfPositionsAtInitialPositionDepth7() {
         gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
         long result = bulkPerft(7);

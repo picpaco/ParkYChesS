@@ -95,7 +95,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             controller.centerPane.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.centerPane.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             initializeBoard(controller);
-            gameState.setPositionFromFen(new FENString(FEN_SIMPLEST_LEGAL));
+            gameState.setPositionFromFen(new FENString(FEN_INITIAL_POSITION));
             displayChessboard(gameState.getChessboard(), controller);
             controller.piecesGrid.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.piecesGrid.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
@@ -170,6 +170,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         removeHighlights();
         Move cachedMove = movesCache.get(pos);
         if (cachedMove != null) {
+            gameState.switchCurrentPlayerColor();
             if (cachedMove.getName().equals(MoveNames.PAWN_PROMOTION)){
                 handlePromotion(cachedMove.getFrom(), cachedMove.getTo(), guiController);
             } else {
