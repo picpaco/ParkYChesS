@@ -4,7 +4,7 @@ import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.Bishop;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,57 +26,57 @@ public class BishopTests {
     }
     @Test
     void whiteBishopInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Bishop whiteBishop = (Bishop) chessboard.getPiece (7,5);
         assertFalse(whiteBishop.hasMoved(), "Bishop should not have already moved at starting position.");
     }
     @Test
     void blackBishopInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Bishop blackBishop = (Bishop) chessboard.getPiece (0,5);
         assertFalse(blackBishop.hasMoved(), "Bishop should not have already moved at starting position.");
     }
     @Test
     void whiteBishopNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Bishop whiteBishop = (Bishop) chessboard.getPiece (7,2);
         assertEquals(PlayerColor.WHITE, whiteBishop.getColor(), "Bishop at square h1 should be white.");
-        assertEquals(PieceName.BISHOP, whiteBishop.getName(), "Bishop's name should be 'BISHOP'");
+        assertEquals(PieceNames.BISHOP, whiteBishop.getName(), "Bishop's name should be 'BISHOP'");
         assertEquals("BISHOP", whiteBishop.toString(), "Bishop's name as string should be 'BISHOP'");
     }
     @Test
     void blackBishopNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Bishop whiteBishop = (Bishop) chessboard.getPiece (0,2);
         assertEquals(PlayerColor.BLACK, whiteBishop.getColor(), "Bishop at square h1 should be black.");
-        assertEquals(PieceName.BISHOP, whiteBishop.getName(), "Bishop's name should be 'BISHOP'");
+        assertEquals(PieceNames.BISHOP, whiteBishop.getName(), "Bishop's name should be 'BISHOP'");
         assertEquals("bishop", whiteBishop.toString(), "Bishop's name as string should be 'bishop'");
     }
     @Test
     void blackBishopAtC8CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         gameState.setCurrentColor(PlayerColor.BLACK);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 2)).isEmpty());
     }
     @Test
     void blackBishopAtF8CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         gameState.setCurrentColor(PlayerColor.BLACK);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 5)).isEmpty());
     }
     @Test
     void whiteBishopAtC1CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 2)).isEmpty());
     }
     @Test
     void whiteBishopAtF1CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 5)).isEmpty());
     }
     @Test
     void blackBishopAtC8LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_BISHOP_C8_NO_CHECK_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_BISHOP_C8_NO_CHECK_POSITION);
         Collection<Move> bishopLegalMoves = new ArrayList<>();
         bishopLegalMoves.add(new StandardMove(new Position(0,2), new Position(1,1)));
         bishopLegalMoves.add(new StandardMove(new Position(0,2), new Position(2,0)));
@@ -93,7 +93,7 @@ public class BishopTests {
     }
     @Test
     void blackBishopAtF8LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_BISHOP_F8_NO_CHECK_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_BISHOP_F8_NO_CHECK_POSITION);
         Collection<Move> bishopLegalMoves = new ArrayList<>();
         bishopLegalMoves.add(new StandardMove(new Position(0,5), new Position(1,6)));
         bishopLegalMoves.add(new StandardMove(new Position(0,5), new Position(2,7)));
@@ -110,7 +110,7 @@ public class BishopTests {
     }
     @Test
     void whiteBishopAtC1LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_BISHOP_C1_NO_CHECK_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_BISHOP_C1_NO_CHECK_POSITION);
         Collection<Move> bishopLegalMoves = new ArrayList<>();
         bishopLegalMoves.add(new StandardMove(new Position(7,2), new Position(6,1)));
         bishopLegalMoves.add(new StandardMove(new Position(7,2), new Position(5,0)));
@@ -127,7 +127,7 @@ public class BishopTests {
     }
     @Test
     void whiteBishopAtF1LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_BISHOP_F1_NO_CHECK_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_BISHOP_F1_NO_CHECK_POSITION);
         Collection<Move> bishopLegalMoves = new ArrayList<>();
         bishopLegalMoves.add(new StandardMove(new Position(7,5), new Position(6,6)));
         bishopLegalMoves.add(new StandardMove(new Position(7,5), new Position(5,7)));

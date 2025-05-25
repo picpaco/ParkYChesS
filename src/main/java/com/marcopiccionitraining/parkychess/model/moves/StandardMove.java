@@ -1,7 +1,8 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.Board;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.PlayerColor;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import lombok.Getter;
@@ -17,6 +18,14 @@ public class StandardMove extends Move {
         setTo(to);
         setName(MoveNames.STANDARD);
     }
+    @Override
+    public boolean isLegal (Board chessboard){
+        Board boardCopy = chessboard.copy();
+        execute(boardCopy);
+        PlayerColor playerColorOfPieceMoved = boardCopy.getPiece(getTo()).getColor();
+        boolean wasKingCaptured = (capturedPiece != null) && (capturedPiece.getName().equals(PieceNames.KING));
+        return !(boardCopy.isInCheck(playerColorOfPieceMoved)) && !(wasKingCaptured);
+    }
 
     @Override
     public boolean execute(Board chessBoard){
@@ -24,23 +33,31 @@ public class StandardMove extends Move {
      //   LOGGER.trace("Executing standard move from: {} to: {}", getFrom(), getTo());
         Piece piece = chessBoard.getPiece(getFrom());
      //   LOGGER.trace("Piece to move: {}", piece);
-        boolean isCapture = !(chessBoard.isEmpty(getTo()));
-     //   LOGGER.trace ("isCapture? {}", isCapture);
+        boolean isCapture = !(chessBoard.isEmpty(getTo())) && !(chessBoard.getPiece(getTo()).getColor().equals(piece.getColor()));
         if (isCapture) {
             capturedPiece = chessBoard.getPiece(getTo());
+        }
+        if (piece.hasMoved()){
+            piece.setHasMovedForGood(true);
+        } else {
+            piece.setHasMoved(true);
         }
         chessBoard.setPiece(piece, getTo());
       //  LOGGER.trace("About to set square {} to empty", getFrom());
         chessBoard.setEmpty(getFrom());
         assert chessBoard.isEmpty(getFrom()) : "Position " + getFrom() + " should be empty.";
-        piece.setHasMoved(true);
       //  LOGGER.trace(chessBoard.toString());
-        return isCapture || (piece.getName().equals(PieceName.PAWN));
+        return isCapture || (piece.getName().equals(PieceNames.PAWN));
     }
 
     @Override
     public void undo(Board chessboard) {
         Piece piece = chessboard.getPiece(getTo());
+        if (piece.isHasMovedForGood()){
+            piece.setHasMovedForGood(false);
+        } else {
+            piece.setHasMoved(false);
+        }
         chessboard.setPiece(piece, getFrom());
         if (capturedPiece != null){
             chessboard.setPiece(capturedPiece, getTo());

@@ -5,6 +5,7 @@ import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.Command;
 import com.marcopiccionitraining.parkychess.model.Position;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,7 @@ public abstract class Move implements Command {
     private Position from;
     private Position to;
     private MoveNames name;
+
  //   private final Logger LOGGER = LoggerFactory.getLogger(Move.class);
 
     void setName (MoveNames name){
@@ -30,12 +32,14 @@ public abstract class Move implements Command {
     }
 
     public boolean isLegal (Board chessboard){
-        PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
+    //    PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
         Board boardCopy = chessboard.copy();
     //    LOGGER.trace(boardCopy.toString());
         execute(boardCopy);
-     //   LOGGER.trace("After executing {} on a copy of the board is {} in check? {}", this, playerColorOfPieceToMove, boardCopy.isInCheck(playerColorOfPieceToMove));
-        return !(boardCopy.isInCheck(playerColorOfPieceToMove));
+        PlayerColor playerColorOfPieceMoved = boardCopy.getPiece(getTo()).getColor();
+        //   LOGGER.trace("After executing {} on a copy of the board is {} in check? {}", this, playerColorOfPieceToMove, boardCopy.isInCheck(playerColorOfPieceToMove));
+//        return !(boardCopy.isInCheck(PlayerColor.getOpponentColor(playerColorOfPieceToMove)));
+        return !(boardCopy.isInCheck(playerColorOfPieceMoved));
     }
 
     @Override

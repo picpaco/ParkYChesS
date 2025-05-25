@@ -1,7 +1,7 @@
 package com.marcopiccionitraining.parkychess;
 
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 @Component("objectFactory")
 public class ObjectFactory {
-    private static final HashMap<PieceName, String> blackPiecesImagePaths = new HashMap<>();
-    private static final HashMap<PieceName, String> whitePiecesImagePaths = new HashMap<>();
+    private static final HashMap<PieceNames, String> blackPiecesImagePaths = new HashMap<>();
+    private static final HashMap<PieceNames, String> whitePiecesImagePaths = new HashMap<>();
     private static final String IMG_DIR = "";
     private static final String IMG_EXTENSION = ".png";
     private static final String BLACK_SQUARE_PATH = IMG_DIR + "blackSquare254" + IMG_EXTENSION;
@@ -21,20 +21,20 @@ public class ObjectFactory {
  //   private static final Logger LOGGER = LoggerFactory.getLogger(ObjectFactory.class);
 
     public ObjectFactory() {
-        blackPiecesImagePaths.put(PieceName.BISHOP, (IMG_DIR + "blackBishop" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.KNIGHT, (IMG_DIR + "blackKnight" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.ROOK, (IMG_DIR + "blackRook" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.QUEEN, (IMG_DIR + "blackQueen" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.KING, (IMG_DIR + "blackKing" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.PAWN, (IMG_DIR + "blackPawn" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.BISHOP, (IMG_DIR + "whiteBishop" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.KNIGHT, (IMG_DIR + "whiteKnight" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.ROOK, (IMG_DIR + "whiteRook" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.QUEEN, (IMG_DIR + "whiteQueen" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.KING, (IMG_DIR + "whiteKing" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.PAWN, (IMG_DIR + "whitePawn" + IMG_EXTENSION));
-        whitePiecesImagePaths.put(PieceName.NONE, (IMG_DIR + "empty" + IMG_EXTENSION));
-        blackPiecesImagePaths.put(PieceName.NONE, (IMG_DIR + "empty" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.BISHOP, (IMG_DIR + "blackBishop" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.KNIGHT, (IMG_DIR + "blackKnight" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.ROOK, (IMG_DIR + "blackRook" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.QUEEN, (IMG_DIR + "blackQueen" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.KING, (IMG_DIR + "blackKing" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.PAWN, (IMG_DIR + "blackPawn" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.BISHOP, (IMG_DIR + "whiteBishop" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.KNIGHT, (IMG_DIR + "whiteKnight" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.ROOK, (IMG_DIR + "whiteRook" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.QUEEN, (IMG_DIR + "whiteQueen" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.KING, (IMG_DIR + "whiteKing" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.PAWN, (IMG_DIR + "whitePawn" + IMG_EXTENSION));
+        whitePiecesImagePaths.put(PieceNames.NONE, (IMG_DIR + "empty" + IMG_EXTENSION));
+        blackPiecesImagePaths.put(PieceNames.NONE, (IMG_DIR + "empty" + IMG_EXTENSION));
     }
 
     public Image getSquareImage (PlayerColor playerColor) {
@@ -44,14 +44,14 @@ public class ObjectFactory {
             return new Image(WHITE_SQUARE_PATH);
         }
     }
-    public Image getPieceImage(PlayerColor playerColor, PieceName pieceName) {
-   //     LOGGER.debug("In getPieceImage(color={} piece name={}", playerColor, pieceName);
+    public Image getPieceImage(PlayerColor playerColor, PieceNames pieceNames) {
+   //     LOGGER.debug("In getPieceImage(color={} piece name={}", playerColor, pieceNames);
         Image resultImage;
         if (playerColor.equals(PlayerColor.BLACK)) {
-            resultImage = new Image(blackPiecesImagePaths.get(pieceName));
+            resultImage = new Image(blackPiecesImagePaths.get(pieceNames));
      //       LOGGER.debug("resultImage url for black: {}", resultImage.getUrl());
         } else {
-            String path = whitePiecesImagePaths.get(pieceName);
+            String path = whitePiecesImagePaths.get(pieceNames);
        //     LOGGER.debug("path: {}", path);
             resultImage = new Image(path);
          //   LOGGER.debug("resultImage url for white or empty square url when no color: {}", resultImage.getUrl());
@@ -62,7 +62,7 @@ public class ObjectFactory {
     public Image getPieceImage(Piece piece) {
    //     LOGGER.trace("Entering getPieceImage (piece = {}", piece);
         if (piece == null) {
-            return getPieceImage(PlayerColor.WHITE, PieceName.NONE);
+            return getPieceImage(PlayerColor.WHITE, PieceNames.NONE);
         }
         return getPieceImage(piece.getColor(), piece.getName());
     }

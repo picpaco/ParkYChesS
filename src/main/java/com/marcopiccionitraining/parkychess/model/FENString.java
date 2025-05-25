@@ -1,7 +1,8 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import com.marcopiccionitraining.parkychess.model.pieces.King;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import org.springframework.util.StringUtils;
 import java.util.regex.Pattern;
 
@@ -98,15 +99,10 @@ public final class FENString {
         return numBlackKings == 1 && numWhiteKing == 1;
     }
 
-    @Override
-    public String toString(){
-        return customFENStringImpl.toString();
-    }
-
     private char getCharForPiece (Piece piece) {
         char charForPiece = ' ';
-        PieceName pieceName = piece.getName();
-        switch (pieceName) {
+        PieceNames pieceNames = piece.getName();
+        switch (pieceNames) {
             case PAWN:
                 charForPiece = 'p';
                 break;
@@ -126,13 +122,14 @@ public final class FENString {
                 charForPiece = 'q';
                 break;
             default:
-                assert false : "Unrecognizable piece name: " + pieceName;
+                assert false : "Unrecognizable piece name: " + pieceNames;
         }
         if (piece.getColor().equals(PlayerColor.WHITE)) {
             return Character.toUpperCase(charForPiece);
         }
         return charForPiece;
     }
+
     private void addRowOfData(Board chessboard, int row){
         int numberOfEmptyPositions = 0;
         for (int col = 0; col < 8; col++){
@@ -150,6 +147,7 @@ public final class FENString {
             customFENStringImpl.append(numberOfEmptyPositions);
         }
     }
+
     private void addPiecePlacementInfo(Board chessboard){
         for (int row = 0; row < 8; row++) {
             if (row != 0){
@@ -158,6 +156,7 @@ public final class FENString {
             addRowOfData(chessboard, row);
         }
     }
+
     private void addCurrentColor(PlayerColor currentPlayerColor){
         if (currentPlayerColor.equals(PlayerColor.WHITE)){
             customFENStringImpl.append("w");
@@ -165,12 +164,15 @@ public final class FENString {
             customFENStringImpl.append("b");
         }
     }
+
     private void addCastlingRights(Board chessboard){
-        boolean whiteKingsideCastling = chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.WHITE);
-        boolean whiteQueensideCastling = chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.WHITE);
-        boolean blackKingsideCastling = chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.BLACK);
-        boolean blackQueensideCastling = chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.BLACK);
-        if (!(whiteKingsideCastling || whiteQueensideCastling || blackKingsideCastling || blackQueensideCastling)){
+        King blackKing = chessboard.getKing(PlayerColor.BLACK);
+        King whiteKing = chessboard.getKing(PlayerColor.WHITE);
+        boolean whiteKingsideCastling = whiteKing.isKingsideCastlingPseudoLegal(whiteKing.getPosition(), chessboard);
+        boolean whiteQueensideCastling = whiteKing.isQueensideCastlingPseudoLegal(whiteKing.getPosition(), chessboard);
+        boolean blackKingsideCastling = blackKing.isKingsideCastlingPseudoLegal(blackKing.getPosition(), chessboard);
+        boolean blackQueensideCastling = blackKing.isQueensideCastlingPseudoLegal(blackKing.getPosition(), chessboard);
+        if (!whiteKingsideCastling && !whiteQueensideCastling && !blackKingsideCastling && !blackQueensideCastling){
             customFENStringImpl.append("-");
             return;
         }
@@ -187,6 +189,7 @@ public final class FENString {
             customFENStringImpl.append("q");
         }
     }
+
     private void addEnPassantData(PlayerColor currentPlayerColor, Board chessboard){
         if (!(chessboard.canCaptureEnPassant(currentPlayerColor))){
             customFENStringImpl.append("-");
@@ -198,5 +201,10 @@ public final class FENString {
         int rowInAlgebraic = 8 - pawnEnPassantPosition.row();
         customFENStringImpl.append(columnInAlgebraic);
         customFENStringImpl.append(rowInAlgebraic);
+    }
+
+    @Override
+    public String toString(){
+        return customFENStringImpl.toString();
     }
 }

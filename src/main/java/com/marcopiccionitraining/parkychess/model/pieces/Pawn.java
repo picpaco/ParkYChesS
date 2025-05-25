@@ -18,7 +18,7 @@ public class Pawn extends Piece {
         } else if (playerColor.equals (PlayerColor.WHITE)){
             forward = Direction.NORTH;
         }
-        setName (PieceName.PAWN);
+        setName (PieceNames.PAWN);
 
     }
 
@@ -56,7 +56,7 @@ public class Pawn extends Piece {
     }
 
     private boolean canMoveTo(Position position, Board chessboard){
-        return  chessboard.isInside(position) && chessboard.isEmpty(position);
+        return  chessboard.isInsideBoard(position) && chessboard.isEmpty(position);
     }
     Collection<Move> getCapturingMoves(Position from, Board chessboard){
         Collection<Move> capturingMoves = new ArrayList<>();
@@ -97,7 +97,7 @@ public class Pawn extends Piece {
     }
 
     private boolean canCaptureAt (Position position, Board chessBoard){
-        if (!(chessBoard.isInside(position)) || chessBoard.isEmpty(position)){
+        if (!(chessBoard.isInsideBoard(position)) || chessBoard.isEmpty(position)){
             return false;
         }
         return !((chessBoard.getPiece(position).getColor()).equals(getColor()));
@@ -117,7 +117,10 @@ public class Pawn extends Piece {
     @Override
     public Piece copy() {
         Pawn pawnCopy = new Pawn(getColor());
-        pawnCopy.setHasMoved(hasMoved());
+        pawnCopy.setPosition(getPosition());
+        pawnCopy.hasMoved = this.hasMoved;
+        pawnCopy.hasMovedForGood = this.hasMovedForGood;
+      //  pawnCopy.currentDepth = this.currentDepth;
         return pawnCopy;
     }
 

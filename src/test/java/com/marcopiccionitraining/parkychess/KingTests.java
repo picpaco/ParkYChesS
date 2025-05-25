@@ -5,7 +5,7 @@ import com.marcopiccionitraining.parkychess.model.moves.DoublePawnMove;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.King;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,46 +26,46 @@ public class KingTests {
     }
     @Test
     void whiteKingInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         King whiteKing = (King) chessboard.getPiece (7,4);
         assertFalse(whiteKing.hasMoved(), "King should not have already moved at starting position.");
     }
     @Test
     void blackKingInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         King blackKing = (King) chessboard.getPiece (0,4);
         assertFalse(blackKing.hasMoved(), "King should not have already moved at starting position.");
     }
     @Test
     void whiteKingNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         King whiteKing = (King) chessboard.getPiece (7,4);
         assertEquals(PlayerColor.WHITE, whiteKing.getColor(), "King at square e1 should be white.");
-        assertEquals(PieceName.KING, whiteKing.getName(), "King's name should be 'KING'");
+        assertEquals(PieceNames.KING, whiteKing.getName(), "King's name should be 'KING'");
         assertEquals("KING", whiteKing.toString(), "King's name as string should be 'KING'");
     }
     @Test
     void blackKingNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         King blackKing = (King) chessboard.getPiece (0,4);
         assertEquals(PlayerColor.BLACK, blackKing.getColor(), "King at square e8 should be black.");
-        assertEquals(PieceName.KING, blackKing.getName(), "King's name should be 'KING'");
+        assertEquals(PieceNames.KING, blackKing.getName(), "King's name should be 'KING'");
         assertEquals("king", blackKing.toString(), "King's name as string should be 'king'");
     }
     @Test
     void blackKingCannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         gameState.setCurrentColor(PlayerColor.BLACK);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 4)).isEmpty());
     }
     @Test
     void whiteKingCannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 4)).isEmpty());
     }
     @Test
     void blackKingLegalMovesBishopCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KING_BISHOP_CHECK_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_KING_BISHOP_CHECK_POSITION);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,4)));
@@ -79,7 +79,7 @@ public class KingTests {
     }
     @Test
     void blackKingLegalMovesBishopCheckInterposePossible() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KING_BISHOP_CHECK_INTERPOSE_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_KING_BISHOP_CHECK_INTERPOSE_POSITION);
         Collection<Move> blackLegalMoves = new ArrayList<>();
         blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
         blackLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,4)));
@@ -94,7 +94,7 @@ public class KingTests {
     }
     @Test
     void blackKingLegalMovesWhiteRookCheckNoQueensideCastleFromFEN() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_WHITE_ROOK_CHECK_NO_QUEENSIDE_CASTLE_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_WHITE_ROOK_CHECK_NO_QUEENSIDE_CASTLE_POSITION);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,4)));
@@ -107,7 +107,7 @@ public class KingTests {
     }
     @Test
     void blackKingLegalMovesWhiteRookCheckNoKingsideCastleFromFEN() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_WHITE_ROOK_CHECK_NO_KINGSIDE_CASTLE_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_WHITE_ROOK_CHECK_NO_KINGSIDE_CASTLE_POSITION);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,4)));
@@ -120,7 +120,7 @@ public class KingTests {
     }
     @Test
     void whiteKingLegalMovesBlackRookCheckNoQueensideCastleFromFEN() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_BLACK_ROOK_CHECK_NO_QUEENSIDE_CASTLE_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_BLACK_ROOK_CHECK_NO_QUEENSIDE_CASTLE_POSITION);
         Collection<Move> whiteKingLegalMoves = new ArrayList<>();
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(6,3)));
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(6,4)));
@@ -133,7 +133,7 @@ public class KingTests {
     }
     @Test
     void whiteKingLegalMovesBlackRookCheckNoKingsideCastleFromFEN() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_BLACK_ROOK_CHECK_NO_KINGSIDE_CASTLE_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_BLACK_ROOK_CHECK_NO_KINGSIDE_CASTLE_POSITION);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(6,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(6,4)));
@@ -146,7 +146,7 @@ public class KingTests {
     }
     @Test
     void whiteKingNoQueensideCastleWithInterposingFriendlyPiece() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_NO_QUEENSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_NO_QUEENSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE);
         Collection<Move> whiteKingLegalMoves = new ArrayList<>();
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,3)));
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,5)));
@@ -161,7 +161,7 @@ public class KingTests {
     }
     @Test
     void blackKingNoQueensideCastleWithInterposingFriendlyPiece() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_NO_QUEENSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_NO_QUEENSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,5)));
@@ -176,7 +176,7 @@ public class KingTests {
     }
     @Test
     void whiteKingNoKingsideCastleWithInterposingFriendlyPiece() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_NO_KINGSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_NO_KINGSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE);
         Collection<Move> whiteKingLegalMoves = new ArrayList<>();
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,3)));
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,5)));
@@ -191,7 +191,7 @@ public class KingTests {
     }
     @Test
     void blackKingNoKingsideCastleWithInterposingFriendlyPiece() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_NO_KINGSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_NO_KINGSIDE_CASTLE_WITH_INTERPOSING_FRIENDLY_PIECE);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,5)));
@@ -205,7 +205,7 @@ public class KingTests {
     }
     @Test
     void blackKingNoCastlePathUnderCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_NO_CASTLE_PATH_UNDER_CHECK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_NO_CASTLE_PATH_UNDER_CHECK);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,5)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(1,5)));
@@ -218,7 +218,7 @@ public class KingTests {
     }
     @Test
     void whiteKingNoCastlePathUnderCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_NO_CASTLE_PATH_UNDER_CHECK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_NO_CASTLE_PATH_UNDER_CHECK);
         Collection<Move> whiteKingLegalMoves = new ArrayList<>();
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,3)));
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(6,3)));
@@ -231,7 +231,7 @@ public class KingTests {
     }
     @Test
     void blackKingNoCastleUnderCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KING_NO_CASTLE_UNDER_CHECK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KING_NO_CASTLE_UNDER_CHECK);
         Collection<Move> blackKingLegalMoves = new ArrayList<>();
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,5)));
         blackKingLegalMoves.add(new StandardMove(new Position(0,4), new Position(0,3)));
@@ -245,7 +245,7 @@ public class KingTests {
     }
     @Test
     void whiteKingNoCastleUnderCheck() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KING_NO_CASTLE_UNDER_CHECK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KING_NO_CASTLE_UNDER_CHECK);
         Collection<Move> whiteKingLegalMoves = new ArrayList<>();
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,3)));
         whiteKingLegalMoves.add(new StandardMove(new Position(7,4), new Position(7,5)));
@@ -259,7 +259,7 @@ public class KingTests {
     }
     @Test
     void verticallyPinnedBlackRook() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_NON_ADJACENT_TO_KING_VERTICALLY_PINNED_BY_WHITE_ROOK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_NON_ADJACENT_TO_KING_VERTICALLY_PINNED_BY_WHITE_ROOK);
         Collection<Move> blackRookLegalMoves = new ArrayList<>();
         blackRookLegalMoves.add(new StandardMove(new Position(2,4), new Position(1,4)));
         blackRookLegalMoves.add(new StandardMove(new Position(2,4), new Position(3,4)));
@@ -276,7 +276,7 @@ public class KingTests {
 
     @Test
     void verticallyPinnedBlackRookAdjacentToKing() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_ADJACENT_TO_KING_VERTICALLY_PINNED_BY_WHITE_ROOK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_ADJACENT_TO_KING_VERTICALLY_PINNED_BY_WHITE_ROOK);
         Collection<Move> blackRookLegalMoves = new ArrayList<>();
         blackRookLegalMoves.add(new StandardMove(new Position(1,4), new Position(2,4)));
         blackRookLegalMoves.add(new StandardMove(new Position(1,4), new Position(3,4)));
@@ -292,7 +292,7 @@ public class KingTests {
     }
     @Test
     void horizontallyPinnedBlackRookAdjacentToKing() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_ADJACENT_TO_KING_HORIZONTALLY_PINNED_BY_WHITE_ROOK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_ADJACENT_TO_KING_HORIZONTALLY_PINNED_BY_WHITE_ROOK);
         Collection<Move> blackRookLegalMoves = new ArrayList<>();
         blackRookLegalMoves.add(new StandardMove(new Position(1,2), new Position(1,3)));
         blackRookLegalMoves.add(new StandardMove(new Position(1,2), new Position(1,4)));
@@ -307,7 +307,7 @@ public class KingTests {
     }
     @Test
     void horizontallyPinnedBlackRookNonAdjacentToKing() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_NON_ADJACENT_TO_KING_HORIZONTALLY_PINNED_BY_WHITE_ROOK));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_NON_ADJACENT_TO_KING_HORIZONTALLY_PINNED_BY_WHITE_ROOK);
         Collection<Move> blackRookLegalMoves = new ArrayList<>();
         blackRookLegalMoves.add(new StandardMove(new Position(1,3), new Position(1,2)));
         blackRookLegalMoves.add(new StandardMove(new Position(1,3), new Position(1,4)));
@@ -322,7 +322,7 @@ public class KingTests {
     }
     @Test
     void blackBishopPinnedByWhiteBishop() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_BISHOP_PINNED_BY_WHITE_BISHOP));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_BISHOP_PINNED_BY_WHITE_BISHOP);
         Collection<Move> blackBishopLegalMoves = new ArrayList<>();
         blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(1,3)));
         blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(3,5)));
@@ -336,7 +336,7 @@ public class KingTests {
     }
     @Test
     void blackBishopNotPinnedByWhiteBishopBecauseOfInterposingKnight() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_BISHOP_NOT_PINNED_BY_WHITE_BISHOP_BECAUSE_OF_INTERPOSING_KNIGHT));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_BISHOP_NOT_PINNED_BY_WHITE_BISHOP_BECAUSE_OF_INTERPOSING_KNIGHT);
         Collection<Move> blackBishopLegalMoves = new ArrayList<>();
         blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(1,3)));
         blackBishopLegalMoves.add(new StandardMove(new Position(2,4), new Position(3,5)));
@@ -355,7 +355,7 @@ public class KingTests {
     }
     @Test
     void whiteBishopPinnedByBlackBishop() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_BISHOP_PINNED_BY_BLACK_BISHOP));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_BISHOP_PINNED_BY_BLACK_BISHOP);
         Collection<Move> whiteBishopLegalMoves = new ArrayList<>();
         whiteBishopLegalMoves.add(new StandardMove(new Position(5,6), new Position(1,2)));
         whiteBishopLegalMoves.add(new StandardMove(new Position(5,6), new Position(2,3)));
@@ -370,37 +370,37 @@ public class KingTests {
 
     @Test
     void whiteKnightPinnedByBlackRookOnRow() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KNIGHT_PINNED_BY_BLACK_ROOK_ON_ROW));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KNIGHT_PINNED_BY_BLACK_ROOK_ON_ROW);
         Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 3));
         assertTrue(computedKnightMoves.isEmpty(), "Knight should have no moves.");
     }
     @Test
     void blackKnightPinnedByWhiteQueenOnColumn() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_KNIGHT_PINNED_BY_WHITE_QUEEN_ON_COLUMN));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_KNIGHT_PINNED_BY_WHITE_QUEEN_ON_COLUMN);
         Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 1));
         assertTrue(computedKnightMoves.isEmpty(), "Knight should have no moves.");
     }
     @Test
     void whiteKnightPinnedByBlackQueenOnDiagonal() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_KNIGHT_PINNED_BY_BLACK_QUEEN_ON_DIAGONAL));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_KNIGHT_PINNED_BY_BLACK_QUEEN_ON_DIAGONAL);
         Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 1));
         assertTrue(computedKnightMoves.isEmpty(), "Knight should have no moves.");
     }
     @Test
     void blackPawnPinnedByWhiteQueenOnDiagonal() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_PAWN_PINNED_BY_WHITE_QUEEN_ON_DIAGONAL));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_PAWN_PINNED_BY_WHITE_QUEEN_ON_DIAGONAL);
         Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(1, 3));
         assertTrue(computedPawnMoves.isEmpty(), "Pawn should have no moves.");
     }
     @Test
     void blackPawnPinnedByWhiteQueenOnRow() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_PAWN_PINNED_BY_WHITE_QUEEN_ON_ROW));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_PAWN_PINNED_BY_WHITE_QUEEN_ON_ROW);
         Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(1, 3));
         assertTrue(computedPawnMoves.isEmpty(), "Pawn should have no moves.");
     }
     @Test
     void whitePawnPinnedNoEnPassantCapture() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_PAWN_PINNED_NO_EN_PASSANT));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_PAWN_PINNED_NO_EN_PASSANT);
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
         whitePawnLegalMoves.add(new StandardMove(new Position(3,3), new Position(2,3)));
         Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 3));
@@ -411,7 +411,7 @@ public class KingTests {
     }
     @Test
     void whitePawnsNotPinnedByBlackQueen() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_PAWNS_NOT_PINNED_BY_BLACK_QUEEN));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_PAWNS_NOT_PINNED_BY_BLACK_QUEEN);
         Collection<Move> whitePawnC3LegalMoves = new ArrayList<>();
         whitePawnC3LegalMoves.add(new StandardMove(new Position(5,2), new Position(4,2)));
         Collection<Move> computedPawnC3Moves = gameState.getLegalMovesForPieceAtPosition(new Position(5, 2));
@@ -430,7 +430,7 @@ public class KingTests {
     }
     @Test
     void blackKingInDoubleCheckedWithDiscoveryAndMateByWhiteKnight() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KING_DOUBLE_CHECKED_AND_MATED_BY_WHITE_KNIGHT));
+        ChessGame gameState = new ChessGame(chessboard, FEN_KING_DOUBLE_CHECKED_AND_MATED_BY_WHITE_KNIGHT);
         Collection<Move> computedKingMoves = gameState.getLegalMovesForPieceAtPosition(new Position(0, 7));
         assertTrue(computedKingMoves.isEmpty(), "King should have no moves.");
         Collection<Move> legalMovesforColor = gameState.getLegalMovesForColor(gameState.getCurrentColor());
@@ -441,11 +441,22 @@ public class KingTests {
     }
     @Test
     void whiteKnightTwoPossibleMovesOneIsDoubleCheckAndDiscovery() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_KNIGHT_DOUBLE_CHECKS_AND_MATES_WHITE_KING));
+        ChessGame gameState = new ChessGame(chessboard, FEN_KNIGHT_DOUBLE_CHECKS_AND_MATES_WHITE_KING);
         Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(0, 5));
         computedKnightMoves.add(new StandardMove(new Position(0,5), new Position(1,7)));
         computedKnightMoves.add(new StandardMove(new Position(0,5), new Position(2,6)));
         assertEquals(2, computedKnightMoves.size(), "Knight should have 2 moves.");
     }
-
+//TODO The following test dictates the app behavior in presence of a checker when move is to the checker's color.
+    @Test
+    void whiteRookInitialCheckAndWhiteMoves() {
+        assertThrows(RuntimeException.class, () -> {
+            ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_ROOK_INITIAL_CHECKER);
+            assertTrue(chessboard.isInCheck(PlayerColor.WHITE), "White player should be in check");
+        }, "We are expecting a Runtime exception.");
+    }
+      //      Collection<Move> computedRookMoves = gameState.getLegalMovesForPieceAtPosition(new Position(0, 0));
+      //      Collection<Move> computedKingMoves = gameState.getLegalMovesForPieceAtPosition(new Position(7, 4));
+        //assertEquals(0, computedRookMoves.size(), "The expected number of computed moves for the white rook is 0.");
+        //assertEquals(0, computedKingMoves.size(), "The expected number of computed moves for the white king is 0.");
 }

@@ -3,8 +3,6 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -13,7 +11,7 @@ public class Knight extends Piece {
 
     public Knight(PlayerColor playerColor){
         super(playerColor);
-        setName(PieceName.KNIGHT);
+        setName(PieceNames.KNIGHT);
     }
 
     @Override
@@ -31,7 +29,10 @@ public class Knight extends Piece {
     @Override
     public Piece copy() {
         Knight knightCopy = new Knight(getColor());
-        knightCopy.setHasMoved(hasMoved());
+        knightCopy.setPosition(getPosition());
+        knightCopy.hasMoved = this.hasMoved;
+        knightCopy.hasMovedForGood = this.hasMovedForGood;
+   //     knightCopy.currentDepth = this.currentDepth;
         return knightCopy;
     }
 }

@@ -1,5 +1,5 @@
 package com.marcopiccionitraining.parkychess.model.pieces;
 
-public enum PieceName {
+public enum PieceNames {
     PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, NONE
 }

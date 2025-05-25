@@ -16,9 +16,7 @@ public record GameResult(PlayerColor winner, GameEndReason gameEndReason) {
 
     @Override
     public String toString() {
-        return "GameResult{" +
-                "winner=" + winner +
-                ", gameEndReason=" + gameEndReason +
-                '}';
+        return "Winner: " + winner +
+                ", game end reason: " + gameEndReason;
     }
 }

@@ -4,8 +4,6 @@ import com.marcopiccionitraining.parkychess.model.Board;
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PawnPromotionMove extends Move {
 
@@ -36,10 +34,12 @@ public class PawnPromotionMove extends Move {
         chessboard.setEmpty(getFrom());
         Piece promotionPiece = createPromotionPiece(pawn.getColor());
         promotionPiece.setHasMoved(true);
+     //   promotionPiece.setHasMovedForGood(true);
         boolean isCapture = !(chessboard.isEmpty(getTo()));
     //    LOGGER.trace ("isCapture? {}", isCapture);
         if (isCapture) {
             capturedPiece = chessboard.getPiece(getTo());
+        //    capturedPiece.setHasMoved(true);
         }
         chessboard.setPiece(promotionPiece, getTo());
         return true;

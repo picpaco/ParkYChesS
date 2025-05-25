@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.Optional;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
-import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_SIMPLEST_LEGAL;
 
 @Component
 public class StageListener implements ApplicationListener<ParkychessApplication.StageReadyEvent> {
@@ -73,7 +72,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             this.applicationContext = applicationContext;
             objectFactory = applicationContext.getBean(ObjectFactory.class);
             chessboard = new Board();
-            gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
+            gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         }
     }
 
@@ -181,9 +180,10 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
 
     private void handleMove (Move aMove, GUIController guiController) {
      //   LOGGER.trace ("In handleMove({}", aMove);
-        Collection<Move> generatedMoves = gameState.getLegalMovesForColor(gameState.getCurrentColor());//generateMoves();
+        Collection<Move> generatedMoves = gameState.getLegalMovesForColor(gameState.getCurrentColor());
         gameState.makeMove (aMove, generatedMoves);
         displayChessboard (gameState.getChessboard(), guiController);
+        gameState.checkGameEnd(gameState.getLegalMovesForColor(gameState.getCurrentColor()));
         if (gameState.isGameOver()) {
         //    LOGGER.debug("Game over!");
             showGameOver(guiController);
@@ -221,7 +221,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         selectedPos = null;
         removeHighlights();
         movesCache.clear();
-        gameState = new ChessGame (chessboard, new FENString(FEN_INITIAL_POSITION));
+        gameState = new ChessGame (chessboard, FEN_INITIAL_POSITION);
         if (gameState.getCurrentColor().equals(PlayerColor.BLACK)){
             guiController.moveToBlack.setVisible(true);
             guiController.moveToWhite.setVisible(false);
@@ -238,7 +238,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Window window = promotionAlert.getDialogPane().getScene().getWindow();
         window.setOnCloseRequest(event -> window.hide());
         GridPane promotionPiecesImagesGrid = new GridPane();
-        ImageView queenImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceName.QUEEN));
+        ImageView queenImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.QUEEN));
         queenImageView.setPreserveRatio(true);
         queenImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         queenImageView.setFitHeight(PROMOTION_PIECE_SIZE);
@@ -249,7 +249,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView rookImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceName.ROOK));
+        ImageView rookImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.ROOK));
         rookImageView.setPreserveRatio(true);
         rookImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         rookImageView.setFitHeight(PROMOTION_PIECE_SIZE);
@@ -260,7 +260,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView knightImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceName.KNIGHT));
+        ImageView knightImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.KNIGHT));
         knightImageView.setPreserveRatio(true);
         knightImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         knightImageView.setFitHeight(PROMOTION_PIECE_SIZE);
@@ -271,7 +271,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView bishopImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceName.BISHOP));
+        ImageView bishopImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.BISHOP));
         bishopImageView.setPreserveRatio(true);
         bishopImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         bishopImageView.setFitHeight(PROMOTION_PIECE_SIZE);
@@ -326,7 +326,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
        //         LOGGER.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
                    //     row, column, guiController.highlightsGrid.getChildren().size());
                 //Then initialize the pieces layer square with an empty image.
-                ImageView imageView = new ImageView (objectFactory.getPieceImage(PlayerColor.WHITE, PieceName.NONE));
+                ImageView imageView = new ImageView (objectFactory.getPieceImage(PlayerColor.WHITE, PieceNames.NONE));
                 imageView.setSmooth(true);
                 imageView.setCache(true);
                 imageView.setFitHeight(DIM_SQUARE_SIDE);

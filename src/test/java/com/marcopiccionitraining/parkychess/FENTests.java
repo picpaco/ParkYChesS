@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
+import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BxA8;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -103,48 +104,24 @@ public class FENTests {
                 "A white pawn on the eigth row should be a problem.");
     }
     @Test
-    void fromInitialFENToChessboard(){
-        String expectedComputedFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        ChessGame gameState = new ChessGame(chessboard, new FENString(expectedComputedFEN));
-        Board chessboard2 = new Board();
-        chessboard2.setPiece(new Rook(PlayerColor.BLACK), 0, 0);
-        chessboard2.setPiece(new Rook(PlayerColor.BLACK), 0, 7);
-        chessboard2.setPiece(new Knight(PlayerColor.BLACK), 0, 1);
-        chessboard2.setPiece(new Knight(PlayerColor.BLACK), 0, 6);
-        chessboard2.setPiece(new Bishop(PlayerColor.BLACK), 0, 2);
-        chessboard2.setPiece(new Bishop(PlayerColor.BLACK), 0, 5);
-        chessboard2.setPiece(new King(PlayerColor.BLACK), 0, 4);
-        chessboard2.setPiece(new Queen(PlayerColor.BLACK), 0, 3);
-        chessboard2.setPiece(new Rook(PlayerColor.WHITE), 7, 0);
-        chessboard2.setPiece(new Rook(PlayerColor.WHITE), 7, 7);
-        chessboard2.setPiece(new Knight(PlayerColor.WHITE), 7, 1);
-        chessboard2.setPiece(new Knight(PlayerColor.WHITE), 7, 6);
-        chessboard2.setPiece(new Bishop(PlayerColor.WHITE), 7, 2);
-        chessboard2.setPiece(new Bishop(PlayerColor.WHITE), 7, 5);
-        chessboard2.setPiece(new King(PlayerColor.WHITE), 7, 4);
-        chessboard2.setPiece(new Queen(PlayerColor.WHITE), 7, 3);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 0);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 1);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 2);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 3);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 4);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 5);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 6);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 1, 7);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 0);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 1);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 2);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 3);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 4);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 5);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 6);
-        chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 6, 7);
-        assertEquals(chessboard, chessboard2, "The content and positions of all pieces should be the same.");
+    void fromInitialStringToFENString(){
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
+        assertEquals(FEN_INITIAL_POSITION, new FENString(FEN_INITIAL_POSITION).toString(),
+                "FEN_INITIAL_POSITION and of new FENString(FEN_INITIAL_POSITION).toString() should be the same.");
     }
+    @Test
+    void testCastleRightsFromFEN() {
+        ChessGame gameState = new ChessGame(chessboard, FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BxA8);
+        assertFalse(chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.BLACK), "Black should not be able to castle queenside.");
+        assertFalse(chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.WHITE), "White should not be able to castle queenside.");
+        assertTrue(chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.BLACK), "Black should be able to castle kings.");
+        assertTrue(chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.WHITE), "White should be able to castle kings.");
+    }
+
     @Test
     void fromEnPassantEnabledFENToChessboard(){
         String expectedComputedFEN = "7k/8/8/pP6/8/8/8/7K w - a6 0 0";
-        ChessGame gameState = new ChessGame(chessboard, new FENString(expectedComputedFEN));
+        ChessGame gameState = new ChessGame(chessboard, expectedComputedFEN);
         Board chessboard2 = new Board();
         chessboard2.setPiece(new King(PlayerColor.BLACK), 0, 7);
         chessboard2.setPiece(new King(PlayerColor.WHITE), 7, 7);
@@ -157,41 +134,8 @@ public class FENTests {
                 "Black must have an en passant capture positions set.");
     }
     @Test
-    void fromChessboardToFEN(){
-        chessboard.setPiece(new Rook(PlayerColor.BLACK), 0, 0);
-        chessboard.setPiece(new Rook(PlayerColor.BLACK), 0, 7);
-        chessboard.setPiece(new Knight(PlayerColor.BLACK), 0, 1);
-        chessboard.setPiece(new Knight(PlayerColor.BLACK), 0, 6);
-        chessboard.setPiece(new Bishop(PlayerColor.BLACK), 0, 2);
-        chessboard.setPiece(new Bishop(PlayerColor.BLACK), 0, 5);
-        chessboard.setPiece(new King(PlayerColor.BLACK), 0, 4);
-        chessboard.setPiece(new Queen(PlayerColor.BLACK), 0, 3);
-        chessboard.setPiece(new Rook(PlayerColor.WHITE), 7, 0);
-        chessboard.setPiece(new Rook(PlayerColor.WHITE), 7, 7);
-        chessboard.setPiece(new Knight(PlayerColor.WHITE), 7, 1);
-        chessboard.setPiece(new Knight(PlayerColor.WHITE), 7, 6);
-        chessboard.setPiece(new Bishop(PlayerColor.WHITE), 7, 2);
-        chessboard.setPiece(new Bishop(PlayerColor.WHITE), 7, 5);
-        chessboard.setPiece(new King(PlayerColor.WHITE), 7, 4);
-        chessboard.setPiece(new Queen(PlayerColor.WHITE), 7, 3);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 0);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 1);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 2);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 3);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 4);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 5);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 6);
-        chessboard.setPiece(new Pawn(PlayerColor.BLACK), 1, 7);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 0);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 1);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 2);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 3);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 4);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 5);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 6);
-        chessboard.setPiece(new Pawn(PlayerColor.WHITE), 6, 7);
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_INITIAL_POSITION));
-        String computedFENString = (new FENString(gameState)).toString();
+    void fromInitialPositionToFEN(){
+        String computedFENString = new FENString(FEN_INITIAL_POSITION).toString();
         assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", computedFENString,
                 "The expected and computed FEN strings should be the same.");
     }

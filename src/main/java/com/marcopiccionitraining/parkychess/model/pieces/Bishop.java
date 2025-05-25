@@ -10,7 +10,7 @@ import java.util.HashSet;
 public class Bishop extends SliderPiece {
     public Bishop(PlayerColor playerColor){
         super(playerColor);
-        setName(PieceName.BISHOP);
+        setName(PieceNames.BISHOP);
     }
 
   //  private final Logger LOGGER = LoggerFactory.getLogger(Bishop.class);
@@ -28,7 +28,10 @@ public class Bishop extends SliderPiece {
     @Override
     public Piece copy() {
         Bishop bishopCopy = new Bishop(getColor());
-        bishopCopy.setHasMoved(hasMoved());
+        bishopCopy.setPosition(getPosition());
+        bishopCopy.hasMoved = hasMoved;
+        bishopCopy.hasMovedForGood = this.hasMovedForGood;
+   //     bishopCopy.currentDepth = this.currentDepth;
         return bishopCopy;
     }
 }

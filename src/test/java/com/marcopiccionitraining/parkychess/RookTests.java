@@ -3,7 +3,7 @@ package com.marcopiccionitraining.parkychess;
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceName;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.Rook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,57 +26,57 @@ class RookTests {
 	}
 	@Test
 	void whiteRookInitialPositionHasNotMovedYet(){
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		Rook whiteRook = (Rook) chessboard.getPiece (7,7);
 		assertFalse(whiteRook.hasMoved(), "Rook should not have already moved at starting position.");
 	}
 	@Test
 	void blackRookInitialPositionHasNotMovedYet(){
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		Rook blackRook = (Rook) chessboard.getPiece (0,7);
 		assertFalse(blackRook.hasMoved(), "Rook should not have already moved at starting position.");
 	}
 	@Test
 	void whiteRookNameCheck(){
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		Rook whiteRook = (Rook) chessboard.getPiece (7,7);
 		assertEquals(PlayerColor.WHITE, whiteRook.getColor(), "Rook at square h1 should be white.");
-		assertEquals(PieceName.ROOK, whiteRook.getName(), "Rook's name should be 'ROOK'");
+		assertEquals(PieceNames.ROOK, whiteRook.getName(), "Rook's name should be 'ROOK'");
 		assertEquals("ROOK", whiteRook.toString(), "Rook's name as string should be 'ROOK'");
 	}
 	@Test
 	void blackRookNameCheck(){
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		Rook blackRook = (Rook) chessboard.getPiece (0,7);
 		assertEquals(PlayerColor.BLACK, blackRook.getColor(), "Rook at square h8 should be black.");
-		assertEquals(PieceName.ROOK, blackRook.getName(), "Rook's name should be 'ROOK'");
+		assertEquals(PieceNames.ROOK, blackRook.getName(), "Rook's name should be 'ROOK'");
 		assertEquals("rook", blackRook.toString(), "Rook's name as string should be 'rook'");
 	}
 	@Test
 	void blackRookAtA8CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		gameState.setCurrentColor(PlayerColor.BLACK);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 0)).isEmpty());
 	}
 	@Test
 	void blackRookAtH8CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		gameState.setCurrentColor(PlayerColor.BLACK);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 7)).isEmpty());
 	}
 	@Test
 	void whiteRookAtA1CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 0)).isEmpty());
 	}
 	@Test
 	void whiteRookAtH1CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 7)).isEmpty());
 	}
 	@Test
 	void blackRookAtA8LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_A8_NO_CHECK_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_A8_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(0,0), new Position(0,1)));
 		rookLegalMoves.add(new StandardMove(new Position(0,0), new Position(0,2)));
@@ -96,7 +96,7 @@ class RookTests {
 	}
 	@Test
 	void blackRookAtH8LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_ROOK_H8_NO_CHECK_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_H8_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(0,7), new Position(0,6)));
 		rookLegalMoves.add(new StandardMove(new Position(0,7), new Position(0,5)));
@@ -115,7 +115,7 @@ class RookTests {
 	}
 	@Test
 	void whiteRookAtA1LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_ROOK_A1_NO_CHECK_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_ROOK_A1_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(7,0), new Position(7,1)));
 		rookLegalMoves.add(new StandardMove(new Position(7,0), new Position(7,2)));
@@ -135,7 +135,7 @@ class RookTests {
 	}
 	@Test
 	void whiteRookAtH1LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_ROOK_H1_NO_CHECK_POSITION));
+		ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_ROOK_H1_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(7,7), new Position(7,6)));
 		rookLegalMoves.add(new StandardMove(new Position(7,7), new Position(7,5)));
@@ -168,7 +168,7 @@ class RookTests {
 	}
 
 	private ArrayList<Position> getPositions() {
-		ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_ROOK_A1_PSEUDO_LEGAL_MOVES));
+		ChessGame gameState = new ChessGame(chessboard, FEN_ROOK_A1_PSEUDO_LEGAL_MOVES);
 		ArrayList<Position> rookPseudoLegalPositions1 = new ArrayList<>();
 		rookPseudoLegalPositions1.add(new Position(7,1));
 		rookPseudoLegalPositions1.add(new Position(7,2));

@@ -1,9 +1,8 @@
 package com.marcopiccionitraining.parkychess.model;
-
-
 import com.marcopiccionitraining.parkychess.model.moves.EnPassantMove;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,10 +16,6 @@ public class Board {
     @Setter
     @Getter
     private Move lastExecutedMove;
-    private boolean isBlackKingsideCastlingPossible = true;
-    private boolean isBlackQueensideCastlingPossible = true;
-    private boolean isWhiteKingsideCastlingPossible = true;
-    private boolean isWhiteQueensideCastlingPossible = true;
     private static final HashMap<Position, ArrayList<Position>> knightInsideBoardPositions = new HashMap<>();
     private static final HashMap<Position, HashSet<ArrayList<Position>>> bishopInsideBoardPositions = new HashMap<>();
     private static final HashMap<Position, HashSet<ArrayList<Position>>> rookInsideBoardPositions = new HashMap<>();
@@ -33,9 +28,14 @@ public class Board {
         initializeQueenPositionsInsideBoard();
     }
 
+    private boolean isBlackKingsideCastlingPossible;
+    private boolean isBlackQueensideCastlingPossible;
+    private boolean isWhiteKingsideCastlingPossible;
+    private boolean isWhiteQueensideCastlingPossible;
+
     //  private static final Logger LOGGER = LoggerFactory.getLogger(Board.class);
 
-    /**
+    /** Assumption made associating coordinates to chessboard squares.
      * (0,0) is a8 and is located top left.
      * (0,7) is h8 and is located top right.
      * (7,0) is a1 and is located bottom left.
@@ -45,18 +45,472 @@ public class Board {
         pawnEnPassantCapturePositions.put(PlayerColor.BLACK, null);
         pawnEnPassantCapturePositions.put(PlayerColor.WHITE, null);
     }
-    private static void initializeQueenPositionsInsideBoard(){
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Position currentPosition = new Position(i, j);
-                HashSet<ArrayList<Position>> setOfDirectionsPerPosition =
-                        new HashSet<>(bishopInsideBoardPositions.get(currentPosition));
-                setOfDirectionsPerPosition.addAll(rookInsideBoardPositions.get(currentPosition));
-                queenInsideBoardPositions.put(currentPosition, setOfDirectionsPerPosition);
-            }
-        }
-    //    System.out.println("queenInsideBoardPositions: " + queenInsideBoardPositions);
+    private static void initializeKnightPositionsInsideBoard() {
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(2, 1));
+        knightInsideBoardPositions.put(new Position(0,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 2));
+        knightInsideBoardPositions.put(new Position(0,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(1, 4));
+        knightInsideBoardPositions.put(new Position(0,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(1, 5));
+        knightInsideBoardPositions.put(new Position(0,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(1, 6));
+        knightInsideBoardPositions.put(new Position(0,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(1, 7));
+        knightInsideBoardPositions.put(new Position(0,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 7));
+        knightInsideBoardPositions.put(new Position(0,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(2, 6));
+        knightInsideBoardPositions.put(new Position(0,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(3, 1));
+        knightInsideBoardPositions.put(new Position(1,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        knightInsideBoardPositions.put(new Position(1,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 0));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(0, 4));
+        knightInsideBoardPositions.put(new Position(1,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(0, 5));
+        knightInsideBoardPositions.put(new Position(1,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(0, 6));
+        knightInsideBoardPositions.put(new Position(1,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(0, 7));
+        knightInsideBoardPositions.put(new Position(1,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        knightInsideBoardPositions.put(new Position(1,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(3, 6));
+        knightInsideBoardPositions.put(new Position(1,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(4, 1));
+        knightInsideBoardPositions.put(new Position(2,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 0));
+        knightInsideBoardPositions.put(new Position(2,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        knightInsideBoardPositions.put(new Position(2,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        knightInsideBoardPositions.put(new Position(2,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        knightInsideBoardPositions.put(new Position(2,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 7));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        knightInsideBoardPositions.put(new Position(2,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 7));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        knightInsideBoardPositions.put(new Position(2,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(4, 6));
+        knightInsideBoardPositions.put(new Position(2,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(5, 1));
+        knightInsideBoardPositions.put(new Position(3,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 2));
+        knightInsideBoardPositions.put(new Position(3,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 3));
+        knightInsideBoardPositions.put(new Position(3,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 4));
+        knightInsideBoardPositions.put(new Position(3,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 5));
+        knightInsideBoardPositions.put(new Position(3,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 6));
+        knightInsideBoardPositions.put(new Position(3,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 7));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 7));
+        knightInsideBoardPositions.put(new Position(3,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(5, 6));
+        knightInsideBoardPositions.put(new Position(3,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(6, 1));
+        knightInsideBoardPositions.put(new Position(4,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 2));
+        knightInsideBoardPositions.put(new Position(4,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 3));
+        knightInsideBoardPositions.put(new Position(4,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 4));
+        knightInsideBoardPositions.put(new Position(4,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 5));
+        knightInsideBoardPositions.put(new Position(4,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 7));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 6));
+        knightInsideBoardPositions.put(new Position(4,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 7));
+        knightInsideBoardPositions.put(new Position(4,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(6, 6));
+        knightInsideBoardPositions.put(new Position(4,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(7, 1));
+        knightInsideBoardPositions.put(new Position(5,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 2));
+        knightInsideBoardPositions.put(new Position(5,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 3));
+        knightInsideBoardPositions.put(new Position(5,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 4));
+        knightInsideBoardPositions.put(new Position(5,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 5));
+        knightInsideBoardPositions.put(new Position(5,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 7));
+        destinations.add(new Position(7, 4));
+        destinations.add(new Position(7, 6));
+        knightInsideBoardPositions.put(new Position(5,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 7));
+        knightInsideBoardPositions.put(new Position(5,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(7, 6));
+        knightInsideBoardPositions.put(new Position(5,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(7, 2));
+        knightInsideBoardPositions.put(new Position(6,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(7, 3));
+        knightInsideBoardPositions.put(new Position(6,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 4));
+        knightInsideBoardPositions.put(new Position(6,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 5));
+        knightInsideBoardPositions.put(new Position(6,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 6));
+        knightInsideBoardPositions.put(new Position(6,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 7));
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 7));
+        knightInsideBoardPositions.put(new Position(6,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(7, 4));
+        knightInsideBoardPositions.put(new Position(6,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(7, 5));
+        knightInsideBoardPositions.put(new Position(6,7), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(6, 2));
+        knightInsideBoardPositions.put(new Position(7,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(6, 3));
+        knightInsideBoardPositions.put(new Position(7,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 4));
+        knightInsideBoardPositions.put(new Position(7,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 5));
+        knightInsideBoardPositions.put(new Position(7,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 6));
+        knightInsideBoardPositions.put(new Position(7,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 7));
+        knightInsideBoardPositions.put(new Position(7,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 7));
+        destinations.add(new Position(6, 4));
+        knightInsideBoardPositions.put(new Position(7,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 5));
+        knightInsideBoardPositions.put(new Position(7,7), destinations);
     }
+
     private static void initializeBishopPositionsInsideBoard() {
         HashSet<ArrayList<Position>> positionsGroupedByDirection = new HashSet<>();
         ArrayList<Position> positionsInDirection1 = new ArrayList<>();
@@ -2317,471 +2771,18 @@ public class Board {
         //validated
     }
 
-    private static void initializeKnightPositionsInsideBoard() {
-        ArrayList<Position> destinations = new ArrayList<>();
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(2, 1));
-        knightInsideBoardPositions.put(new Position(0,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(2, 0));
-        destinations.add(new Position(2, 2));
-        knightInsideBoardPositions.put(new Position(0,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 0));
-        destinations.add(new Position(2, 1));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(1, 4));
-        knightInsideBoardPositions.put(new Position(0,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 1));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(1, 5));
-        knightInsideBoardPositions.put(new Position(0,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(1, 6));
-        knightInsideBoardPositions.put(new Position(0,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(2, 6));
-        destinations.add(new Position(1, 7));
-        knightInsideBoardPositions.put(new Position(0,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 4));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(2, 7));
-        knightInsideBoardPositions.put(new Position(0,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 5));
-        destinations.add(new Position(2, 6));
-        knightInsideBoardPositions.put(new Position(0,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 2));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(3, 1));
-        knightInsideBoardPositions.put(new Position(1,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 3));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(3, 0));
-        destinations.add(new Position(3, 2));
-        knightInsideBoardPositions.put(new Position(1,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 0));
-        destinations.add(new Position(2, 0));
-        destinations.add(new Position(3, 1));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(0, 4));
-        knightInsideBoardPositions.put(new Position(1,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 1));
-        destinations.add(new Position(2, 1));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(0, 5));
-        knightInsideBoardPositions.put(new Position(1,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 2));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(2, 6));
-        destinations.add(new Position(0, 6));
-        knightInsideBoardPositions.put(new Position(1,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 3));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(3, 6));
-        destinations.add(new Position(2, 7));
-        destinations.add(new Position(0, 7));
-        knightInsideBoardPositions.put(new Position(1,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 4));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(3, 7));
-        knightInsideBoardPositions.put(new Position(1,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 5));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(3, 6));
-        knightInsideBoardPositions.put(new Position(1,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 1));
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(4, 1));
-        knightInsideBoardPositions.put(new Position(2,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 2));
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(4, 0));
-        knightInsideBoardPositions.put(new Position(2,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 1));
-        destinations.add(new Position(0, 3));
-        destinations.add(new Position(1, 0));
-        destinations.add(new Position(1, 4));
-        destinations.add(new Position(3, 0));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(4, 1));
-        destinations.add(new Position(4, 3));
-        knightInsideBoardPositions.put(new Position(2,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 2));
-        destinations.add(new Position(0, 4));
-        destinations.add(new Position(1, 1));
-        destinations.add(new Position(1, 5));
-        destinations.add(new Position(3, 1));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(4, 4));
-        knightInsideBoardPositions.put(new Position(2,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 3));
-        destinations.add(new Position(0, 5));
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(1, 6));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(3, 6));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(4, 5));
-        knightInsideBoardPositions.put(new Position(2,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 4));
-        destinations.add(new Position(0, 6));
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(1, 7));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(3, 7));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(4, 6));
-        knightInsideBoardPositions.put(new Position(2,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 5));
-        destinations.add(new Position(0, 7));
-        destinations.add(new Position(1, 4));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(4, 7));
-        knightInsideBoardPositions.put(new Position(2,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(0, 6));
-        destinations.add(new Position(1, 5));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(4, 6));
-        knightInsideBoardPositions.put(new Position(2,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 1));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(5, 1));
-        knightInsideBoardPositions.put(new Position(3,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 0));
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(5, 0));
-        destinations.add(new Position(5, 2));
-        knightInsideBoardPositions.put(new Position(3,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 1));
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(2, 0));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(4, 0));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(5, 1));
-        destinations.add(new Position(5, 3));
-        knightInsideBoardPositions.put(new Position(3,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 2));
-        destinations.add(new Position(1, 4));
-        destinations.add(new Position(2, 1));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(4, 1));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(5, 4));
-        knightInsideBoardPositions.put(new Position(3,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 3));
-        destinations.add(new Position(1, 5));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(2, 6));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(4, 6));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(5, 5));
-        knightInsideBoardPositions.put(new Position(3,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 4));
-        destinations.add(new Position(1, 6));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(2, 7));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(4, 7));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(5, 6));
-        knightInsideBoardPositions.put(new Position(3,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 5));
-        destinations.add(new Position(1, 7));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(5, 7));
-        knightInsideBoardPositions.put(new Position(3,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(1, 6));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(5, 6));
-        knightInsideBoardPositions.put(new Position(3,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 1));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(6, 1));
-        knightInsideBoardPositions.put(new Position(4,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 0));
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(6, 0));
-        destinations.add(new Position(6, 2));
-        knightInsideBoardPositions.put(new Position(4,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 1));
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(3, 0));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(5, 0));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(6, 1));
-        destinations.add(new Position(6, 3));
-        knightInsideBoardPositions.put(new Position(4,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 2));
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(3, 1));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(5, 1));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(6, 2));
-        destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(4,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 3));
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(3, 6));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(5, 6));
-        destinations.add(new Position(6, 3));
-        destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(4,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 4));
-        destinations.add(new Position(2, 6));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(3, 7));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(5, 7));
-        destinations.add(new Position(6, 4));
-        destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(4,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 5));
-        destinations.add(new Position(2, 7));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(6, 5));
-        destinations.add(new Position(6, 7));
-        knightInsideBoardPositions.put(new Position(4,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(2, 6));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(4,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 1));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(6, 2));
-        destinations.add(new Position(7, 1));
-        knightInsideBoardPositions.put(new Position(5,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 0));
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(6, 3));
-        destinations.add(new Position(7, 0));
-        destinations.add(new Position(7, 2));
-        knightInsideBoardPositions.put(new Position(5,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 1));
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(4, 0));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(6, 0));
-        destinations.add(new Position(6, 4));
-        destinations.add(new Position(7, 1));
-        destinations.add(new Position(7, 3));
-        knightInsideBoardPositions.put(new Position(5,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 2));
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(4, 1));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(6, 1));
-        destinations.add(new Position(6, 5));
-        destinations.add(new Position(7, 2));
-        destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(5,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 3));
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(4, 6));
-        destinations.add(new Position(6, 2));
-        destinations.add(new Position(6, 6));
-        destinations.add(new Position(7, 3));
-        destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(5,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 4));
-        destinations.add(new Position(3, 6));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(4, 7));
-        destinations.add(new Position(6, 3));
-        destinations.add(new Position(6, 7));
-        destinations.add(new Position(7, 4));
-        destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(5,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 5));
-        destinations.add(new Position(3, 7));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(6, 4));
-        destinations.add(new Position(7, 5));
-        destinations.add(new Position(7, 7));
-        knightInsideBoardPositions.put(new Position(5,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(3, 6));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(6, 5));
-        destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(5,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 1));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(7, 2));
-        knightInsideBoardPositions.put(new Position(6,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 0));
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(7, 3));
-        knightInsideBoardPositions.put(new Position(6,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 1));
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(5, 0));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(7, 0));
-        destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(6,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 2));
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(5, 1));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(7, 1));
-        destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(6,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 3));
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(5, 6));
-        destinations.add(new Position(7, 2));
-        destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(6,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 4));
-        destinations.add(new Position(4, 6));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(5, 7));
-        destinations.add(new Position(7, 3));
-        destinations.add(new Position(7, 7));
-        knightInsideBoardPositions.put(new Position(6,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 5));
-        destinations.add(new Position(4, 7));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(6,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(4, 6));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(6,7), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 1));
-        destinations.add(new Position(6, 2));
-        knightInsideBoardPositions.put(new Position(7,0), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 0));
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(6, 3));
-        knightInsideBoardPositions.put(new Position(7,1), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 1));
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(6, 0));
-        destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(7,2), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 2));
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(6, 1));
-        destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(7,3), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 3));
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(6, 2));
-        destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(7,4), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 4));
-        destinations.add(new Position(5, 6));
-        destinations.add(new Position(6, 3));
-        destinations.add(new Position(6, 7));
-        knightInsideBoardPositions.put(new Position(7,5), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 5));
-        destinations.add(new Position(5, 7));
-        destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(7,6), destinations);
-        destinations = new ArrayList<>();
-        destinations.add(new Position(5, 6));
-        destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(7,7), destinations);
+    private static void initializeQueenPositionsInsideBoard(){
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Position currentPosition = new Position(i, j);
+                HashSet<ArrayList<Position>> setOfDirectionsPerPosition =
+                        new HashSet<>(bishopInsideBoardPositions.get(currentPosition));
+                setOfDirectionsPerPosition.addAll(rookInsideBoardPositions.get(currentPosition));
+                queenInsideBoardPositions.put(currentPosition, setOfDirectionsPerPosition);
+            }
+        }
     }
+
     public List<Position> getPotentialKnightDestinations(Position from){
         return knightInsideBoardPositions.get(from);
     }
@@ -2798,38 +2799,6 @@ public class Board {
         return queenInsideBoardPositions.get(from);
     }
 
-    public boolean isBlackKingsideCastlingPossible() {
-        return isBlackKingsideCastlingPossible;
-    }
-
-    public void setBlackKingsideCastlingPossible(boolean blackKingsideCastlingPossible) {
-        isBlackKingsideCastlingPossible = blackKingsideCastlingPossible;
-    }
-
-    public boolean isBlackQueensideCastlingPossible() {
-        return isBlackQueensideCastlingPossible;
-    }
-
-    public void setBlackQueensideCastlingPossible(boolean blackQueensideCastlingPossible) {
-        isBlackQueensideCastlingPossible = blackQueensideCastlingPossible;
-    }
-
-    public boolean isWhiteKingsideCastlingPossible() {
-        return isWhiteKingsideCastlingPossible;
-    }
-
-    public void setWhiteKingsideCastlingPossible(boolean whiteKingsideCastlingPossible) {
-        isWhiteKingsideCastlingPossible = whiteKingsideCastlingPossible;
-    }
-
-    public boolean isWhiteQueensideCastlingPossible() {
-        return isWhiteQueensideCastlingPossible;
-    }
-
-    public void setWhiteQueensideCastlingPossible(boolean whiteQueensideCastlingPossible) {
-        isWhiteQueensideCastlingPossible = whiteQueensideCastlingPossible;
-    }
-
     public Position getEnPassantCapturePositionForColor (PlayerColor playerColor){
         return pawnEnPassantCapturePositions.get(playerColor);
     }
@@ -2838,32 +2807,42 @@ public class Board {
      //   LOGGER.trace("Entering setEnPassantCapturePositionForColor(playerColor = {}, position = {}", playerColor, position);
         pawnEnPassantCapturePositions.put(playerColor, position);
     }
+
     public Piece getPiece(Position position) {
         return pieces[position.row()][position.column()];
     }
+
     public Piece getPiece(int row, int column) {
         return pieces[row][column];
     }
+
     public void setPiece (Piece piece, Position position){
+        piece.setPosition(position);
         pieces [position.row()][position.column()] = piece;
     }
+
     public void setPiece (Piece piece, int row, int column){
+       piece.setPosition(new Position(row,column));
         pieces[row][column] = piece;
     }
+
     public void setEmpty (Position position){
       //  LOGGER.trace("setEmpty(position = {}", position);
         pieces [position.row()][position.column()] = null;
     }
 
     public boolean isEmpty (Position position){
-        return pieces [position.row()][position.column()] == null;
+        if (position == null){
+            return true;
+        }
+        return pieces[position.row()][position.column()] == null;
     }
 
     public boolean isEmpty (int row, int column){
         return pieces [row][column] == null;
     }
 
-    public boolean isInside (Position position){
+    public boolean isInsideBoard(Position position){
         if (position == null){
             return false;
         }
@@ -2872,6 +2851,9 @@ public class Board {
 
     //TODO implement code detecting initial checkers
 
+    /**
+     * @return a collection containing all the board positions containing pieces.
+     */
     public Collection<Position> getPiecesPositions(){
       //  LOGGER.trace("Entering getPiecesPositions()");
         Collection<Position> piecesPositions = new ArrayList<>();
@@ -2880,27 +2862,44 @@ public class Board {
                 if (!isEmpty(row, column)){
                     Position position = new Position(row, column);
                     piecesPositions.add(position);
+            //        System.out.println("Added a " + getPiece(row, column) + " at " + position);
                 }
             }
         }
-      //  LOGGER.trace("piecesPositions: {}", piecesPositions);
+   //     System.out.println("piecesPositions: " + piecesPositions);
+   //     System.out.println("Found " + piecesPositions.size() + " pieces positions");
         return  piecesPositions;
     }
 
+    /**
+     * @param playerColor is the color we are interested in.
+     * @return a collection containing all the board positions containing pieces of playerColor.
+     */
     public Collection<Position> getPiecesPositionsFor(PlayerColor playerColor){
-       // LOGGER.trace("Entering getPiecesPositionsFor {}", playerColor);
+    //    System.out.println("Entering getPiecesPositionsFor " + playerColor);
         Collection<Position> piecesOfColorPositions = new ArrayList<>();
         Collection<Position> piecesPositions = getPiecesPositions();
+      //  System.out.println("Analyzing " + piecesPositions.size() + " pieces positions");
         for (Position position : piecesPositions){
-                if (getPiece(position).getColor().equals(playerColor)) {
-                    piecesOfColorPositions.add(position);
-                }
+            if (getPiece(position).getColor().equals(playerColor)) {
+                piecesOfColorPositions.add(new Position (position.row(), position.column()));
+        //        System.out.println("Added " + position + " to " + playerColor + " positions");
+            }
         }
      //   LOGGER.trace("piecesOfColorPositions for {}: {}", playerColor, piecesOfColorPositions);
         return  piecesOfColorPositions;
     }
-    //TODO implement isInDoubleCheck()
 
+    public boolean isInDoubleCheck() {
+        //TODO implement me
+        throw new RuntimeException("Implement me!");
+    }
+
+
+    /**
+     * @param playerColor is the color we are interested in.
+     * @return true if playerColor's king is in check.
+     */
     public boolean isInCheck(PlayerColor playerColor){
       //  LOGGER.trace("Entering isInCheck({}", playerColor);
         boolean isInCheck;
@@ -2917,12 +2916,17 @@ public class Board {
         return false;
     }
 
+    /**
+     * @return a copy of the current board.
+     */
     public Board copy(){
        // LOGGER.trace("Making a copy of the chessboard...");
         Board copy = new Board();
-        for (Position pos : getPiecesPositions()) {
-            copy.setPiece(getPiece(pos).copy(), pos);
+        Collection<Position> positions = getPiecesPositions();
+        for (Position pos : positions) {
+            copy.setPiece((getPiece(pos)).copy(), pos);
         }
+     //   System.out.println(copy);
         return copy;
     }
 
@@ -2955,20 +2959,22 @@ public class Board {
     private boolean areKingVsKingAndBishopLeft(PieceCounter pieceCounter){
       //  LOGGER.trace("Entering areKingVsKingAndBishopLeft(pieceCounter={}", pieceCounter);
         return pieceCounter.getTotalNumberOfPieces() == 3 &&
-                (pieceCounter.getBlackNumberOfPiecesNamed(PieceName.BISHOP) == 1 ||
-                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceName.BISHOP) == 1);
+                (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.BISHOP) == 1 ||
+                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.BISHOP) == 1);
     }
+
     private boolean areKingVsKingAndKnightLeft(PieceCounter pieceCounter){
         return pieceCounter.getTotalNumberOfPieces() == 3 &&
-                (pieceCounter.getBlackNumberOfPiecesNamed(PieceName.KNIGHT) == 1 ||
-                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceName.KNIGHT) == 1);
+                (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.KNIGHT) == 1 ||
+                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.KNIGHT) == 1);
     }
+
     private boolean areKingAndBishopVsKingAndBishopOfOppositeColorsLeft(PieceCounter pieceCounter){
         if (pieceCounter.getTotalNumberOfPieces() != 4){
             return false;
         }
-        if (pieceCounter.getBlackNumberOfPiecesNamed(PieceName.BISHOP) != 1 ||
-                pieceCounter.getWhiteNumberOfPiecesNamed(PieceName.BISHOP) != 1) {
+        if (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.BISHOP) != 1 ||
+                pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.BISHOP) != 1) {
             return false;
         }
         Position blackBishopPosition = findBishop(PlayerColor.BLACK);
@@ -2979,37 +2985,75 @@ public class Board {
             return false;
         }
     }
+
     private Position findBishop(PlayerColor playerColor){
         for (Position piecePosition : getPiecesPositionsFor(playerColor)) {
-            if (getPiece(piecePosition).getName().equals(PieceName.BISHOP)){
+            if (getPiece(piecePosition).getName().equals(PieceNames.BISHOP)){
                 return piecePosition;
             }
         }
         return null;
     }
-    private boolean haveKingAndRookNotMovedYet (Position kingPosition, Position rookPosition){
-        if (isEmpty(kingPosition) || isEmpty(rookPosition)){
-            return false;
-        }
-        Piece king = getPiece(kingPosition);
-        Piece rook = getPiece(rookPosition);
-        return !(king.hasMoved()) && !(rook.hasMoved());
-    }
+
     public boolean isKingsideCastlingPossibleFromFEN(PlayerColor playerColor){
         if (playerColor.equals(PlayerColor.BLACK)){
             return isBlackKingsideCastlingPossible;
         } else if (playerColor.equals(PlayerColor.WHITE)){
             return isWhiteKingsideCastlingPossible;
         }
-        return true;
+        assert false:"Player color must be either black or white.";
+        return false;
     }
+
+    public boolean haveKingAndKingsideRookNeverMoved(PlayerColor playerColor){
+        if (playerColor.equals(PlayerColor.BLACK)){
+            return haveKingAndRookNotMovedYet(new Position(0, 4), new Position(0, 7));
+        } else if (playerColor.equals(PlayerColor.WHITE)){
+            return haveKingAndRookNotMovedYet(new Position(7, 4), new Position(7, 7));
+        }
+        assert false : "Unreachable code. There should be only 2 colors.";
+        return false;
+    }
+
     public boolean isQueensideCastlingPossibleFromFEN(PlayerColor playerColor){
         if (playerColor.equals(PlayerColor.BLACK)){
             return isBlackQueensideCastlingPossible;
         } else if (playerColor.equals(PlayerColor.WHITE)){
             return isWhiteQueensideCastlingPossible;
         }
-        return true;
+        return false;
+    }
+
+    public boolean haveKingAndQueensideRookNeverMoved(PlayerColor playerColor){
+        if (playerColor.equals(PlayerColor.BLACK)){
+            return haveKingAndRookNotMovedYet(new Position(0, 4), new Position(0, 0));
+        } else if (playerColor.equals(PlayerColor.WHITE)){
+            return haveKingAndRookNotMovedYet(new Position(7, 4), new Position(7, 0));
+        }
+        return false;
+    }
+
+    private boolean haveKingAndRookNotMovedYet (Position kingPosition, Position rookPosition){
+        assert kingPosition != null : "King position must exist.";
+        assert rookPosition != null : "Rook position must exist.";
+        if (isEmpty(kingPosition) || isEmpty(rookPosition)){
+      //      System.out.println("kingPosition is empty? " + isEmpty(kingPosition));
+      //      System.out.println("rookPosition is empty? " + isEmpty(rookPosition));
+            return false;
+        }
+        Piece maybeKing = getPiece(kingPosition);
+        Piece maybeRook = getPiece(rookPosition);
+        if (!(maybeKing.getColor().equals(maybeRook.getColor()))){
+            return false;
+        }
+        if (!(maybeKing.getName().equals(PieceNames.KING)) ||
+                !(maybeRook.getName().equals(PieceNames.ROOK))) {
+            return false;
+        }
+   //     System.out.println("maybeKing.hasMoved():" + maybeKing.hasMoved());
+   //     System.out.println("maybeRook.hasMoved():" + maybeRook.hasMoved());
+   //     return !(maybeKing.hasMoved()) && !(maybeRook.hasMoved());
+        return !(maybeKing.isHasMovedForGood()) && !(maybeRook.isHasMovedForGood());
     }
 
     public boolean canCaptureEnPassant (PlayerColor playerColor) {
@@ -3022,13 +3066,13 @@ public class Board {
         if (playerColor.equals(PlayerColor.BLACK)) {
             Position enPassantCaptureSE = enPassantCapturePosition.stepTowardsDirection(Direction.SOUTH_EAST);
             if (enPassantCaptureSE != null) {
-                if (isInside(enPassantCaptureSE)) {
+                if (isInsideBoard(enPassantCaptureSE)) {
                     potentialEnPassantPawnPositions[0] = new Position(enPassantCaptureSE.row(), enPassantCaptureSE.column());
                 }
             }
             Position enPassantCaptureSW = enPassantCapturePosition.stepTowardsDirection(Direction.SOUTH_WEST);
             if (enPassantCaptureSW != null) {
-                if (isInside(enPassantCaptureSW)) {
+                if (isInsideBoard(enPassantCaptureSW)) {
                     potentialEnPassantPawnPositions[1] = new Position(enPassantCaptureSW.row(), enPassantCaptureSW.column());
                 }
             }
@@ -3037,13 +3081,13 @@ public class Board {
             if (playerColor.equals(PlayerColor.WHITE)) {
                 Position enPassantCaptureNE = enPassantCapturePosition.stepTowardsDirection(Direction.NORTH_EAST);
                 if (enPassantCaptureNE != null) {
-                    if (isInside(enPassantCaptureNE)) {
+                    if (isInsideBoard(enPassantCaptureNE)) {
                         potentialEnPassantPawnPositions[0] = new Position(enPassantCaptureNE.row(), enPassantCaptureNE.column());
                     }
                 }
                 Position enPassantCaptureNW = enPassantCapturePosition.stepTowardsDirection(Direction.NORTH_WEST);
                 if (enPassantCaptureNW != null){
-                    if (isInside(enPassantCaptureNW)) {
+                    if (isInsideBoard(enPassantCaptureNW)) {
                         potentialEnPassantPawnPositions[1] = new Position(enPassantCaptureNW.row(), enPassantCaptureNW.column());
                     }
                 }
@@ -3053,11 +3097,12 @@ public class Board {
        LOGGER.trace("enPassantCapturePosition: {}", enPassantCapturePosition);*/
         return isPawnReadyForCapturingEnPassant(playerColor, potentialEnPassantPawnPositions, enPassantCapturePosition);
     }
+
     private boolean isPawnReadyForCapturingEnPassant (PlayerColor currentPlayerColor, Position[] pawnPositionsForEnPassant,
                                                       Position enPassantCapturePosition){
     //    LOGGER.trace("Entering isPawnReadyForCapturingEnPassant(color={} pawnPositionsForEnPassant={}", currentPlayerColor, pawnPositionsForEnPassant);
         for (Position position : pawnPositionsForEnPassant) {
-            if (isInside(position)){
+            if (isInsideBoard(position)){
                 Piece piece = getPiece(position);
                 if (piece == null){
                     continue;
@@ -3065,7 +3110,7 @@ public class Board {
                 if (piece.getColor().equals(currentPlayerColor)){
                     continue;
                 }
-                if (!piece.getName().equals(PieceName.PAWN)) {
+                if (!piece.getName().equals(PieceNames.PAWN)) {
                     continue;
                 }
                 EnPassantMove enPassantMove = new EnPassantMove(position, enPassantCapturePosition);
@@ -3078,9 +3123,9 @@ public class Board {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Board board)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Board board)) return false;
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
                 if (!(Objects.equals(pieces [row][column], board.pieces[row][column]))){
@@ -3113,5 +3158,42 @@ public class Board {
             charView.append("\n");
         }
         return charView.toString();
+    }
+
+    public void setBlackKingsideCastlingPossible(boolean isBlackKingsideCastlingPossible) {
+        this.isBlackKingsideCastlingPossible = isBlackKingsideCastlingPossible;
+    }
+
+    public void setBlackQueensideCastlingPossible(boolean isBlackQueensideCastlingPossible) {
+        this.isBlackQueensideCastlingPossible = isBlackQueensideCastlingPossible;
+    }
+
+    public void setWhiteKingsideCastlingPossible(boolean isWhiteKingsideCastlingPossible) {
+        this.isWhiteKingsideCastlingPossible = isWhiteKingsideCastlingPossible;
+    }
+
+    public void setWhiteQueensideCastlingPossible(boolean isWhiteQueensideCastlingPossible) {
+        this.isWhiteQueensideCastlingPossible = isWhiteQueensideCastlingPossible;
+    }
+
+    public Position getKingPosition(PlayerColor playerColor) {
+    //    System.out.println("In getKingPosition");
+        Collection<Position> piecesPositions = getPiecesPositions();
+    //    System.out.println("piecesPositions: " + piecesPositions);
+        for (Position piecePosition : piecesPositions) {
+            Piece piece = getPiece(piecePosition);
+         //   System.out.println("Found " + playerColor + " " + piece);
+            if (piece.getName().equals(PieceNames.KING) && piece.getColor().equals(playerColor)) {
+        //        System.out.println("Found " + playerColor + " king.");
+                return piecePosition;
+            }
+        }
+        assert false : "There must be a " + playerColor +" king on the chessboard";
+        return null;
+    }
+
+    public King getKing(PlayerColor playerColor) {
+        Position kingPosition = getKingPosition(playerColor);
+        return (King) getPiece(kingPosition);
     }
 }

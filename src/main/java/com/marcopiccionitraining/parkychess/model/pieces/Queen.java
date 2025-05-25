@@ -2,7 +2,6 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
-import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +11,7 @@ public class Queen extends SliderPiece {
 
     public Queen(PlayerColor playerColor) {
         super(playerColor);
-        setName(PieceName.QUEEN);
+        setName(PieceNames.QUEEN);
     }
 
     public Collection<Move> getPseudoLegalMoves(Position from , Board chessboard){
@@ -28,7 +27,10 @@ public class Queen extends SliderPiece {
     @Override
     public Piece copy() {
         Queen queenCopy = new Queen(getColor());
-        queenCopy.setHasMoved(hasMoved());
+        queenCopy.setPosition(getPosition());
+        queenCopy.hasMoved = hasMoved;
+        queenCopy.hasMovedForGood = this.hasMovedForGood;
+     //   queenCopy.currentDepth = currentDepth;
         return queenCopy;
     }
 }

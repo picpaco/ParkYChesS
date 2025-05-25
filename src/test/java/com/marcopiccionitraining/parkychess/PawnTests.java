@@ -27,7 +27,7 @@ public class PawnTests {
 
     @Test
     void whitePawnsInitialPositionHaveNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Pawn whitePawn1 = (Pawn) chessboard.getPiece (6,0);
         assertFalse(whitePawn1.hasMoved(), "Pawn should not have already moved at starting position.");
         Pawn whitePawn2 = (Pawn) chessboard.getPiece (6,1);
@@ -45,9 +45,10 @@ public class PawnTests {
         Pawn whitePawn8 = (Pawn) chessboard.getPiece (6,7);
         assertFalse(whitePawn8.hasMoved(), "Pawn should not have already moved at starting position.");
     }
+
     @Test
     void blackPawnsInitialPositionHaveNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Pawn blackPawn1 = (Pawn) chessboard.getPiece (1,0);
         assertFalse(blackPawn1.hasMoved(), "Pawn should not have already moved at starting position.");
         Pawn blackPawn2 = (Pawn) chessboard.getPiece (1,1);
@@ -65,29 +66,29 @@ public class PawnTests {
     }
     @Test
     void whitePawnNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Pawn whitePawn = (Pawn) chessboard.getPiece (6,7);
         assertEquals(PlayerColor.WHITE, whitePawn.getColor(), "Pawn at square a2 should be white.");
-        assertEquals(PieceName.PAWN, whitePawn.getName(), "Pawn's name should be 'PAWN'");
+        assertEquals(PieceNames.PAWN, whitePawn.getName(), "Pawn's name should be 'PAWN'");
         assertEquals("PAWN", whitePawn.toString(), "Pawn's name as string should be 'PAWN'");
     }
     @Test
     void blackPawnNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString (FEN_INITIAL_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
         Pawn blackPawn = (Pawn) chessboard.getPiece (1,7);
         assertEquals(PlayerColor.BLACK, blackPawn.getColor(), "Pawn at square a7 should be black.");
-        assertEquals(PieceName.PAWN, blackPawn.getName(), "Pawn's name should be 'PAWN'");
+        assertEquals(PieceNames.PAWN, blackPawn.getName(), "Pawn's name should be 'PAWN'");
         assertEquals("pawn", blackPawn.toString(), "Pawn's name as string should be 'pawn'");
     }
     @Test
     void oppositeColorPawnsAtA5A4CannotMove() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_TWO_MUTUALLY_BLOCKING_PAWNS_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_TWO_MUTUALLY_BLOCKING_PAWNS_POSITION);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(3, 0)).isEmpty());
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(4, 0)).isEmpty());
     }
     @Test
     void oppositeColorPawnsAtC5D5C4D4WhiteCannotMoveCanCapture() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_FOUR_MUTUALLY_BLOCKING_PAWNS_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_FOUR_MUTUALLY_BLOCKING_PAWNS_POSITION);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(4, 2)).size());
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(4, 3)).size());
         Collection<Move> whitePawn1LegalMoves = new ArrayList<>();
@@ -107,7 +108,7 @@ public class PawnTests {
     }
     @Test
     void oppositeColorPawnsAtC5D5C4D4BlackCannotMoveCanCapture() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_FOUR_MUTUALLY_BLOCKING_PAWNS_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_FOUR_MUTUALLY_BLOCKING_PAWNS_POSITION);
         gameState.setCurrentColor(PlayerColor.BLACK);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 2)).size());
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 3)).size());
@@ -128,7 +129,7 @@ public class PawnTests {
     }
     @Test
     void oppositeColorPawnsAtE5F5G5E4F4G4CannotMoveCanCapture() {
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_SIX_MUTUALLY_BLOCKING_PAWNS_POSITION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_SIX_MUTUALLY_BLOCKING_PAWNS_POSITION);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(4, 4)).size());
         assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(4, 5)).size());
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(4, 6)).size());
@@ -139,20 +140,20 @@ public class PawnTests {
     }
     @Test
     void noEnPassantForBlackPawn(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BASIC));
+        ChessGame gameState = new ChessGame(chessboard, FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BASIC);
         assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(1, 0)).size());
         gameState.setCurrentColor(PlayerColor.WHITE);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
     }
     @Test
     void noEnPassantForWhitePawnWithBlackPawnAtStartingSquare(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BLACK_PAWN_START_SQUARE));
+        ChessGame gameState = new ChessGame(chessboard, FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BLACK_PAWN_START_SQUARE);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
     }
     @Test
     void enPassantBasicCaseLeft(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_A5));
+        ChessGame gameState = new ChessGame(chessboard, FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_A5);
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
         whitePawnLegalMoves.add(new StandardMove(new Position(3,1), new Position(2,1)));
         whitePawnLegalMoves.add(new EnPassantMove(new Position(3,1), new Position(2,0)));
@@ -164,7 +165,7 @@ public class PawnTests {
     }
     @Test
     void enPassantBasicCaseRight(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_H4));
+        ChessGame gameState = new ChessGame(chessboard, FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_H4);
         Collection<Move> blackPawnLegalMoves = new ArrayList<>();
         blackPawnLegalMoves.add(new StandardMove(new Position(4,7), new Position(5,7)));
         blackPawnLegalMoves.add(new EnPassantMove(new Position(4,7), new Position(5,6)));
@@ -176,7 +177,7 @@ public class PawnTests {
     }
     @Test
     void whitePawnPromotion(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_WHITE_PAWN_PROMOTION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_PAWN_PROMOTION);
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3), new Queen(PlayerColor.WHITE)));
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3), new Rook(PlayerColor.WHITE)));
@@ -190,7 +191,7 @@ public class PawnTests {
     }
     @Test
     void blackPawnPromotion(){
-        ChessGame gameState = new ChessGame(chessboard, new FENString(FEN_BLACK_PAWN_PROMOTION));
+        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_PAWN_PROMOTION);
         Collection<Move> blackPawnLegalMoves = new ArrayList<>();
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0), new Queen(PlayerColor.BLACK)));
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0), new Rook(PlayerColor.BLACK)));

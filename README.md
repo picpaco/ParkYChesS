@@ -3,7 +3,7 @@ An attempt at programming a chess bot using JavaFX integrated within the Spring 
 # Progress Log
 2024-9-10: The GUI allows two humans to play a game of chess according to the rules.
 There is a legal moves generator that to generate all moves at depth 5 takes 5m:25s (uses Perft).
-I'll try to improve on this, ideally < 1s.
+I'll try to improve on this, ideally it should take < 1 sec.
 2024-9-12
 # Programming tasks
 ## Chessboard representation
@@ -44,7 +44,7 @@ Exit generation if stalemate
          2) An enemy piece is encountered first. If it's a sliding piece then your king is under check.
          3) At this point you should have a data structure (likely a hash map) containing pinned pieces with their
             reachable tiles.
-                     2.1.6 Consider castle
+                     2.1.6 Castle
                      2.1.6.1 Kingside castle
                      2.1.6.2 Queenside castle
                      2.1.6.3 Castle restrictions
@@ -71,16 +71,24 @@ Exit generation if stalemate
                      2.4.2 Consider en passant captures
                      2.4.3 Consider checks (direct or discovered)
                      2.4.4 Consider promotions
-3. Moves generation (depth > 1, alternate colors)
+Moves generation (depth > 1, alternate colors)
    3.1 For each move generated at depth d: switch color and generate all possible moves for current (d+1) depth
    3.2 Exit current depth and go back to previous depth (d-1) if checkmate or stalemate
-4. Remarks on move generation
-   4.1 Execute each move and save board state; then undo each move and restore board state.
+   3.3 Execute move and save board state
+   3.4 Board state (saved immediately after a move is played)
+    3.4.1 move played (from/to)
+    3.4.2 captured piece if applicable
+    3.4.3 if pawn: en passant status (ready to capture/be captured)
+    3.4.4 if promoted pawn: promotion piece
+    3.4.5 if king: impossibility to castle status
+    3.4.6 (double) check status on board for color
+    3.4.7 if rook: impossibility to castle kingside/queenside status (depending on which rook it is)
+   3.5 undo move and restore board state.
    4.2 Write as many unit tests as possible to test every aspect of your program in isolation.
    4.3 Check correctness using assert instructions (use Design by Contract for consistency)
    4.4 Check correctness using perft function and compare number of generated positions with Stockfish.
    4.5 Check performance (secondary to move evaluation performance)
-5. Statistics
+Statistics
    5.1 Counters (have dependencies on each other):
    5.1.1 Moves: reflect leaves of the generated tree, aka nodes at max depth.
    5.1.2 Double checks: reflect the number of double checks. Each double check is NOT counted as 2 simple checks as well (TBC).
@@ -93,9 +101,9 @@ Exit generation if stalemate
    multiplied by depth -1 etc. until depth 0.
    5.1.8 En passant captures: reflect the number of en passant captures at max depth multiplied by depth plus the number of
    en passant capture at max depth - 1 multiplied by depth -1 etc. until depth 0. 
-6. Move evaluation
+Move evaluation
    6.1 Add evaluation to each move based on certain rules
    6.2 Program rules based on human experience
    6.3 Let program find its own rules by learning them when playing games against itself (use reinforcement learning).
-7.  Optimization
+Optimization
    7.1 
