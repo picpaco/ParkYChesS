@@ -10,6 +10,7 @@ module parkychess {
     requires java.desktop;
     requires static lombok;
     requires jdk.jshell;
+    requires annotations;
     opens com.marcopiccionitraining.parkychess to spring.core, javafx.fxml;
     opens com.marcopiccionitraining.parkychess.controller to spring.core, javafx.fxml;
     exports com.marcopiccionitraining.parkychess to javafx.fxml, spring.core, spring.beans, spring.context, javafx.graphics;

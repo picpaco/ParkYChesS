@@ -5,9 +5,9 @@ import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -15,72 +15,35 @@ import java.util.Objects;
 /**
  * Chess pieces representation.
  */
+@Slf4j
 public abstract class Piece {
-
-    private final PlayerColor playerColor;
     @Getter
+    private final PlayerColor color;
+    @Getter @Setter
     private PieceNames name;
-
-    @Getter
-    @Setter
+    @Getter @Setter
     private Position position;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(Piece.class);
-
-    //  @Getter
-    //  int currentDepth;
-
-    void setName(PieceNames name) {
-        this.name = name;
+    Piece (PlayerColor color) {
+        assert color != null : "Player color cannot be null";
+        this.color = color;
     }
 
-    Piece(PlayerColor playerColor) {
-        this.playerColor = playerColor;
-    }
-
-    public PlayerColor getColor() {
-        return playerColor;
-    }
-
-    //FIXME; also check code in StandardMove
-    /*  if (hasMoved) {
-            if (this.hasMoved) {
-                this.hasMovedForGood = true;
-            } else {
-                this.hasMoved = true;
-            }
-        } else {
-            if (!this.hasMovedForGood) {
-                this.hasMoved = false;
-            }
-        }*/
-    //public HashMap<Integer, Boolean> hasMoved = new HashMap<>();
-    @Setter
-    @Getter
-    boolean hasMoved;
-
-    /**
-     * This attribute is true when a certain piece (king or rook) has moved from its starting square
-     * and therefore has lost forever the ability to castle.
-     */
-    @Setter
-    @Getter
-    public boolean hasMovedForGood;
+    @Getter @Setter
+    private boolean isFlaggedAsHavingAlreadyMoved;
 
     public abstract Piece copy();
 
     public abstract Collection<Move> getPseudoLegalMoves(Position from, Board chessboard);
 
-    public boolean canCaptureEnemyKing(Position from, Board chessboard) {
-        //    LOGGER.trace("In canCaptureEnemyKing (from = {}", from);
+    public boolean canCaptureEnemyKing (@NonNull Position from, @NonNull Board chessboard) {
+        assert chessboard.getPiece(from) != null : "Piece at position " + from + " must exist.";
         for (Move move : getPseudoLegalMoves(from, chessboard)) {
             Piece targetPiece = chessboard.getPiece(move.getTo());
             if (targetPiece != null && targetPiece.getName().equals(PieceNames.KING)) {
-                //    LOGGER.trace("canCaptureEnemyKing? Yes");
                 return true;
             }
         }
-        // LOGGER.trace("canCaptureEnemyKing? No");
         return false;
     }
 
@@ -88,25 +51,22 @@ public abstract class Piece {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Piece piece)) return false;
-        return playerColor.equals(piece.playerColor) && name.toString().equals(piece.name.toString());
+        return hashCode() == piece.hashCode();
+     //   return playerColor.equals(piece.playerColor) && name.toString().equals(piece.name.toString());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(playerColor, name);
+        return Objects.hash(color, name);
     }
 
     @Override
     public String toString() {
-        if (getColor().equals(PlayerColor.BLACK)) {
-            return name.toString().toLowerCase();
-        } else {
-            return name.toString();
-        }
+        return toOneChar() + ((getPosition() == null) ? "N.A." : getPosition().toString());
     }
 
     public char toOneChar() {
-        if (getColor().equals(PlayerColor.BLACK)) {
+        if (color.equals(PlayerColor.BLACK)) {
             if (getName().equals(PieceNames.KNIGHT)) {
                 return 'n';
             } else {
@@ -120,31 +80,4 @@ public abstract class Piece {
             }
         }
     }
-
-    public boolean hasMoved() {
-        return hasMoved;
-    }
-
-    /*
-    public Boolean hasMoved() {
-        if (this.hasMoved.get(currentDepth) == null) {
-            this.hasMoved.put(currentDepth, Boolean.FALSE);
-            return Boolean.FALSE;
-        } else {
-            return this.hasMoved.get(currentDepth);
-        }
-    }
-
-    public void setHasMoved(Integer currentDepth, Boolean updatedHasMoved) {
-        assert currentDepth != null : "currentDepth cannot be null.";
-        assert updatedHasMoved != null : "updatedHasMoved cannot be null.";
-        this.hasMoved.put(currentDepth, updatedHasMoved);
-        this.currentDepth = currentDepth;
-        if (name.equals(PieceNames.KING)) {
-            LOGGER.info("{} {} depth: {}, value: {}, hasMoved: {}",
-                    playerColor, name, currentDepth, updatedHasMoved, this.hasMoved);
-        }
-    }
-
- */
 }

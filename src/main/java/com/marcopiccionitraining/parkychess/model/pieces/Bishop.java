@@ -5,7 +5,6 @@ import com.marcopiccionitraining.parkychess.model.moves.Move;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 public class Bishop extends SliderPiece {
     public Bishop(PlayerColor playerColor){
@@ -17,9 +16,10 @@ public class Bishop extends SliderPiece {
 
     public Collection<Move> getPseudoLegalMoves(Position from , Board chessboard){
         Collection<Move> bishopPseudoLegalMoves = new ArrayList<>();
-        HashSet<ArrayList<Position>> existingDiagonals = chessboard.getPotentialBishopDestinations(from);
+        ArrayList<ArrayList<Position>> existingDiagonals =
+                PseudoLegalPiecesPositionsInitializer.getBishopPseudoLegalPoitions(from);
         for (ArrayList<Position> diagonalPositions : existingDiagonals) {
-            bishopPseudoLegalMoves.addAll(pseudoLegalMovesOnDirection(diagonalPositions, from, chessboard));
+            bishopPseudoLegalMoves.addAll(getPseudoLegalMovesInDirection(diagonalPositions, from, chessboard));
         }
         return bishopPseudoLegalMoves;
           //    LOGGER.trace("Exiting getPseudoLegalMoves(Position from = {}, Board chessboard). Moves found: {}", from, moves);
@@ -28,10 +28,8 @@ public class Bishop extends SliderPiece {
     @Override
     public Piece copy() {
         Bishop bishopCopy = new Bishop(getColor());
-        bishopCopy.setPosition(getPosition());
-        bishopCopy.hasMoved = hasMoved;
-        bishopCopy.hasMovedForGood = this.hasMovedForGood;
-   //     bishopCopy.currentDepth = this.currentDepth;
+        bishopCopy.setPosition(new Position(getPosition().row(), getPosition().column()));
+        bishopCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return bishopCopy;
     }
 }

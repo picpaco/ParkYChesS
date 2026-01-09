@@ -5,78 +5,122 @@ import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.Rook;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest
+@Slf4j @SpringBootTest
 class RookTests {
-	private Board chessboard;
+	private MoveGeneratorStatistics stats;
+    private PerftUtils ptu;
 
 	@BeforeEach
-	void setup(){
-		chessboard = new Board();
+	void setup() {
+		stats = new MoveGeneratorStatistics();
+    }
+
+	@Test
+	void blackRookHasNotMovedAfterAnyMoveWithUndo(){
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+        log.debug("After creating chessGame, before creating PerftUtils");
+		ptu = new PerftUtils(gameState);
+        log.debug("Current color after initializing gameState: {}", gameState.getChessboard().getCurrentPlayerColor());
+        Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+        log.debug("Current color before invoking perft: {}", gameState.getChessboard().getCurrentPlayerColor());
+        assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Before the first move is made, " +
+                "the rook should not be flagged as having already moved.");
+        long result = ptu.perft(1, 1, stats);
+		assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
+		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"After the first move is undone, " +
+				"the rook should not be flagged as having already moved.");
+	}
+
+	@Test
+	void blackRookHasNotMovedAfterThreeMovesWithUndoDepth_3(){
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+        ptu = new PerftUtils(gameState);
+        //FENStateString positionState = new FENStateString(gameState);
+        //gameState.getChessboard().getGameStateContainer().push(positionState);
+        Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Initially, the rook should not be flagged as having already moved.");
+		long result = ptu.perft(3, 3, stats);
+		assertEquals(1197, result, "There should be 1197 legal moves (leaf nodes).");
+		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"After all the move have been undone, " +
+				"the rook should not be flagged as having already moved.");
 	}
 	@Test
-	void whiteRookInitialPositionHasNotMovedYet(){
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		Rook whiteRook = (Rook) chessboard.getPiece (7,7);
-		assertFalse(whiteRook.hasMoved(), "Rook should not have already moved at starting position.");
+	void blackRookHasMovedForGoodDepth5(){
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+		assertTrue(blackRook.isBlackKingsideRook(), "The rook should be a black kingside rook");
+        StandardMove standardRookMove1 = new StandardMove(new Position(0, 7), new Position(1, 7));
+		standardRookMove1.execute(gameState.getChessboard());
+		StandardMove standardRookMove2 = new StandardMove(new Position(1, 7), new Position(2, 7));
+		standardRookMove2.execute(gameState.getChessboard());
+		StandardMove standardRookMove3 = new StandardMove(new Position(2, 7), new Position(1, 7));
+		standardRookMove3.execute(gameState.getChessboard());
+		StandardMove standardRookMove4 = new StandardMove(new Position(1, 7), new Position(0, 7));
+		standardRookMove4.execute(gameState.getChessboard());
+		assertTrue(blackRook.isBlackKingsideRookFlaggedAsHavingAlreadyMoved(),"The rook should be flagged as having already moved.");
+	//	assertTrue(blackRook.isFlaggedAsHavingAlreadyMoved(), "The rook should be flagged as having already moved.");
 	}
-	@Test
-	void blackRookInitialPositionHasNotMovedYet(){
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		Rook blackRook = (Rook) chessboard.getPiece (0,7);
-		assertFalse(blackRook.hasMoved(), "Rook should not have already moved at starting position.");
-	}
+
 	@Test
 	void whiteRookNameCheck(){
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		Rook whiteRook = (Rook) chessboard.getPiece (7,7);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
+		Rook whiteRook = (Rook) gameState.getChessboard().getPiece (7,7);
 		assertEquals(PlayerColor.WHITE, whiteRook.getColor(), "Rook at square h1 should be white.");
 		assertEquals(PieceNames.ROOK, whiteRook.getName(), "Rook's name should be 'ROOK'");
-		assertEquals("ROOK", whiteRook.toString(), "Rook's name as string should be 'ROOK'");
+		assertEquals("Rh1", whiteRook.toString(), "Rook's name as string should be 'Rh1'");
 	}
+
 	@Test
 	void blackRookNameCheck(){
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		Rook blackRook = (Rook) chessboard.getPiece (0,7);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
+		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
 		assertEquals(PlayerColor.BLACK, blackRook.getColor(), "Rook at square h8 should be black.");
 		assertEquals(PieceNames.ROOK, blackRook.getName(), "Rook's name should be 'ROOK'");
-		assertEquals("rook", blackRook.toString(), "Rook's name as string should be 'rook'");
+		assertEquals("rh8", blackRook.toString(), "Rook's name as string should be 'rh8'");
 	}
+
 	@Test
 	void blackRookAtA8CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		gameState.setCurrentColor(PlayerColor.BLACK);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
+        gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 0)).isEmpty());
 	}
+
 	@Test
 	void blackRookAtH8CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-		gameState.setCurrentColor(PlayerColor.BLACK);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
+        gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 7)).isEmpty());
 	}
+
 	@Test
 	void whiteRookAtA1CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 0)).isEmpty());
 	}
+
 	@Test
 	void whiteRookAtH1CannotMoveAtStartingPosition() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
+		ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
 		assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 7)).isEmpty());
 	}
+
 	@Test
 	void blackRookAtA8LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_A8_NO_CHECK_POSITION);
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_A8_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(0,0), new Position(0,1)));
 		rookLegalMoves.add(new StandardMove(new Position(0,0), new Position(0,2)));
@@ -94,9 +138,10 @@ class RookTests {
 				computedRookMoves.containsAll(rookLegalMoves), "The expected list of moves: " + rookLegalMoves +
 				" is not the same as the produced one: " + computedRookMoves);
 	}
+
 	@Test
 	void blackRookAtH8LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_ROOK_H8_NO_CHECK_POSITION);
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(0,7), new Position(0,6)));
 		rookLegalMoves.add(new StandardMove(new Position(0,7), new Position(0,5)));
@@ -113,9 +158,10 @@ class RookTests {
 				computedRookMoves.containsAll(rookLegalMoves), "The expected list of moves: " + rookLegalMoves +
 				" is not the same as the produced one: " + computedRookMoves);
 	}
+
 	@Test
 	void whiteRookAtA1LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_ROOK_A1_NO_CHECK_POSITION);
+		ChessGame gameState = new ChessGame(FEN_WHITE_ROOK_A1_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(7,0), new Position(7,1)));
 		rookLegalMoves.add(new StandardMove(new Position(7,0), new Position(7,2)));
@@ -133,9 +179,10 @@ class RookTests {
 				computedRookMoves.containsAll(rookLegalMoves), "The expected list of moves: " + rookLegalMoves +
 				" is not the same as the produced one: " + computedRookMoves);
 	}
+
 	@Test
 	void whiteRookAtH1LegalMovesNoCheck() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_ROOK_H1_NO_CHECK_POSITION);
+		ChessGame gameState = new ChessGame(FEN_WHITE_ROOK_H1_NO_CHECK_POSITION);
 		Collection<Move> rookLegalMoves = new ArrayList<>();
 		rookLegalMoves.add(new StandardMove(new Position(7,7), new Position(7,6)));
 		rookLegalMoves.add(new StandardMove(new Position(7,7), new Position(7,5)));
@@ -152,10 +199,12 @@ class RookTests {
 				computedRookMoves.containsAll(rookLegalMoves), "The expected list of moves: " + rookLegalMoves +
 				" is not the same as the produced one: " + computedRookMoves);
 	}
+
 	@Test
 	void rookA1PseudoLegalMoves() {
 		ArrayList<Position> allPseudoLegalRookPositions = getPositions();
-		HashSet<ArrayList<Position>> computedPseudoLegalRookTrajectories = chessboard.getPotentialRookDestinations(new Position(7,0));
+		ArrayList<ArrayList<Position>> computedPseudoLegalRookTrajectories =
+				PseudoLegalPiecesPositionsInitializer.getRookPseudoLegalPositions(new Position(7,0));
 		ArrayList<Position> allComputedPseudoLegalRookPositions = new ArrayList<>();
 		for (ArrayList<Position> rookTrajectory : computedPseudoLegalRookTrajectories) {
             allComputedPseudoLegalRookPositions.addAll(rookTrajectory);
@@ -168,7 +217,7 @@ class RookTests {
 	}
 
 	private ArrayList<Position> getPositions() {
-		ChessGame gameState = new ChessGame(chessboard, FEN_ROOK_A1_PSEUDO_LEGAL_MOVES);
+		ChessGame gameState = new ChessGame(FEN_ROOK_A1_PSEUDO_LEGAL_MOVES);
 		ArrayList<Position> rookPseudoLegalPositions1 = new ArrayList<>();
 		rookPseudoLegalPositions1.add(new Position(7,1));
 		rookPseudoLegalPositions1.add(new Position(7,2));

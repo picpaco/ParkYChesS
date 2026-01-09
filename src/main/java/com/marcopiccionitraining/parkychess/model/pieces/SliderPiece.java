@@ -14,20 +14,22 @@ public abstract class SliderPiece extends Piece {
         super(playerColor);
     }
 
-    Collection<Move> pseudoLegalMovesOnDirection(Collection<Position> positionsInDirection, Position from, Board chessboard){
-        Collection<Move> allPseudoLegalMoves = new ArrayList<>();
+    Collection<Move> getPseudoLegalMovesInDirection(Collection<Position> positionsInDirection,
+                                                       Position from, Board chessboard){
+        assert from != null : "The from position must exist";
+        Collection<Move> allPseudoLegalMovesInDirection = new ArrayList<>();
             for (Position position : positionsInDirection) {
                 if (chessboard.isEmpty(position)){
-                    allPseudoLegalMoves.add(new StandardMove(from, position));
+                    allPseudoLegalMovesInDirection.add(new StandardMove(from, position));
                 } else {
                     Piece pieceFound = chessboard.getPiece(position);
                     if (!(pieceFound.getColor().equals(chessboard.getPiece(from).getColor()))) {
-                        allPseudoLegalMoves.add(new StandardMove(from, position));
-                        return allPseudoLegalMoves;
+                        allPseudoLegalMovesInDirection.add(new StandardMove(from, position));
+                        return allPseudoLegalMovesInDirection;
                     }
-                    return allPseudoLegalMoves;
+                    return allPseudoLegalMovesInDirection;
                 }
             }
-        return allPseudoLegalMoves;
+        return allPseudoLegalMovesInDirection;
     }
 }

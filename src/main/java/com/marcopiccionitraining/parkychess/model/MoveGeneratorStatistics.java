@@ -107,9 +107,12 @@ public class MoveGeneratorStatistics {
     //       return numberOfCapturesPerDepth;
     //   }
 
-    public long getNumberOfDepthRelatedLeaves(int currentDepth) {
-        return movesMap.get((long)currentDepth);
-    }
+ //   public long getNumberOfDepthRelatedLeaves(int currentDepth) {
+ //       if (movesMap.get((long)currentDepth) == null) {
+ //           return 0;
+ //       }
+ //       return movesMap.get((long)currentDepth);
+ //   }
     public void incrementNumberOfCheckmates() {
         numberOfCheckmates++;
       //  LOGGER.trace("Just incremented numberOfCheckmates to {}", numberOfCheckmates);

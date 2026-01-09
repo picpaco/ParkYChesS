@@ -17,55 +17,41 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class QueenTests {
 
-    Board chessboard;
 
     @BeforeEach
-    void setUp() {
-        chessboard = new Board();
-    }
-    @Test
-    void whiteQueenInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
-        Queen whiteQueen = (Queen) chessboard.getPiece (7,3);
-        assertFalse(whiteQueen.hasMoved(), "Queen should not have already moved at starting position.");
-    }
-    @Test
-    void blackQueenInitialPositionHasNotMovedYet(){
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
-        Queen blackQueen = (Queen) chessboard.getPiece (0,3);
-        assertFalse(blackQueen.hasMoved(), "Queen should not have already moved at starting position.");
-    }
+    void setUp() {}
+
     @Test
     void whiteQueenNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
-        Queen whiteQueen = (Queen) chessboard.getPiece (7,3);
+        ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION );
+        Queen whiteQueen = (Queen) gameState.getChessboard().getPiece (7,3);
         assertEquals(PlayerColor.WHITE, whiteQueen.getColor(), "Queen at square d1 should be white.");
         assertEquals(PieceNames.QUEEN, whiteQueen.getName(), "Queen's name should be 'QUEEN'");
-        assertEquals("QUEEN", whiteQueen.toString(), "Queen's name as string should be 'QUEEN'");
+        assertEquals("Qd1", whiteQueen.toString(), "Queen's name as string should be 'Qd1'");
     }
     @Test
     void blackQueenNameCheck(){
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
-        Queen blackQueen = (Queen) chessboard.getPiece (0,3);
+        ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION );
+        Queen blackQueen = (Queen) gameState.getChessboard().getPiece (0,3);
         assertEquals(PlayerColor.BLACK, blackQueen.getColor(), "Queen at square d8 should be black.");
         assertEquals(PieceNames.QUEEN, blackQueen.getName(), "Queen's name should be 'QUEEN'");
-        assertEquals("queen", blackQueen.toString(), "Queen's name as string should be 'queen'");
+        assertEquals("qd8", blackQueen.toString(), "Queen's name as string should be 'qd8'");
     }
     @Test
     void blackQueenAtD8CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
-        gameState.setCurrentColor(PlayerColor.BLACK);
+        ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION );
+        gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 3)).isEmpty());
     }
 
     @Test
     void whiteQueenAtD1CannotMoveAtStartingPosition() {
-        ChessGame gameState = new ChessGame(chessboard,FEN_INITIAL_POSITION );
+        ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION );
         assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 3)).isEmpty());
     }
     @Test
     void blackQueenAtD8LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, FEN_BLACK_QUEEN_D8_NO_CHECK_POSITION);
+        ChessGame gameState = new ChessGame(FEN_BLACK_QUEEN_D8_NO_CHECK_POSITION);
         Collection<Move> queenLegalMoves = new ArrayList<>();
         queenLegalMoves.add(new StandardMove(new Position(0, 3), new Position(0, 0)));
         queenLegalMoves.add(new StandardMove(new Position(0, 3), new Position(0, 1)));
@@ -92,7 +78,7 @@ public class QueenTests {
     }
     @Test
     void whiteQueenAtD1LegalMovesNoCheck() {
-        ChessGame gameState = new ChessGame(chessboard, FEN_WHITE_QUEEN_D1_NO_CHECK_POSITION);
+        ChessGame gameState = new ChessGame(FEN_WHITE_QUEEN_D1_NO_CHECK_POSITION);
         Collection<Move> queenLegalMoves = new ArrayList<>();
         queenLegalMoves.add(new StandardMove(new Position(7, 3), new Position(7, 0)));
         queenLegalMoves.add(new StandardMove(new Position(7, 3), new Position(7, 1)));

@@ -1,5 +1,7 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import lombok.NonNull;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -11,13 +13,16 @@ import java.util.Optional;
  * 3. columns increase from left (0) to right (7).
  */
 //TODO check everywhere else if you can avoid creating Position objects
+// TODO think about deleting this class altogether and refactor its code in the Board class.
 public record Position(int row, int column) {
+
     public Position {
-        assert row >= 0 && row <= 7 : "invalid row: " + row;
-        assert column >= 0 && column <= 7 : "invalid column: " + column;
+        assert row >= -1 && row <= 7 : "invalid row: " + row;
+        assert column >= -1 && column <= 7 : "invalid column: " + column;
     }
 
     public PlayerColor getSquareColor() {
+        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";
         if ((row + column) % 2 == 0) {
             return PlayerColor.WHITE;
         } else {
@@ -26,7 +31,7 @@ public record Position(int row, int column) {
     }
 
     public Position stepTowardsDirection (Direction direction) {
-        int expectedRow = row + direction.rowDelta();
+        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";        int expectedRow = row + direction.rowDelta();
         int expectedColumn = column + direction.columnDelta();
         if (expectedRow >= 0 && expectedRow <= 7 && expectedColumn >= 0 && expectedColumn <= 7) {
             return new Position(expectedRow, expectedColumn);
@@ -35,7 +40,8 @@ public record Position(int row, int column) {
         }
     }
 
-    public String toAlgebraic() {
+    public @NonNull String toAlgebraic() {
+        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";
         StringBuilder algebraicForm = new StringBuilder();
         switch (column) {
             case 0:
@@ -82,7 +88,10 @@ public record Position(int row, int column) {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
+        if (row == -1 && column == -1) {
+            return "undetermined";
+        }
         return toAlgebraic();
     }
 }

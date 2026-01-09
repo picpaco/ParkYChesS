@@ -18,7 +18,7 @@ public class Knight extends Piece {
     public Collection<Move> getPseudoLegalMoves(Position from, Board chessboard){
     //    LOGGER.trace("Entering getPseudoLegalMoves(from = {}, chessboard)", from);
         Collection<Move> moves = new ArrayList<>();
-        for (Position to : chessboard.getPotentialKnightDestinations(from)){
+        for (Position to : PseudoLegalPiecesPositionsInitializer.getKnightPseudoLegalPositions(from)){
             if (chessboard.isEmpty(to) || !(chessboard.getPiece(to).getColor().equals(getColor()))){
                 moves.add(new StandardMove(from, to));
             }
@@ -29,10 +29,8 @@ public class Knight extends Piece {
     @Override
     public Piece copy() {
         Knight knightCopy = new Knight(getColor());
-        knightCopy.setPosition(getPosition());
-        knightCopy.hasMoved = this.hasMoved;
-        knightCopy.hasMovedForGood = this.hasMovedForGood;
-   //     knightCopy.currentDepth = this.currentDepth;
+        knightCopy.setPosition(new Position(getPosition().row(), getPosition().column()));
+        knightCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return knightCopy;
     }
 }

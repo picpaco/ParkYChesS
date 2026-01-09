@@ -2,141 +2,169 @@ package com.marcopiccionitraining.parkychess;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
-import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BxA8;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest @Slf4j
 public class FENTests {
-    Board chessboard;
     private final String FEN_VALIDATOR_REGEX = "((([pnbrqkPNBRQK1-8]{1,8})/?){8})\\s+([bw])\\s+(-|K?Q?k?q?)\\s+(-|([a-h][3-6])?)\\s+(\\d+)\\s+(\\d+)\\s*";
 
     @BeforeEach
-        void setUp() {
-            chessboard = new Board();
-        }
+        void setUp() {};
+
     @Test
     void initialFENCorrect(){
         String expectedInitialFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         assertTrue(expectedInitialFEN.matches(FEN_VALIDATOR_REGEX), "The fen string failed to validate");
-        assertEquals(expectedInitialFEN, FEN_INITIAL_POSITION, "Initial FEN string should be different");
+        assertEquals(expectedInitialFEN, FEN_INITIAL_POSITION, "Initial FEN string is wrong.");
     }
     @Test
-    void FENEmptyRow(){
+    void FENTwoConsecutiveSlashes(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/8//8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "An empty row in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/8//8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be two consecutive slashes in a FEN string.");
     }
     @Test
     void FENNineEmptySquaresInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/8/9/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "More than 8 empty squares on a row in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/8/9/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be more than 8 empty squares in a FEN row.");
     }
     @Test
-    void FENSixPawnsInARow(){
+    void FENSixSquareInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "Less than 8 squares on a row (empty or not) in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "In a FEN row without empty squares there cannot be less than 8 chars.");
     }
     @Test
     void FENSevenEmptySquaresInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/8/7/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "Less than 8 empty squares on a row in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/8/7/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be less than 8 empty squares in an empty FEN row.");
     }
     @Test
     void FENNinePawnsInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/ppppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "More than 8 squares on a row (empty or not) in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/ppppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be more than 8 chars representing pieces on a FEN string row.");
     }
     @Test
     void FENEightPawnsAndOneEmptySquareInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/ppppppp1p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "More than 8 squares on a row (empty or not) in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/ppppppp1p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be more than 8 chars representing pieces and empty squares on a FEN string row.");
     }
     @Test
     void FENNinePawnsAndOneEmptySquareInARow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp1p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "More than 8 squares on a row (empty or not) in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp1p/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be more than 8 chars representing pieces and empty squares on a FEN string row.");
     }
     @Test
     void FENWrongRowMissingSlash(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/88/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "A missing slash in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/88/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There is a missing slash in the FEN.");
     }
     @Test
     void FENWrongRowMissingTwoSlashes(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/88/8/8PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "A missing slash in the FEN should be a problem.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/88/8/8PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There are more than a missing slash in the FEN.");
     }
     @Test
     void FENTwoBlackKings(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/kppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                () -> new ChessGame("rnbqkbnr/kppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
                 "There are two black kings in the FEN.");
+    }
+    @Test
+    void FENTwoWhiteKings(){
+        assertThrowsExactly(IllegalArgumentException.class,
+                () -> new ChessGame("rnbqkbnr/pppppppp/8/8/8/8/KPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There are two white kings in the FEN.");
     }
     @Test
     void FENNoKings(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 1"),
-                "Having no kings in the FEN should be a problem..");
+                () -> new ChessGame("rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 1"),
+                "There are no kings in the FEN.");
     }
     @Test
     void FENBlackPawnOnFirstRow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnp/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
-                "A black pawn on the first row should be a problem.");
+                () -> new ChessGame("rnbqkbnp/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+                "There cannot be a black pawn on the first row.");
     }
     @Test
     void FENWhitePawnOnEighthRow(){
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> new FENString("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RPBQKBNR w KQkq - 0 1"),
-                "A white pawn on the eigth row should be a problem.");
-    }
-    @Test
-    void fromInitialStringToFENString(){
-        ChessGame gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
-        assertEquals(FEN_INITIAL_POSITION, new FENString(FEN_INITIAL_POSITION).toString(),
-                "FEN_INITIAL_POSITION and of new FENString(FEN_INITIAL_POSITION).toString() should be the same.");
-    }
-    @Test
-    void testCastleRightsFromFEN() {
-        ChessGame gameState = new ChessGame(chessboard, FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BxA8);
-        assertFalse(chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.BLACK), "Black should not be able to castle queenside.");
-        assertFalse(chessboard.isQueensideCastlingPossibleFromFEN(PlayerColor.WHITE), "White should not be able to castle queenside.");
-        assertTrue(chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.BLACK), "Black should be able to castle kings.");
-        assertTrue(chessboard.isKingsideCastlingPossibleFromFEN(PlayerColor.WHITE), "White should be able to castle kings.");
+                () -> new ChessGame("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RPBQKBNR w KQkq - 0 1"),
+                "There cannot be a white pawn on the eighth row.");
     }
 
     @Test
     void fromEnPassantEnabledFENToChessboard(){
         String expectedComputedFEN = "7k/8/8/pP6/8/8/8/7K w - a6 0 0";
-        ChessGame gameState = new ChessGame(chessboard, expectedComputedFEN);
-        Board chessboard2 = new Board();
-        chessboard2.setPiece(new King(PlayerColor.BLACK), 0, 7);
-        chessboard2.setPiece(new King(PlayerColor.WHITE), 7, 7);
-        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 3, 0);
+        ChessGame gameState = new ChessGame(expectedComputedFEN);
+        log.debug("{}", gameState.getChessboard().toString());
+        gameState.getChessboard().setPiece(new King(PlayerColor.BLACK), 0, 7);
+        gameState.getChessboard().setPiece(new King(PlayerColor.WHITE), 7, 7);
+        gameState.getChessboard().setPiece(new Pawn(PlayerColor.BLACK), 3, 0);
         Pawn whitePawn = new Pawn(PlayerColor.WHITE);
-        chessboard2.setEnPassantCapturePositionForColor(PlayerColor.BLACK, new Position(2,0));
-        chessboard2.setPiece(whitePawn,3,1);
-        assertEquals(chessboard, chessboard2, "The content and positions of all pieces should be the same.");
-        assertEquals(new Position(2,0), chessboard.getEnPassantCapturePositionForColor(PlayerColor.BLACK),
-                "Black must have an en passant capture positions set.");
+        gameState.getChessboard().setPiece(whitePawn,3,1);
+        Collection<Position> piecePositions = new ArrayList<>();
+        gameState.getChessboard().setPawnSkippedPosition(PlayerColor.getOpponentColor(
+                gameState.getChessboard().getCurrentPlayerColor()), new Position(2,0));
+        piecePositions.add(new Position(2,0));
+        piecePositions.add(new Position(3,1));
+        piecePositions.add(new Position(0,7));
+        piecePositions.add(new Position(7,7));
+        piecePositions.add(new Position(3,0));
+        assertEquals(gameState.getChessboard().getPiecesPositions().size() + 1, piecePositions.size(),
+                "The positions of all pieces should be the same.");
+        assertEquals(new Position(2,0), gameState.getChessboard().getPawnSkippedPosition(
+                PlayerColor.getOpponentColor(gameState.getChessboard().getCurrentPlayerColor())),
+                "Black must have an en passant capture position set.");
     }
     @Test
-    void fromInitialPositionToFEN(){
-        String computedFENString = new FENString(FEN_INITIAL_POSITION).toString();
-        assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", computedFENString,
-                "The expected and computed FEN strings should be the same.");
+    void noCastlingPossibleShouldBeEncodedWithADash (){
+        ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
+        FENStateString computedFENStateString = new FENStateString(gameState);
+        assertEquals(FEN_KINGS_ONLY, computedFENStateString.toString(),
+                "FEN_KINGS_ONLY and the computed FEN state string should be equal.");
+        assertEquals(FEN_KINGS_ONLY.charAt(22), computedFENStateString.toString().charAt(22),
+                "The 22nd char of both strings should be a dash.");
+        King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
+        King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "The black King should not have already moved.");
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "The white King should not have already moved.");
+    }
+
+    @Test
+    void equalsTest(){
+        ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
+        FENStateString computedFENStateString1 = new FENStateString(gameState);
+        FENStateString computedFENStateString2 = new FENStateString(gameState);
+        assertEquals(computedFENStateString1, computedFENStateString2, "The two FENs should be equal.");
+    }
+    @Test
+    void equalsTestWithDifferentTails(){
+        ChessGame gameState = new ChessGame("4k3/8/8/8/8/8/8/4K3 w - - 50 31");
+        ChessGame gameState2 = new ChessGame("4k3/8/8/8/8/8/8/4K3 w - - 50 31");
+        FENStateString computedFENStateString1 = new FENStateString(gameState);
+        FENStateString computedFENStateString2 = new FENStateString(gameState2);
+        assertEquals(computedFENStateString1, computedFENStateString2, "The two FENs should be equal.");
+        log.debug("computedFENStateString1: {}", computedFENStateString1);
+        log.debug("computedFENStateString2: {}", computedFENStateString2);
     }
 }

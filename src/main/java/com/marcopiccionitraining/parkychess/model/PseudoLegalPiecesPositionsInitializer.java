@@ -1,104 +1,462 @@
 package com.marcopiccionitraining.parkychess.model;
-import com.marcopiccionitraining.parkychess.model.moves.EnPassantMove;
-import com.marcopiccionitraining.parkychess.model.moves.Move;
-import com.marcopiccionitraining.parkychess.model.pieces.*;
-import jdk.jshell.spi.ExecutionControl;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.util.*;
+import lombok.NonNull;
 
-public class Board {
-    private static final int CHESSBOARD_ROW_SIZE = 8;
-    private static final int CHESSBOARD_COLUMN_SIZE = 8;
-    private final Piece[][] pieces = new Piece[CHESSBOARD_ROW_SIZE][CHESSBOARD_COLUMN_SIZE];
-    private final HashMap<PlayerColor, Position> pawnEnPassantCapturePositions = new HashMap<>();
-    @Setter
-    @Getter
-    private Move lastExecutedMove;
-    private static final HashMap<Position, ArrayList<Position>> knightInsideBoardPositions = new HashMap<>();
-    private static final HashMap<Position, HashSet<ArrayList<Position>>> bishopInsideBoardPositions = new HashMap<>();
-    private static final HashMap<Position, HashSet<ArrayList<Position>>> rookInsideBoardPositions = new HashMap<>();
-    private static final HashMap<Position, HashSet<ArrayList<Position>>> queenInsideBoardPositions = new HashMap<>();
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
+public record PseudoLegalPiecesPositionsInitializer() {
+    private static final HashMap<Position, ArrayList<Position>> knightPseudoLegalPositions = new HashMap<>();
+    private static final HashMap<Position, ArrayList<ArrayList<Position>>> bishopPseudoLegalPositions = new HashMap<>();
+    private static final HashMap<Position, ArrayList<ArrayList<Position>>> rookPseudoLegalPositions = new HashMap<>();
+    private static final HashMap<Position, ArrayList<ArrayList<Position>>> queenPseudoLegalPositions = new HashMap<>();
+    private static final HashMap<Position, ArrayList<Position>> blackPawnPseudoLegalCapturePositions = new HashMap<>();
+    private static final HashMap<Position, ArrayList<Position>> whitePawnPseudoLegalCapturePositions = new HashMap<>();
 
     static {
-        initializeKnightPositionsInsideBoard();
-        initializeBishopPositionsInsideBoard();
-        initializeRookPositionsInsideBoard();
-        initializeQueenPositionsInsideBoard();
+        initializeKnightPseudoLegalPositions();
+        initializeBishopPseudoLegalPositions();
+        initializeRookPseudoLegalPositions();
+        initializeQueenPseudoLegalPositions();
+        initializeBlackPawnPseudoLegalCapturePositions();
+        initializeWhitePawnCapturePseudoLegalPositions();
     }
 
-    private boolean isBlackKingsideCastlingPossible;
-    private boolean isBlackQueensideCastlingPossible;
-    private boolean isWhiteKingsideCastlingPossible;
-    private boolean isWhiteQueensideCastlingPossible;
-
-    //  private static final Logger LOGGER = LoggerFactory.getLogger(Board.class);
-
-    /** Assumption made associating coordinates to chessboard squares.
-     * (0,0) is a8 and is located top left.
-     * (0,7) is h8 and is located top right.
-     * (7,0) is a1 and is located bottom left.
-     * (7,7) is h1 and is located bottom right.
-     */
-    public Board() {
-        pawnEnPassantCapturePositions.put(PlayerColor.BLACK, null);
-        pawnEnPassantCapturePositions.put(PlayerColor.WHITE, null);
+    private static void initializeBlackPawnPseudoLegalCapturePositions() {
+        //row 1
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(1,7), destinations);
+        //row 2
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(2,7), destinations);
+        //row 3
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(3,7), destinations);
+        //row 4
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(4,7), destinations);
+        //row 5
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(5,7), destinations);
+        //row 6
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 1));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 2));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 3));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 4));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 5));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 4));
+        destinations.add(new Position(7, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 7));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(7, 6));
+        blackPawnPseudoLegalCapturePositions.put(new Position(6,7), destinations);
     }
-    private static void initializeKnightPositionsInsideBoard() {
+
+    private static void initializeWhitePawnCapturePseudoLegalPositions() {
+        //row 6
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(6,7), destinations);
+        //row 5
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(5,7), destinations);
+        //row 4
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(4,7), destinations);
+        //row 3
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(3,7), destinations);
+        //row 2
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(2,7), destinations);
+        //row 1
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 0));
+        destinations.add(new Position(0, 2));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(0, 3));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(0, 4));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 5));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(0, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 7));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 6));
+        whitePawnPseudoLegalCapturePositions.put(new Position(1,7), destinations);
+    }
+
+
+    private static void initializeKnightPseudoLegalPositions() {
         ArrayList<Position> destinations = new ArrayList<>();
         destinations.add(new Position(1, 2));
         destinations.add(new Position(2, 1));
-        knightInsideBoardPositions.put(new Position(0,0), destinations);
+        knightPseudoLegalPositions.put(new Position(0,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 3));
         destinations.add(new Position(2, 0));
         destinations.add(new Position(2, 2));
-        knightInsideBoardPositions.put(new Position(0,1), destinations);
+        knightPseudoLegalPositions.put(new Position(0,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 0));
         destinations.add(new Position(2, 1));
         destinations.add(new Position(2, 3));
         destinations.add(new Position(1, 4));
-        knightInsideBoardPositions.put(new Position(0,2), destinations);
+        knightPseudoLegalPositions.put(new Position(0,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 1));
         destinations.add(new Position(2, 2));
         destinations.add(new Position(2, 4));
         destinations.add(new Position(1, 5));
-        knightInsideBoardPositions.put(new Position(0,3), destinations);
+        knightPseudoLegalPositions.put(new Position(0,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 2));
         destinations.add(new Position(2, 3));
         destinations.add(new Position(2, 5));
         destinations.add(new Position(1, 6));
-        knightInsideBoardPositions.put(new Position(0,4), destinations);
+        knightPseudoLegalPositions.put(new Position(0,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 3));
         destinations.add(new Position(2, 4));
         destinations.add(new Position(2, 6));
         destinations.add(new Position(1, 7));
-        knightInsideBoardPositions.put(new Position(0,5), destinations);
+        knightPseudoLegalPositions.put(new Position(0,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 4));
         destinations.add(new Position(2, 5));
         destinations.add(new Position(2, 7));
-        knightInsideBoardPositions.put(new Position(0,6), destinations);
+        knightPseudoLegalPositions.put(new Position(0,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 5));
         destinations.add(new Position(2, 6));
-        knightInsideBoardPositions.put(new Position(0,7), destinations);
+        knightPseudoLegalPositions.put(new Position(0,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 2));
         destinations.add(new Position(2, 2));
         destinations.add(new Position(3, 1));
-        knightInsideBoardPositions.put(new Position(1,0), destinations);
+        knightPseudoLegalPositions.put(new Position(1,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 3));
         destinations.add(new Position(2, 3));
         destinations.add(new Position(3, 0));
         destinations.add(new Position(3, 2));
-        knightInsideBoardPositions.put(new Position(1,1), destinations);
+        knightPseudoLegalPositions.put(new Position(1,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 0));
         destinations.add(new Position(2, 0));
@@ -106,7 +464,7 @@ public class Board {
         destinations.add(new Position(3, 3));
         destinations.add(new Position(2, 4));
         destinations.add(new Position(0, 4));
-        knightInsideBoardPositions.put(new Position(1,2), destinations);
+        knightPseudoLegalPositions.put(new Position(1,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 1));
         destinations.add(new Position(2, 1));
@@ -114,7 +472,7 @@ public class Board {
         destinations.add(new Position(3, 4));
         destinations.add(new Position(2, 5));
         destinations.add(new Position(0, 5));
-        knightInsideBoardPositions.put(new Position(1,3), destinations);
+        knightPseudoLegalPositions.put(new Position(1,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 2));
         destinations.add(new Position(2, 2));
@@ -122,7 +480,7 @@ public class Board {
         destinations.add(new Position(3, 5));
         destinations.add(new Position(2, 6));
         destinations.add(new Position(0, 6));
-        knightInsideBoardPositions.put(new Position(1,4), destinations);
+        knightPseudoLegalPositions.put(new Position(1,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 3));
         destinations.add(new Position(2, 3));
@@ -130,31 +488,31 @@ public class Board {
         destinations.add(new Position(3, 6));
         destinations.add(new Position(2, 7));
         destinations.add(new Position(0, 7));
-        knightInsideBoardPositions.put(new Position(1,5), destinations);
+        knightPseudoLegalPositions.put(new Position(1,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 4));
         destinations.add(new Position(2, 4));
         destinations.add(new Position(3, 5));
         destinations.add(new Position(3, 7));
-        knightInsideBoardPositions.put(new Position(1,6), destinations);
+        knightPseudoLegalPositions.put(new Position(1,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 5));
         destinations.add(new Position(2, 5));
         destinations.add(new Position(3, 6));
-        knightInsideBoardPositions.put(new Position(1,7), destinations);
+        knightPseudoLegalPositions.put(new Position(1,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 1));
         destinations.add(new Position(1, 2));
         destinations.add(new Position(3, 2));
         destinations.add(new Position(4, 1));
-        knightInsideBoardPositions.put(new Position(2,0), destinations);
+        knightPseudoLegalPositions.put(new Position(2,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 2));
         destinations.add(new Position(1, 3));
         destinations.add(new Position(3, 3));
         destinations.add(new Position(4, 2));
         destinations.add(new Position(4, 0));
-        knightInsideBoardPositions.put(new Position(2,1), destinations);
+        knightPseudoLegalPositions.put(new Position(2,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 1));
         destinations.add(new Position(0, 3));
@@ -164,7 +522,7 @@ public class Board {
         destinations.add(new Position(3, 4));
         destinations.add(new Position(4, 1));
         destinations.add(new Position(4, 3));
-        knightInsideBoardPositions.put(new Position(2,2), destinations);
+        knightPseudoLegalPositions.put(new Position(2,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 2));
         destinations.add(new Position(0, 4));
@@ -174,7 +532,7 @@ public class Board {
         destinations.add(new Position(3, 5));
         destinations.add(new Position(4, 2));
         destinations.add(new Position(4, 4));
-        knightInsideBoardPositions.put(new Position(2,3), destinations);
+        knightPseudoLegalPositions.put(new Position(2,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 3));
         destinations.add(new Position(0, 5));
@@ -184,7 +542,7 @@ public class Board {
         destinations.add(new Position(3, 6));
         destinations.add(new Position(4, 3));
         destinations.add(new Position(4, 5));
-        knightInsideBoardPositions.put(new Position(2,4), destinations);
+        knightPseudoLegalPositions.put(new Position(2,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 4));
         destinations.add(new Position(0, 6));
@@ -194,7 +552,7 @@ public class Board {
         destinations.add(new Position(3, 7));
         destinations.add(new Position(4, 4));
         destinations.add(new Position(4, 6));
-        knightInsideBoardPositions.put(new Position(2,5), destinations);
+        knightPseudoLegalPositions.put(new Position(2,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 5));
         destinations.add(new Position(0, 7));
@@ -202,19 +560,19 @@ public class Board {
         destinations.add(new Position(3, 4));
         destinations.add(new Position(4, 5));
         destinations.add(new Position(4, 7));
-        knightInsideBoardPositions.put(new Position(2,6), destinations);
+        knightPseudoLegalPositions.put(new Position(2,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 6));
         destinations.add(new Position(1, 5));
         destinations.add(new Position(3, 5));
         destinations.add(new Position(4, 6));
-        knightInsideBoardPositions.put(new Position(2,7), destinations);
+        knightPseudoLegalPositions.put(new Position(2,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 1));
         destinations.add(new Position(2, 2));
         destinations.add(new Position(4, 2));
         destinations.add(new Position(5, 1));
-        knightInsideBoardPositions.put(new Position(3,0), destinations);
+        knightPseudoLegalPositions.put(new Position(3,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 0));
         destinations.add(new Position(1, 2));
@@ -222,7 +580,7 @@ public class Board {
         destinations.add(new Position(4, 3));
         destinations.add(new Position(5, 0));
         destinations.add(new Position(5, 2));
-        knightInsideBoardPositions.put(new Position(3,1), destinations);
+        knightPseudoLegalPositions.put(new Position(3,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 1));
         destinations.add(new Position(1, 3));
@@ -232,7 +590,7 @@ public class Board {
         destinations.add(new Position(4, 4));
         destinations.add(new Position(5, 1));
         destinations.add(new Position(5, 3));
-        knightInsideBoardPositions.put(new Position(3,2), destinations);
+        knightPseudoLegalPositions.put(new Position(3,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 2));
         destinations.add(new Position(1, 4));
@@ -242,7 +600,7 @@ public class Board {
         destinations.add(new Position(4, 5));
         destinations.add(new Position(5, 2));
         destinations.add(new Position(5, 4));
-        knightInsideBoardPositions.put(new Position(3,3), destinations);
+        knightPseudoLegalPositions.put(new Position(3,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 3));
         destinations.add(new Position(1, 5));
@@ -252,7 +610,7 @@ public class Board {
         destinations.add(new Position(4, 6));
         destinations.add(new Position(5, 3));
         destinations.add(new Position(5, 5));
-        knightInsideBoardPositions.put(new Position(3,4), destinations);
+        knightPseudoLegalPositions.put(new Position(3,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 4));
         destinations.add(new Position(1, 6));
@@ -262,7 +620,7 @@ public class Board {
         destinations.add(new Position(4, 7));
         destinations.add(new Position(5, 4));
         destinations.add(new Position(5, 6));
-        knightInsideBoardPositions.put(new Position(3,5), destinations);
+        knightPseudoLegalPositions.put(new Position(3,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 5));
         destinations.add(new Position(1, 7));
@@ -270,19 +628,19 @@ public class Board {
         destinations.add(new Position(4, 4));
         destinations.add(new Position(5, 5));
         destinations.add(new Position(5, 7));
-        knightInsideBoardPositions.put(new Position(3,6), destinations);
+        knightPseudoLegalPositions.put(new Position(3,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 6));
         destinations.add(new Position(2, 5));
         destinations.add(new Position(4, 5));
         destinations.add(new Position(5, 6));
-        knightInsideBoardPositions.put(new Position(3,7), destinations);
+        knightPseudoLegalPositions.put(new Position(3,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 1));
         destinations.add(new Position(3, 2));
         destinations.add(new Position(5, 2));
         destinations.add(new Position(6, 1));
-        knightInsideBoardPositions.put(new Position(4,0), destinations);
+        knightPseudoLegalPositions.put(new Position(4,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 0));
         destinations.add(new Position(2, 2));
@@ -290,7 +648,7 @@ public class Board {
         destinations.add(new Position(5, 3));
         destinations.add(new Position(6, 0));
         destinations.add(new Position(6, 2));
-        knightInsideBoardPositions.put(new Position(4,1), destinations);
+        knightPseudoLegalPositions.put(new Position(4,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 1));
         destinations.add(new Position(2, 3));
@@ -300,7 +658,7 @@ public class Board {
         destinations.add(new Position(5, 4));
         destinations.add(new Position(6, 1));
         destinations.add(new Position(6, 3));
-        knightInsideBoardPositions.put(new Position(4,2), destinations);
+        knightPseudoLegalPositions.put(new Position(4,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 2));
         destinations.add(new Position(2, 4));
@@ -310,7 +668,7 @@ public class Board {
         destinations.add(new Position(5, 5));
         destinations.add(new Position(6, 2));
         destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(4,3), destinations);
+        knightPseudoLegalPositions.put(new Position(4,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 3));
         destinations.add(new Position(2, 5));
@@ -320,7 +678,7 @@ public class Board {
         destinations.add(new Position(5, 6));
         destinations.add(new Position(6, 3));
         destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(4,4), destinations);
+        knightPseudoLegalPositions.put(new Position(4,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 4));
         destinations.add(new Position(2, 6));
@@ -330,7 +688,7 @@ public class Board {
         destinations.add(new Position(5, 7));
         destinations.add(new Position(6, 4));
         destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(4,5), destinations);
+        knightPseudoLegalPositions.put(new Position(4,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 5));
         destinations.add(new Position(2, 7));
@@ -338,19 +696,19 @@ public class Board {
         destinations.add(new Position(5, 4));
         destinations.add(new Position(6, 5));
         destinations.add(new Position(6, 7));
-        knightInsideBoardPositions.put(new Position(4,6), destinations);
+        knightPseudoLegalPositions.put(new Position(4,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 6));
         destinations.add(new Position(3, 5));
         destinations.add(new Position(5, 5));
         destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(4,7), destinations);
+        knightPseudoLegalPositions.put(new Position(4,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 1));
         destinations.add(new Position(4, 2));
         destinations.add(new Position(6, 2));
         destinations.add(new Position(7, 1));
-        knightInsideBoardPositions.put(new Position(5,0), destinations);
+        knightPseudoLegalPositions.put(new Position(5,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 0));
         destinations.add(new Position(3, 2));
@@ -358,7 +716,7 @@ public class Board {
         destinations.add(new Position(6, 3));
         destinations.add(new Position(7, 0));
         destinations.add(new Position(7, 2));
-        knightInsideBoardPositions.put(new Position(5,1), destinations);
+        knightPseudoLegalPositions.put(new Position(5,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 1));
         destinations.add(new Position(3, 3));
@@ -368,7 +726,7 @@ public class Board {
         destinations.add(new Position(6, 4));
         destinations.add(new Position(7, 1));
         destinations.add(new Position(7, 3));
-        knightInsideBoardPositions.put(new Position(5,2), destinations);
+        knightPseudoLegalPositions.put(new Position(5,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 2));
         destinations.add(new Position(3, 4));
@@ -378,7 +736,7 @@ public class Board {
         destinations.add(new Position(6, 5));
         destinations.add(new Position(7, 2));
         destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(5,3), destinations);
+        knightPseudoLegalPositions.put(new Position(5,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 3));
         destinations.add(new Position(3, 5));
@@ -388,7 +746,7 @@ public class Board {
         destinations.add(new Position(6, 6));
         destinations.add(new Position(7, 3));
         destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(5,4), destinations);
+        knightPseudoLegalPositions.put(new Position(5,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 4));
         destinations.add(new Position(3, 6));
@@ -398,7 +756,7 @@ public class Board {
         destinations.add(new Position(6, 7));
         destinations.add(new Position(7, 4));
         destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(5,5), destinations);
+        knightPseudoLegalPositions.put(new Position(5,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 5));
         destinations.add(new Position(3, 7));
@@ -406,24 +764,24 @@ public class Board {
         destinations.add(new Position(6, 4));
         destinations.add(new Position(7, 5));
         destinations.add(new Position(7, 7));
-        knightInsideBoardPositions.put(new Position(5,6), destinations);
+        knightPseudoLegalPositions.put(new Position(5,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 6));
         destinations.add(new Position(4, 5));
         destinations.add(new Position(6, 5));
         destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(5,7), destinations);
+        knightPseudoLegalPositions.put(new Position(5,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 1));
         destinations.add(new Position(5, 2));
         destinations.add(new Position(7, 2));
-        knightInsideBoardPositions.put(new Position(6,0), destinations);
+        knightPseudoLegalPositions.put(new Position(6,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 0));
         destinations.add(new Position(4, 2));
         destinations.add(new Position(5, 3));
         destinations.add(new Position(7, 3));
-        knightInsideBoardPositions.put(new Position(6,1), destinations);
+        knightPseudoLegalPositions.put(new Position(6,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 1));
         destinations.add(new Position(4, 3));
@@ -431,7 +789,7 @@ public class Board {
         destinations.add(new Position(5, 4));
         destinations.add(new Position(7, 0));
         destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(6,2), destinations);
+        knightPseudoLegalPositions.put(new Position(6,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 2));
         destinations.add(new Position(4, 4));
@@ -439,7 +797,7 @@ public class Board {
         destinations.add(new Position(5, 5));
         destinations.add(new Position(7, 1));
         destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(6,3), destinations);
+        knightPseudoLegalPositions.put(new Position(6,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 3));
         destinations.add(new Position(4, 5));
@@ -447,7 +805,7 @@ public class Board {
         destinations.add(new Position(5, 6));
         destinations.add(new Position(7, 2));
         destinations.add(new Position(7, 6));
-        knightInsideBoardPositions.put(new Position(6,4), destinations);
+        knightPseudoLegalPositions.put(new Position(6,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 4));
         destinations.add(new Position(4, 6));
@@ -455,72 +813,73 @@ public class Board {
         destinations.add(new Position(5, 7));
         destinations.add(new Position(7, 3));
         destinations.add(new Position(7, 7));
-        knightInsideBoardPositions.put(new Position(6,5), destinations);
+        knightPseudoLegalPositions.put(new Position(6,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 5));
         destinations.add(new Position(4, 7));
         destinations.add(new Position(5, 4));
         destinations.add(new Position(7, 4));
-        knightInsideBoardPositions.put(new Position(6,6), destinations);
+        knightPseudoLegalPositions.put(new Position(6,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 6));
         destinations.add(new Position(5, 5));
         destinations.add(new Position(7, 5));
-        knightInsideBoardPositions.put(new Position(6,7), destinations);
+        knightPseudoLegalPositions.put(new Position(6,7), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 1));
         destinations.add(new Position(6, 2));
-        knightInsideBoardPositions.put(new Position(7,0), destinations);
+        knightPseudoLegalPositions.put(new Position(7,0), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 0));
         destinations.add(new Position(5, 2));
         destinations.add(new Position(6, 3));
-        knightInsideBoardPositions.put(new Position(7,1), destinations);
+        knightPseudoLegalPositions.put(new Position(7,1), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 1));
         destinations.add(new Position(5, 3));
         destinations.add(new Position(6, 0));
         destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(7,2), destinations);
+        knightPseudoLegalPositions.put(new Position(7,2), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 2));
         destinations.add(new Position(5, 4));
         destinations.add(new Position(6, 1));
         destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(7,3), destinations);
+        knightPseudoLegalPositions.put(new Position(7,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 3));
         destinations.add(new Position(5, 5));
         destinations.add(new Position(6, 2));
         destinations.add(new Position(6, 6));
-        knightInsideBoardPositions.put(new Position(7,4), destinations);
+        knightPseudoLegalPositions.put(new Position(7,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 4));
         destinations.add(new Position(5, 6));
         destinations.add(new Position(6, 3));
         destinations.add(new Position(6, 7));
-        knightInsideBoardPositions.put(new Position(7,5), destinations);
+        knightPseudoLegalPositions.put(new Position(7,5), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 5));
         destinations.add(new Position(5, 7));
         destinations.add(new Position(6, 4));
-        knightInsideBoardPositions.put(new Position(7,6), destinations);
+        knightPseudoLegalPositions.put(new Position(7,6), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 6));
         destinations.add(new Position(6, 5));
-        knightInsideBoardPositions.put(new Position(7,7), destinations);
+        knightPseudoLegalPositions.put(new Position(7,7), destinations);
     }
 
-    private static void initializeBishopPositionsInsideBoard() {
-        HashSet<ArrayList<Position>> positionsGroupedByDirection = new HashSet<>();
+
+    private static void initializeBishopPseudoLegalPositions() {
+        ArrayList<ArrayList<Position>> positionsGroupedByDirection = new ArrayList<>();
         ArrayList<Position> positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,22,33,44,55,66,77
             positionsInDirection1.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
-        bishopInsideBoardPositions.put(new Position(0,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -529,9 +888,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 1));
         positionsInDirection1.add(new Position(2, 0));
@@ -541,9 +900,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i+2));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         for (int i = 1; i < 5; i++) {//14,25,36,47
@@ -554,9 +913,9 @@ public class Board {
         }
         positionsGroupedByDirection.add(positionsInDirection1);
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         for (int i = 1; i < 4; i++) {//15,26,37
@@ -567,9 +926,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 4-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         for (int i = 1; i < 3; i++) {//16,27
@@ -580,9 +939,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 5-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
@@ -591,17 +950,17 @@ public class Board {
             positionsInDirection2.add(new Position(i, 6-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(0,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//16,25,34,43,52,61,70
             positionsInDirection1.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
-        bishopInsideBoardPositions.put(new Position(0,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(0,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 1));
@@ -610,9 +969,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(1,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         ArrayList<Position> positionsInDirection3 = new ArrayList<>();
@@ -627,9 +986,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection2 = new ArrayList<>();
         positionsInDirection3 = new ArrayList<>();
@@ -645,9 +1004,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 2));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -664,9 +1023,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 4-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 3));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -683,9 +1042,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 5-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 4));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -702,9 +1061,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 6-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 5));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -719,9 +1078,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(1,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 6));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -730,9 +1089,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(1,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(1,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 1));
         positionsInDirection1.add(new Position(0, 2));
@@ -742,9 +1101,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-2));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(2,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -760,9 +1119,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 1));
         positionsInDirection1.add(new Position(0, 0));
@@ -780,9 +1139,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 4));
         positionsInDirection1.add(new Position(0, 5));
@@ -801,9 +1160,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 3));
         positionsInDirection1.add(new Position(0, 2));
@@ -822,9 +1181,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 6-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 4));
         positionsInDirection1.add(new Position(0, 3));
@@ -842,9 +1201,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -860,9 +1219,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(2,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 6));
         positionsInDirection1.add(new Position(0, 5));
@@ -872,9 +1231,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 9-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(2,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(2,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i >= 0; i--) {//21,12,03
             positionsInDirection1.add(new Position(i, 3-i));
@@ -885,9 +1244,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-3));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(3,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -904,9 +1263,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-2));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 1));
         positionsInDirection1.add(new Position(1, 0));
@@ -925,9 +1284,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 5-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i >= 0; i--) {//22,11,00
             positionsInDirection1.add(new Position(i, i));
@@ -948,9 +1307,9 @@ public class Board {
             positionsInDirection4.add(new Position(6-i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i >= 0; i--) {//25,16,07
             positionsInDirection1.add(new Position(i, 7-i));
@@ -971,9 +1330,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 6));
         positionsInDirection1.add(new Position(1, 7));
@@ -992,9 +1351,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1011,9 +1370,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 9-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(3,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i >= 0; i--) {//26,15,04
             positionsInDirection1.add(new Position(i, 4+i));
@@ -1024,9 +1383,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 10-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(3,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(3,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i >= 0; i--) {//31,22,13,04
             positionsInDirection1.add(new Position(i, 4-i));
@@ -1037,9 +1396,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-4));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(4,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3,0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1056,9 +1415,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-3));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3,1));
         positionsInDirection1.add(new Position(2, 0));
@@ -1077,9 +1436,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-2));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i > 0; i--) {//32,21,10
             positionsInDirection1.add(new Position(i, i-1));
@@ -1100,9 +1459,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i >= 0; i--) {//33,22,11,00
             positionsInDirection1.add(new Position(i, i));
@@ -1123,9 +1482,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3, 6));
         positionsInDirection1.add(new Position(2, 7));
@@ -1144,9 +1503,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1163,9 +1522,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+2));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(4,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//56,65,74
             positionsInDirection1.add(new Position(i, 11-i));
@@ -1176,9 +1535,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i+3));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(4,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(4,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 1));
         positionsInDirection1.add(new Position(7, 2));
@@ -1188,9 +1547,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 5-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(5,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1206,9 +1565,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 6-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(4, 1));
         positionsInDirection1.add(new Position(3, 0));
@@ -1226,9 +1585,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 2));
         positionsInDirection1.add(new Position(7, 1));
@@ -1247,9 +1606,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 3));
         positionsInDirection1.add(new Position(7, 2));
@@ -1268,9 +1627,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 4));
         positionsInDirection1.add(new Position(7, 3));
@@ -1288,9 +1647,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(4, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1306,9 +1665,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(5,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 6));
         positionsInDirection1.add(new Position(7, 5));
@@ -1318,9 +1677,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i+2));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(5,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(5,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 1));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1329,9 +1688,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 6-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(6,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(5, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1346,9 +1705,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(5, 1));
         positionsInDirection1.add(new Position(4, 0));
@@ -1364,9 +1723,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 2));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1383,9 +1742,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 9-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 3));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1402,9 +1761,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, 10-i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 4));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1420,9 +1779,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 5));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1437,9 +1796,9 @@ public class Board {
             positionsInDirection4.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        bishopInsideBoardPositions.put(new Position(6,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
 
         positionsInDirection1.add(new Position(7, 6));
@@ -1449,17 +1808,17 @@ public class Board {
             positionsInDirection2.add(new Position(i, i+1));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(6,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(6,7), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {//61,52,43,34,25,16,07
             positionsInDirection1.add(new Position(i, 7-i));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
-        bishopInsideBoardPositions.put(new Position(7,0), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,0), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 0));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1468,9 +1827,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 8-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,1), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,1), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 1));
         positionsInDirection1.add(new Position(5, 0));
@@ -1480,9 +1839,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, 9-i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,2), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,2), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i > 2; i--) {//64,55,46,37
             positionsInDirection1.add(new Position(i, 10-i));
@@ -1493,9 +1852,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-4));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,3), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,3), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i > 3; i--) {//65,56,47
             positionsInDirection1.add(new Position(i, 11-i));
@@ -1506,9 +1865,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-3));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,4), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,4), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 6));
         positionsInDirection1.add(new Position(5, 7));
@@ -1518,9 +1877,9 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-2));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,5), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,5), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1529,19 +1888,20 @@ public class Board {
             positionsInDirection2.add(new Position(i, i-1));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        bishopInsideBoardPositions.put(new Position(7,6), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,6), positionsGroupedByDirection);
 
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {//66,55,44,33,22,11,00
             positionsInDirection1.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
-        bishopInsideBoardPositions.put(new Position(7,7), positionsGroupedByDirection);
+        bishopPseudoLegalPositions.put(new Position(7,7), positionsGroupedByDirection);
     }
 
-    private static void initializeRookPositionsInsideBoard(){
-        HashSet<ArrayList<Position>> positionsGroupedByDirection = new HashSet<>();
+
+    private static void initializeRookPseudoLegalPositions(){
+        ArrayList<ArrayList<Position>> positionsGroupedByDirection = new ArrayList<>();
         ArrayList<Position> positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//10,20,30,40,50,60,70
             positionsInDirection1.add(new Position(i, 0));
@@ -1552,9 +1912,9 @@ public class Board {
             positionsInDirection2.add(new Position(0, i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        rookInsideBoardPositions.put(new Position(0,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,21,31,41,51,61,71
             positionsInDirection1.add(new Position(i, 1));
@@ -1568,9 +1928,9 @@ public class Board {
         ArrayList<Position> positionsInDirection3 = new ArrayList<>();
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//12,22,32,42,52,62,72
             positionsInDirection1.add(new Position(i, 2));
@@ -1585,9 +1945,9 @@ public class Board {
         positionsInDirection3.add(new Position(0, 1));
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//13,23,33,43,53,63,73
             positionsInDirection1.add(new Position(i, 3));
@@ -1602,9 +1962,9 @@ public class Board {
         for (int i = 2; i >= 0; i--) {//02,01,00
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//14,24,34,44,54,64,74
             positionsInDirection1.add(new Position(i, 4));
@@ -1619,9 +1979,9 @@ public class Board {
         for (int i = 3; i >= 0; i--) {//03,02,01,00
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//15,25,35,45,55,65,75
             positionsInDirection1.add(new Position(i, 5));
@@ -1636,9 +1996,9 @@ public class Board {
         for (int i = 4; i >= 0; i--) {//04,03,02,01,00
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//16,26,36,46,56,66,76
             positionsInDirection1.add(new Position(i, 6));
@@ -1651,9 +2011,9 @@ public class Board {
         for (int i = 5; i >= 0; i--) {//05,04,03,02,01,00
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(0,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//17,27,37,47,57,67,77
             positionsInDirection1.add(new Position(i, 7));
@@ -1664,9 +2024,9 @@ public class Board {
             positionsInDirection2.add(new Position(0, i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        rookInsideBoardPositions.put(new Position(0,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(0,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,12,13,14,15,16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1680,9 +2040,9 @@ public class Board {
         positionsInDirection3 = new ArrayList<>();
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(1,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//12,13,14,15,16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1699,9 +2059,9 @@ public class Board {
         ArrayList<Position> positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//13,14,15,16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1719,9 +2079,9 @@ public class Board {
         positionsInDirection4.add(new Position(1, 1));
         positionsInDirection4.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//14,15,16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1740,9 +2100,9 @@ public class Board {
             positionsInDirection4.add(new Position(1, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//15,16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1761,9 +2121,9 @@ public class Board {
             positionsInDirection4.add(new Position(1, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//16,17
             positionsInDirection1.add(new Position(1, i));
@@ -1782,9 +2142,9 @@ public class Board {
             positionsInDirection4.add(new Position(1, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1801,9 +2161,9 @@ public class Board {
             positionsInDirection4.add(new Position(1, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(1,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1817,9 +2177,9 @@ public class Board {
             positionsInDirection3.add(new Position(1, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(1,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(1,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//21,22,23,24,25,26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1834,9 +2194,9 @@ public class Board {
         positionsInDirection3.add(new Position(1, 0));
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(2,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//22,23,24,25,26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1854,9 +2214,9 @@ public class Board {
         positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//23,24,25,26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1875,9 +2235,9 @@ public class Board {
         positionsInDirection4.add(new Position(2, 1));
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//24,25,26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1897,9 +2257,9 @@ public class Board {
         positionsInDirection4.add(new Position(2, 1));
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//25,26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1919,9 +2279,9 @@ public class Board {
             positionsInDirection4.add(new Position(2, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//26,27
             positionsInDirection1.add(new Position(2, i));
@@ -1941,9 +2301,9 @@ public class Board {
             positionsInDirection4.add(new Position(2, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -1961,9 +2321,9 @@ public class Board {
             positionsInDirection4.add(new Position(2, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(2,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
         positionsInDirection1.add(new Position(0, 7));
@@ -1978,9 +2338,9 @@ public class Board {
             positionsInDirection3.add(new Position(2, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(2,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(2,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//31,32,33,34,35,36,37
             positionsInDirection1.add(new Position(3, i));
@@ -1996,9 +2356,9 @@ public class Board {
         positionsInDirection3.add(new Position(1, 0));
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(3,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//32,33,34,35,36,37
             positionsInDirection1.add(new Position(3, i));
@@ -2017,9 +2377,9 @@ public class Board {
         positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//33,34,35,36,37
             positionsInDirection1.add(new Position(3, i));
@@ -2039,9 +2399,9 @@ public class Board {
         positionsInDirection4.add(new Position(3, 1));
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//34,35,36,37
             positionsInDirection1.add(new Position(3, i));
@@ -2062,9 +2422,9 @@ public class Board {
         positionsInDirection4.add(new Position(3, 1));
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//35,36,37
             positionsInDirection1.add(new Position(3, i));
@@ -2085,9 +2445,9 @@ public class Board {
             positionsInDirection4.add(new Position(3, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//36,37
             positionsInDirection1.add(new Position(3, i));
@@ -2108,9 +2468,9 @@ public class Board {
             positionsInDirection4.add(new Position(3, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2129,9 +2489,9 @@ public class Board {
             positionsInDirection4.add(new Position(3, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(3,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//47,57,67,77
             positionsInDirection1.add(new Position(i, 7));
@@ -2147,9 +2507,9 @@ public class Board {
             positionsInDirection3.add(new Position(3, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(3,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(3,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//41,42,43,44,45,46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2165,9 +2525,9 @@ public class Board {
             positionsInDirection3.add(new Position(i,0));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(4,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//42,43,44,45,46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2186,9 +2546,9 @@ public class Board {
         positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//43,44,45,46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2208,9 +2568,9 @@ public class Board {
         positionsInDirection4.add(new Position(4, 1));
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//44,45,46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2231,9 +2591,9 @@ public class Board {
         positionsInDirection4.add(new Position(4, 1));
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//45,46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2254,9 +2614,9 @@ public class Board {
             positionsInDirection4.add(new Position(4, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//46,47
             positionsInDirection1.add(new Position(4, i));
@@ -2277,9 +2637,9 @@ public class Board {
             positionsInDirection4.add(new Position(4, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(4, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2298,9 +2658,9 @@ public class Board {
             positionsInDirection4.add(new Position(4, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(4,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//57,67,77
             positionsInDirection1.add(new Position(i, 7));
@@ -2316,9 +2676,9 @@ public class Board {
             positionsInDirection3.add(new Position(4, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(4,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(4,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//51,52,53,54,55,56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2334,9 +2694,9 @@ public class Board {
             positionsInDirection3.add(new Position(i,0));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(5,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//52,53,54,55,56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2355,9 +2715,9 @@ public class Board {
         positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//53,54,55,56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2377,9 +2737,9 @@ public class Board {
         positionsInDirection4.add(new Position(5,1));
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//54,55,56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2400,9 +2760,9 @@ public class Board {
         positionsInDirection4.add(new Position(5,1));
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//55,56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2423,9 +2783,9 @@ public class Board {
             positionsInDirection4.add(new Position(5, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//56,57
             positionsInDirection1.add(new Position(5, i));
@@ -2446,9 +2806,9 @@ public class Board {
             positionsInDirection4.add(new Position(5, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(5, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2467,9 +2827,9 @@ public class Board {
             positionsInDirection4.add(new Position(5, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(5,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//67,77
             positionsInDirection1.add(new Position(i,7));
@@ -2485,9 +2845,9 @@ public class Board {
             positionsInDirection3.add(new Position(5, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(5,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(5,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//61,62,63,64,65,66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2501,9 +2861,9 @@ public class Board {
             positionsInDirection3.add(new Position(i,0));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(6,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//62,63,64,65,66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2520,9 +2880,9 @@ public class Board {
         positionsInDirection4 = new ArrayList<>();
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//63,64,65,66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2540,9 +2900,9 @@ public class Board {
         positionsInDirection4.add(new Position(6,1));
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//64,65,66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2561,9 +2921,9 @@ public class Board {
         positionsInDirection4.add(new Position(6,1));
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//65,66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2582,9 +2942,9 @@ public class Board {
             positionsInDirection4.add(new Position(6, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//66,67
             positionsInDirection1.add(new Position(6, i));
@@ -2603,9 +2963,9 @@ public class Board {
             positionsInDirection4.add(new Position(6, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2622,9 +2982,9 @@ public class Board {
             positionsInDirection4.add(new Position(6, i));
         }
         positionsGroupedByDirection.add(positionsInDirection4);
-        rookInsideBoardPositions.put(new Position(6,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7,7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2638,9 +2998,9 @@ public class Board {
             positionsInDirection3.add(new Position(6, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(6,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(6,7), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//71,72,73,74,75,76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2651,9 +3011,9 @@ public class Board {
             positionsInDirection2.add(new Position(i,0));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        rookInsideBoardPositions.put(new Position(7,0), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,0), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//72,73,74,75,76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2667,9 +3027,9 @@ public class Board {
         positionsInDirection3 = new ArrayList<>();
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,1), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,1), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//73,74,75,76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2684,9 +3044,9 @@ public class Board {
         positionsInDirection3.add(new Position(7,1));
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,2), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,2), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//74,75,76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2702,9 +3062,9 @@ public class Board {
         positionsInDirection3.add(new Position(7,1));
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,3), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,3), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//75,76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2720,9 +3080,9 @@ public class Board {
             positionsInDirection3.add(new Position(7, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,4), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,4), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//76,77
             positionsInDirection1.add(new Position(7, i));
@@ -2738,9 +3098,9 @@ public class Board {
             positionsInDirection3.add(new Position(7, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,5), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,5), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 7));
         positionsGroupedByDirection.add(positionsInDirection1);
@@ -2754,9 +3114,9 @@ public class Board {
             positionsInDirection3.add(new Position(7, i));
         }
         positionsGroupedByDirection.add(positionsInDirection3);
-        rookInsideBoardPositions.put(new Position(7,6), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,6), positionsGroupedByDirection);
 //validated
-        positionsGroupedByDirection = new HashSet<>();
+        positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {//67,57,47,37,27,17,07
             positionsInDirection1.add(new Position(i,7));
@@ -2767,433 +3127,44 @@ public class Board {
             positionsInDirection2.add(new Position(7, i));
         }
         positionsGroupedByDirection.add(positionsInDirection2);
-        rookInsideBoardPositions.put(new Position(7,7), positionsGroupedByDirection);
+        rookPseudoLegalPositions.put(new Position(7,7), positionsGroupedByDirection);
         //validated
     }
 
-    private static void initializeQueenPositionsInsideBoard(){
+    private static void initializeQueenPseudoLegalPositions(){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Position currentPosition = new Position(i, j);
-                HashSet<ArrayList<Position>> setOfDirectionsPerPosition =
-                        new HashSet<>(bishopInsideBoardPositions.get(currentPosition));
-                setOfDirectionsPerPosition.addAll(rookInsideBoardPositions.get(currentPosition));
-                queenInsideBoardPositions.put(currentPosition, setOfDirectionsPerPosition);
+                ArrayList<ArrayList<Position>> setOfDirectionsPerPosition =
+                        new ArrayList<>(bishopPseudoLegalPositions.get(currentPosition));
+                setOfDirectionsPerPosition.addAll(rookPseudoLegalPositions.get(currentPosition));
+                queenPseudoLegalPositions.put(currentPosition, setOfDirectionsPerPosition);
             }
         }
     }
 
-    public List<Position> getPotentialKnightDestinations(Position from){
-        return knightInsideBoardPositions.get(from);
+    public static List<Position> getKnightPseudoLegalPositions(Position from){
+        return knightPseudoLegalPositions.get(from);
     }
 
-    public HashSet<ArrayList<Position>> getPotentialBishopDestinations(Position from){
-        return bishopInsideBoardPositions.get(from);
+    public static ArrayList<ArrayList<Position>> getBishopPseudoLegalPoitions(Position from){
+        return bishopPseudoLegalPositions.get(from);
     }
 
-    public HashSet<ArrayList<Position>> getPotentialRookDestinations(Position from){
-        return rookInsideBoardPositions.get(from);
+    public static ArrayList<ArrayList<Position>> getRookPseudoLegalPositions(Position from){
+        return rookPseudoLegalPositions.get(from);
     }
 
-    public HashSet<ArrayList<Position>> getPotentialQueenDestinations(Position from){
-        return queenInsideBoardPositions.get(from);
+    public static ArrayList<ArrayList<Position>> getQueenPseudoLegalPositions(Position from){
+        return queenPseudoLegalPositions.get(from);
     }
 
-    public Position getEnPassantCapturePositionForColor (PlayerColor playerColor){
-        return pawnEnPassantCapturePositions.get(playerColor);
-    }
-
-    public void setEnPassantCapturePositionForColor (PlayerColor playerColor, Position position){
-     //   LOGGER.trace("Entering setEnPassantCapturePositionForColor(playerColor = {}, position = {}", playerColor, position);
-        pawnEnPassantCapturePositions.put(playerColor, position);
-    }
-
-    public Piece getPiece(Position position) {
-        return pieces[position.row()][position.column()];
-    }
-
-    public Piece getPiece(int row, int column) {
-        return pieces[row][column];
-    }
-
-    public void setPiece (Piece piece, Position position){
-        piece.setPosition(position);
-        pieces [position.row()][position.column()] = piece;
-    }
-
-    public void setPiece (Piece piece, int row, int column){
-       piece.setPosition(new Position(row,column));
-        pieces[row][column] = piece;
-    }
-
-    public void setEmpty (Position position){
-      //  LOGGER.trace("setEmpty(position = {}", position);
-        pieces [position.row()][position.column()] = null;
-    }
-
-    public boolean isEmpty (Position position){
-        if (position == null){
-            return true;
-        }
-        return pieces[position.row()][position.column()] == null;
-    }
-
-    public boolean isEmpty (int row, int column){
-        return pieces [row][column] == null;
-    }
-
-    public boolean isInsideBoard(Position position){
-        if (position == null){
-            return false;
-        }
-        return position.row() >= 0 && position.row() <= 7 && position.column() >= 0 && position.column() <= 7;
-    }
-
-    //TODO implement code detecting initial checkers
-
-    /**
-     * @return a collection containing all the board positions containing pieces.
-     */
-    public Collection<Position> getPiecesPositions(){
-      //  LOGGER.trace("Entering getPiecesPositions()");
-        Collection<Position> piecesPositions = new ArrayList<>();
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                if (!isEmpty(row, column)){
-                    Position position = new Position(row, column);
-                    piecesPositions.add(position);
-            //        System.out.println("Added a " + getPiece(row, column) + " at " + position);
-                }
-            }
-        }
-   //     System.out.println("piecesPositions: " + piecesPositions);
-   //     System.out.println("Found " + piecesPositions.size() + " pieces positions");
-        return  piecesPositions;
-    }
-
-    /**
-     * @param playerColor is the color we are interested in.
-     * @return a collection containing all the board positions containing pieces of playerColor.
-     */
-    public Collection<Position> getPiecesPositionsFor(PlayerColor playerColor){
-    //    System.out.println("Entering getPiecesPositionsFor " + playerColor);
-        Collection<Position> piecesOfColorPositions = new ArrayList<>();
-        Collection<Position> piecesPositions = getPiecesPositions();
-      //  System.out.println("Analyzing " + piecesPositions.size() + " pieces positions");
-        for (Position position : piecesPositions){
-            if (getPiece(position).getColor().equals(playerColor)) {
-                piecesOfColorPositions.add(new Position (position.row(), position.column()));
-        //        System.out.println("Added " + position + " to " + playerColor + " positions");
-            }
-        }
-     //   LOGGER.trace("piecesOfColorPositions for {}: {}", playerColor, piecesOfColorPositions);
-        return  piecesOfColorPositions;
-    }
-
-    public boolean isInDoubleCheck() {
-        //TODO implement me
-        throw new RuntimeException("Implement me!");
-    }
-
-
-    /**
-     * @param playerColor is the color we are interested in.
-     * @return true if playerColor's king is in check.
-     */
-    public boolean isInCheck(PlayerColor playerColor){
-      //  LOGGER.trace("Entering isInCheck({}", playerColor);
-        boolean isInCheck;
-        Collection<Position> piecesPositions = getPiecesPositionsFor(PlayerColor.getOpponentColor(playerColor));
-        for (Position pos : piecesPositions) {
-            Piece piece = getPiece(pos);
-            isInCheck = piece.canCaptureEnemyKing(pos, this);
-            if (isInCheck) {
-           //     LOGGER.debug("{}'s king is in check.", playerColor);
-                return true;
-            }
-        }
-       // LOGGER.trace("{}'s king is not in check.", playerColor);
-        return false;
-    }
-
-    /**
-     * @return a copy of the current board.
-     */
-    public Board copy(){
-       // LOGGER.trace("Making a copy of the chessboard...");
-        Board copy = new Board();
-        Collection<Position> positions = getPiecesPositions();
-        for (Position pos : positions) {
-            copy.setPiece((getPiece(pos)).copy(), pos);
-        }
-     //   System.out.println(copy);
-        return copy;
-    }
-
-    public void flip() {
-        //TODO implement me
-    }
-
-    public PieceCounter getPiecesCounter(){
-    //    LOGGER.trace("Entering getPiecesCounter");
-        PieceCounter counter = new PieceCounter();
-        for (Position piecePosition : getPiecesPositions()) {
-            Piece piece = getPiece(piecePosition);
-            counter.incrementNumberOfPiecesForColor(piece.getColor(), piece.getName());
-        }
-        return counter;
-    }
-
-    public boolean checkForInsufficientMaterialDraw(){
-      //  LOGGER.trace("Entering checkForInsufficientMaterialDraw");
-        PieceCounter pieceCounter = getPiecesCounter();
-        return areOnlyKingsLeft(pieceCounter) || areKingVsKingAndBishopLeft(pieceCounter) ||
-                areKingVsKingAndKnightLeft(pieceCounter) || areKingAndBishopVsKingAndBishopOfOppositeColorsLeft(pieceCounter);
-    }
-
-    private boolean areOnlyKingsLeft(PieceCounter pieceCounter){
-      //  LOGGER.trace ("Entering areOnlyKingsLeft");
-        return pieceCounter.getTotalNumberOfPieces() == 2;
-    }
-
-    private boolean areKingVsKingAndBishopLeft(PieceCounter pieceCounter){
-      //  LOGGER.trace("Entering areKingVsKingAndBishopLeft(pieceCounter={}", pieceCounter);
-        return pieceCounter.getTotalNumberOfPieces() == 3 &&
-                (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.BISHOP) == 1 ||
-                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.BISHOP) == 1);
-    }
-
-    private boolean areKingVsKingAndKnightLeft(PieceCounter pieceCounter){
-        return pieceCounter.getTotalNumberOfPieces() == 3 &&
-                (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.KNIGHT) == 1 ||
-                        pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.KNIGHT) == 1);
-    }
-
-    private boolean areKingAndBishopVsKingAndBishopOfOppositeColorsLeft(PieceCounter pieceCounter){
-        if (pieceCounter.getTotalNumberOfPieces() != 4){
-            return false;
-        }
-        if (pieceCounter.getBlackNumberOfPiecesNamed(PieceNames.BISHOP) != 1 ||
-                pieceCounter.getWhiteNumberOfPiecesNamed(PieceNames.BISHOP) != 1) {
-            return false;
-        }
-        Position blackBishopPosition = findBishop(PlayerColor.BLACK);
-        Position whiteBishopPosition = findBishop(PlayerColor.WHITE);
-        if (blackBishopPosition != null && whiteBishopPosition != null) {
-            return blackBishopPosition.getSquareColor().equals(whiteBishopPosition.getSquareColor());
+    public static Collection<Position> getPawnCapturePseudoLegalPositions (@NonNull PlayerColor playerColor,
+                                                                           @NonNull Position pawnPosition){
+        if (playerColor.equals(PlayerColor.BLACK)){
+            return blackPawnPseudoLegalCapturePositions.get(pawnPosition);
         } else {
-            return false;
+            return whitePawnPseudoLegalCapturePositions.get(pawnPosition);
         }
-    }
-
-    private Position findBishop(PlayerColor playerColor){
-        for (Position piecePosition : getPiecesPositionsFor(playerColor)) {
-            if (getPiece(piecePosition).getName().equals(PieceNames.BISHOP)){
-                return piecePosition;
-            }
-        }
-        return null;
-    }
-
-    public boolean isKingsideCastlingPossibleFromFEN(PlayerColor playerColor){
-        if (playerColor.equals(PlayerColor.BLACK)){
-            return isBlackKingsideCastlingPossible;
-        } else if (playerColor.equals(PlayerColor.WHITE)){
-            return isWhiteKingsideCastlingPossible;
-        }
-        assert false:"Player color must be either black or white.";
-        return false;
-    }
-
-    public boolean haveKingAndKingsideRookNeverMoved(PlayerColor playerColor){
-        if (playerColor.equals(PlayerColor.BLACK)){
-            return haveKingAndRookNotMovedYet(new Position(0, 4), new Position(0, 7));
-        } else if (playerColor.equals(PlayerColor.WHITE)){
-            return haveKingAndRookNotMovedYet(new Position(7, 4), new Position(7, 7));
-        }
-        assert false : "Unreachable code. There should be only 2 colors.";
-        return false;
-    }
-
-    public boolean isQueensideCastlingPossibleFromFEN(PlayerColor playerColor){
-        if (playerColor.equals(PlayerColor.BLACK)){
-            return isBlackQueensideCastlingPossible;
-        } else if (playerColor.equals(PlayerColor.WHITE)){
-            return isWhiteQueensideCastlingPossible;
-        }
-        return false;
-    }
-
-    public boolean haveKingAndQueensideRookNeverMoved(PlayerColor playerColor){
-        if (playerColor.equals(PlayerColor.BLACK)){
-            return haveKingAndRookNotMovedYet(new Position(0, 4), new Position(0, 0));
-        } else if (playerColor.equals(PlayerColor.WHITE)){
-            return haveKingAndRookNotMovedYet(new Position(7, 4), new Position(7, 0));
-        }
-        return false;
-    }
-
-    private boolean haveKingAndRookNotMovedYet (Position kingPosition, Position rookPosition){
-        assert kingPosition != null : "King position must exist.";
-        assert rookPosition != null : "Rook position must exist.";
-        if (isEmpty(kingPosition) || isEmpty(rookPosition)){
-      //      System.out.println("kingPosition is empty? " + isEmpty(kingPosition));
-      //      System.out.println("rookPosition is empty? " + isEmpty(rookPosition));
-            return false;
-        }
-        Piece maybeKing = getPiece(kingPosition);
-        Piece maybeRook = getPiece(rookPosition);
-        if (!(maybeKing.getColor().equals(maybeRook.getColor()))){
-            return false;
-        }
-        if (!(maybeKing.getName().equals(PieceNames.KING)) ||
-                !(maybeRook.getName().equals(PieceNames.ROOK))) {
-            return false;
-        }
-   //     System.out.println("maybeKing.hasMoved():" + maybeKing.hasMoved());
-   //     System.out.println("maybeRook.hasMoved():" + maybeRook.hasMoved());
-   //     return !(maybeKing.hasMoved()) && !(maybeRook.hasMoved());
-        return !(maybeKing.isHasMovedForGood()) && !(maybeRook.isHasMovedForGood());
-    }
-
-    public boolean canCaptureEnPassant (PlayerColor playerColor) {
-     //   LOGGER.trace("Entering canCaptureEnPassant(playerColor = {}", playerColor);
-        Position enPassantCapturePosition = getEnPassantCapturePositionForColor(PlayerColor.getOpponentColor(playerColor));
-        if (enPassantCapturePosition == null) {
-            return false;
-        }
-        Position[] potentialEnPassantPawnPositions = new Position[2];
-        if (playerColor.equals(PlayerColor.BLACK)) {
-            Position enPassantCaptureSE = enPassantCapturePosition.stepTowardsDirection(Direction.SOUTH_EAST);
-            if (enPassantCaptureSE != null) {
-                if (isInsideBoard(enPassantCaptureSE)) {
-                    potentialEnPassantPawnPositions[0] = new Position(enPassantCaptureSE.row(), enPassantCaptureSE.column());
-                }
-            }
-            Position enPassantCaptureSW = enPassantCapturePosition.stepTowardsDirection(Direction.SOUTH_WEST);
-            if (enPassantCaptureSW != null) {
-                if (isInsideBoard(enPassantCaptureSW)) {
-                    potentialEnPassantPawnPositions[1] = new Position(enPassantCaptureSW.row(), enPassantCaptureSW.column());
-                }
-            }
-        } else {
-            //TODO en passant check playerColor in if
-            if (playerColor.equals(PlayerColor.WHITE)) {
-                Position enPassantCaptureNE = enPassantCapturePosition.stepTowardsDirection(Direction.NORTH_EAST);
-                if (enPassantCaptureNE != null) {
-                    if (isInsideBoard(enPassantCaptureNE)) {
-                        potentialEnPassantPawnPositions[0] = new Position(enPassantCaptureNE.row(), enPassantCaptureNE.column());
-                    }
-                }
-                Position enPassantCaptureNW = enPassantCapturePosition.stepTowardsDirection(Direction.NORTH_WEST);
-                if (enPassantCaptureNW != null){
-                    if (isInsideBoard(enPassantCaptureNW)) {
-                        potentialEnPassantPawnPositions[1] = new Position(enPassantCaptureNW.row(), enPassantCaptureNW.column());
-                    }
-                }
-            }
-        }
-      /*  LOGGER.trace("potentialEnPassantPawnPositions: {{},{}}", potentialEnPassantPawnPositions[0], potentialEnPassantPawnPositions[1]);
-       LOGGER.trace("enPassantCapturePosition: {}", enPassantCapturePosition);*/
-        return isPawnReadyForCapturingEnPassant(playerColor, potentialEnPassantPawnPositions, enPassantCapturePosition);
-    }
-
-    private boolean isPawnReadyForCapturingEnPassant (PlayerColor currentPlayerColor, Position[] pawnPositionsForEnPassant,
-                                                      Position enPassantCapturePosition){
-    //    LOGGER.trace("Entering isPawnReadyForCapturingEnPassant(color={} pawnPositionsForEnPassant={}", currentPlayerColor, pawnPositionsForEnPassant);
-        for (Position position : pawnPositionsForEnPassant) {
-            if (isInsideBoard(position)){
-                Piece piece = getPiece(position);
-                if (piece == null){
-                    continue;
-                }
-                if (piece.getColor().equals(currentPlayerColor)){
-                    continue;
-                }
-                if (!piece.getName().equals(PieceNames.PAWN)) {
-                    continue;
-                }
-                EnPassantMove enPassantMove = new EnPassantMove(position, enPassantCapturePosition);
-                if (enPassantMove.isLegal(this)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Board board)) return false;
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                if (!(Objects.equals(pieces [row][column], board.pieces[row][column]))){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(pieces);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder charView = new StringBuilder();
-        charView.append("\n");
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                if (pieces [row][column] == null){
-                    charView.append("|___|");
-                } else {
-                    charView.append("|_");
-                    charView.append ((pieces [row][column]).toOneChar());
-                    charView.append("_|");
-                }
-            }
-            charView.append("\n");
-        }
-        return charView.toString();
-    }
-
-    public void setBlackKingsideCastlingPossible(boolean isBlackKingsideCastlingPossible) {
-        this.isBlackKingsideCastlingPossible = isBlackKingsideCastlingPossible;
-    }
-
-    public void setBlackQueensideCastlingPossible(boolean isBlackQueensideCastlingPossible) {
-        this.isBlackQueensideCastlingPossible = isBlackQueensideCastlingPossible;
-    }
-
-    public void setWhiteKingsideCastlingPossible(boolean isWhiteKingsideCastlingPossible) {
-        this.isWhiteKingsideCastlingPossible = isWhiteKingsideCastlingPossible;
-    }
-
-    public void setWhiteQueensideCastlingPossible(boolean isWhiteQueensideCastlingPossible) {
-        this.isWhiteQueensideCastlingPossible = isWhiteQueensideCastlingPossible;
-    }
-
-    public Position getKingPosition(PlayerColor playerColor) {
-    //    System.out.println("In getKingPosition");
-        Collection<Position> piecesPositions = getPiecesPositions();
-    //    System.out.println("piecesPositions: " + piecesPositions);
-        for (Position piecePosition : piecesPositions) {
-            Piece piece = getPiece(piecePosition);
-         //   System.out.println("Found " + playerColor + " " + piece);
-            if (piece.getName().equals(PieceNames.KING) && piece.getColor().equals(playerColor)) {
-        //        System.out.println("Found " + playerColor + " king.");
-                return piecePosition;
-            }
-        }
-        assert false : "There must be a " + playerColor +" king on the chessboard";
-        return null;
-    }
-
-    public King getKing(PlayerColor playerColor) {
-        Position kingPosition = getKingPosition(playerColor);
-        return (King) getPiece(kingPosition);
     }
 }

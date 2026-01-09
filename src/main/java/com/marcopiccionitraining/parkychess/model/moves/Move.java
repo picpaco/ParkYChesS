@@ -1,51 +1,34 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
-import com.marcopiccionitraining.parkychess.model.Board;
-import com.marcopiccionitraining.parkychess.model.PlayerColor;
-import com.marcopiccionitraining.parkychess.model.Command;
-import com.marcopiccionitraining.parkychess.model.Position;
+import com.marcopiccionitraining.parkychess.model.*;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
-@Getter
+@Slf4j
 public abstract class Move implements Command {
+    @Getter @Setter
     private Position from;
+    @Getter @Setter
     private Position to;
+    @Getter @Setter
     private MoveNames name;
 
- //   private final Logger LOGGER = LoggerFactory.getLogger(Move.class);
-
-    void setName (MoveNames name){
-        this.name = name;
-    }
-
-    void setFrom (Position from) {
-        this.from = from;
-    }
-
-    void setTo (Position to) {
-        this.to = to;
-    }
-
-    public boolean isLegal (Board chessboard){
-    //    PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
+    public boolean isLegal (@NonNull Board chessboard){
+        log.trace("Executing Move.isLegal()");
+        PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
         Board boardCopy = chessboard.copy();
-    //    LOGGER.trace(boardCopy.toString());
         execute(boardCopy);
-        PlayerColor playerColorOfPieceMoved = boardCopy.getPiece(getTo()).getColor();
-        //   LOGGER.trace("After executing {} on a copy of the board is {} in check? {}", this, playerColorOfPieceToMove, boardCopy.isInCheck(playerColorOfPieceToMove));
-//        return !(boardCopy.isInCheck(PlayerColor.getOpponentColor(playerColorOfPieceToMove)));
-        return !(boardCopy.isInCheck(playerColorOfPieceMoved));
+        return !(boardCopy.isPlayerInCheck(playerColorOfPieceToMove));
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Move move)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Move move)) return false;
         return Objects.equals(from, move.from) && Objects.equals(to, move.to);
     }
 
@@ -60,6 +43,5 @@ public abstract class Move implements Command {
     }
 
     public abstract boolean execute (Board chessboard);
-    public abstract void undo (Board chessboard);
-
+    public abstract void undo (Board chessboard, FENStateString oldGameState);
 }

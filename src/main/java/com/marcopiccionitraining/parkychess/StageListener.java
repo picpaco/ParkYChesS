@@ -18,8 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -35,6 +34,7 @@ import java.util.Optional;
 import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
 
 @Component
+@Slf4j
 public class StageListener implements ApplicationListener<ParkychessApplication.StageReadyEvent> {
 
     private String applicationTitle;
@@ -55,7 +55,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     private ObjectFactory objectFactory;
     private ChessGame gameState;
     private Position selectedPos = null;
-    private final Logger LOGGER = LoggerFactory.getLogger(StageListener.class);
 
     public StageListener (@Value("${spring.application.ui.title}") String applicationTitle,
                        //   @Value("${spring.application.ui.main.window.width}") String applicationWindowWidth,
@@ -64,22 +63,22 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                           @Value("classpath:ui.fxml") Resource fxmlUIResource,
                           ApplicationContext applicationContext){
         if (executeTestsOnly) {
-            LOGGER.info("Executing StageListener (Tests only)...");
+            log.info("Executing StageListener (Tests only)...");
         } else {
-     //       LOGGER.trace("Executing StageListener (GUI app)...");
+     //       log.trace("Executing StageListener (GUI app)...");
             this.applicationTitle = applicationTitle;
             this.fxmlUI = fxmlUIResource;
             this.applicationContext = applicationContext;
             objectFactory = applicationContext.getBean(ObjectFactory.class);
-            chessboard = new Board();
-            gameState = new ChessGame(chessboard, FEN_INITIAL_POSITION);
+            chessboard = new Board(PlayerColor.WHITE);
+            gameState = new ChessGame(FEN_INITIAL_POSITION);
         }
     }
 
     @Override
     public void onApplicationEvent(ParkychessApplication.StageReadyEvent stageReadyEvent) {
         try {
-       //     LOGGER.trace("Entering onApplicationEvent.");
+       //     log.trace("Entering onApplicationEvent.");
             Stage stage = stageReadyEvent.getStage();
             URL url = fxmlUI.getURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -87,24 +86,24 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             GUIController controller = (GUIController) applicationContext.getBean("controller",
                     "com.marcopiccioni.parkychess.controller.GUIController");
             BorderPane root = fxmlLoader.load();
-         //   LOGGER.debug("List of centerpane children: {}", controller.centerPane.getChildren().stream().toList());
+         //   log.debug("List of centerpane children: {}", controller.centerPane.getChildren().stream().toList());
             controller.centerPane.setPrefSize (CHESSBORD_SIDE_SIZE * CHESSBOARD_NUMBER_OF_ROWS,
                     CHESSBORD_SIDE_SIZE * CHESSBOARD_NUMBER_OF_COLUMNS);
             controller.centerPane.setMaxSize(controller.centerPane.getPrefWidth(), controller.centerPane.getPrefHeight());
             controller.centerPane.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.centerPane.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             initializeBoard(controller);
-            gameState.setPositionFromFen(new FENString(FEN_INITIAL_POSITION));
+            gameState.setPositionFromFEN(FEN_INITIAL_POSITION);
             displayChessboard(gameState.getChessboard(), controller);
             controller.piecesGrid.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.piecesGrid.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.chessboardGrid.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.chessboardGrid.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.piecesGrid.setOnMouseClicked ((mouseEvent -> {
-           //     LOGGER.trace ("mouse button clicked");
+           //     log.trace ("mouse button clicked");
                 Point2D point = new Point2D (mouseEvent.getX(), mouseEvent.getY());
-            //    LOGGER.debug("mouseEvent.getX(): {}", mouseEvent.getX());
-            //    LOGGER.debug("mouseEvent.getY(): {}", mouseEvent.getY());
+            //    log.debug("mouseEvent.getX(): {}", mouseEvent.getX());
+            //    log.debug("mouseEvent.getY(): {}", mouseEvent.getY());
                 Position pos = getPositionFromPoint(point, controller);
                 if (selectedPos == null) {
                     controller.piecesGrid.setCursor(Cursor.CLOSED_HAND);
@@ -123,32 +122,32 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             stage.minHeightProperty().bind(scene.widthProperty());
             stage.setTitle(applicationTitle);
             stage.show();
-       //     LOGGER.debug("Scene width: {}", scene.getWidth());
-       //     LOGGER.debug("Scene height: {}", scene.getHeight());
-       //     LOGGER.debug("Stage width: {}", stage.getWidth());
-       //     LOGGER.debug("Stage height: {}", stage.getHeight());
-       //     LOGGER.trace("Exiting onApplicationEvent.");
+       //     log.debug("Scene width: {}", scene.getWidth());
+       //     log.debug("Scene height: {}", scene.getHeight());
+       //     log.debug("Stage width: {}", stage.getWidth());
+       //     log.debug("Stage height: {}", stage.getHeight());
+       //     log.trace("Exiting onApplicationEvent.");
         } catch (IOException e) {
-        //    LOGGER.debug("An IOException was thrown while building the GUI. Message: {}", e.getMessage());
+        //    log.debug("An IOException was thrown while building the GUI. Message: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     private Position getPositionFromPoint(Point2D point, GUIController guiController) {
-       // LOGGER.trace("In getPositionFromPoint: {}", point);
+       // log.trace("In getPositionFromPoint: {}", point);
         double squareSize = CHESSBORD_SIDE_SIZE / 8;
-      //  LOGGER.debug("piecesGrid.getWidth() = {}", guiController.piecesGrid.getWidth());
-     //   LOGGER.debug("piecesGrid.getHeight() = {}", guiController.piecesGrid.getHeight());
-     //   LOGGER.debug("Expected squareSize in pixels: {}", squareSize);
+      //  log.debug("piecesGrid.getWidth() = {}", guiController.piecesGrid.getWidth());
+     //   log.debug("piecesGrid.getHeight() = {}", guiController.piecesGrid.getHeight());
+     //   log.debug("Expected squareSize in pixels: {}", squareSize);
         int row = (int)((point.getY()) / squareSize);
         int col = (int)((point.getX()) / squareSize);
-     //   LOGGER.trace("In getPositionFromPoint(point); computed position: ({}, {})", row, col);
+     //   log.trace("In getPositionFromPoint(point); computed position: ({}, {})", row, col);
         return new Position(row, col);
     }
 
     private void onFromPositionSelected(Position pos) {
         Collection<Move> legalMoves = gameState.getLegalMovesForPieceAtPosition(pos);
-     //   LOGGER.debug("getLegalMovesForPieceAtPosition(pos): {}", legalMoves);
+        log.debug("getLegalMovesForPieceAtPosition(pos): {}", legalMoves);
         if (!legalMoves.isEmpty()) {
             selectedPos = pos;
             cacheMoves(legalMoves);
@@ -164,12 +163,12 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void OnToPositionSelected(Position pos, GUIController guiController) {
-     //   LOGGER.trace("Entering OnToPositionSelected (pos={}", pos);
+     //   log.trace("Entering OnToPositionSelected (pos={}", pos);
         selectedPos = null;
         removeHighlights();
         Move cachedMove = movesCache.get(pos);
         if (cachedMove != null) {
-            gameState.switchCurrentPlayerColor();
+            chessboard.switchCurrentPlayerColor();
             if (cachedMove.getName().equals(MoveNames.PAWN_PROMOTION)){
                 handlePromotion(cachedMove.getFrom(), cachedMove.getTo(), guiController);
             } else {
@@ -179,17 +178,17 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void handleMove (Move aMove, GUIController guiController) {
-     //   LOGGER.trace ("In handleMove({}", aMove);
-        Collection<Move> generatedMoves = gameState.getLegalMovesForColor(gameState.getCurrentColor());
+     //   log.trace ("In handleMove({}", aMove);
+        Collection<Move> generatedMoves = gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor());
         gameState.makeMove (aMove, generatedMoves);
         displayChessboard (gameState.getChessboard(), guiController);
-        gameState.checkGameEnd(gameState.getLegalMovesForColor(gameState.getCurrentColor()));
+        gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()));
         if (gameState.isGameOver()) {
-        //    LOGGER.debug("Game over!");
+            log.debug("Game over!");
             showGameOver(guiController);
         }
-       // setCursor(gameState.getCurrentColor());
-        if (gameState.getCurrentColor().equals(PlayerColor.BLACK)){
+       // setCursor(gameState.getCurrentPlayerColor());
+        if (chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK)){
             guiController.moveToBlack.setVisible(true);
             guiController.moveToWhite.setVisible(false);
         } else {
@@ -207,7 +206,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         ButtonType newGameType = new ButtonType("New Game", ButtonBar.ButtonData.CANCEL_CLOSE);
         gameOverAlert.getButtonTypes().setAll (okType, newGameType);
         Optional<ButtonType> buttonPressed = gameOverAlert.showAndWait();
-      //  LOGGER.debug("button pressed: {}", buttonPressed);
+      //  log.debug("button pressed: {}", buttonPressed);
         if (buttonPressed.isPresent() && buttonPressed.get() == okType){
             System.exit(0);
         } else {
@@ -221,8 +220,8 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         selectedPos = null;
         removeHighlights();
         movesCache.clear();
-        gameState = new ChessGame (chessboard, FEN_INITIAL_POSITION);
-        if (gameState.getCurrentColor().equals(PlayerColor.BLACK)){
+        gameState = new ChessGame (FEN_INITIAL_POSITION);
+        if (chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK)){
             guiController.moveToBlack.setVisible(true);
             guiController.moveToWhite.setVisible(false);
         } else {
@@ -230,7 +229,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             guiController.moveToWhite.setVisible(true);
         }
         displayChessboard(chessboard, guiController);
-   //     setCursor(gameState.getCurrentColor());
+   //     setCursor(gameState.getCurrentPlayerColor());
     }
     private void handlePromotion(Position from, Position to, GUIController guiController) {
         Dialog<String> promotionAlert = new Dialog<>();
@@ -238,47 +237,47 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Window window = promotionAlert.getDialogPane().getScene().getWindow();
         window.setOnCloseRequest(event -> window.hide());
         GridPane promotionPiecesImagesGrid = new GridPane();
-        ImageView queenImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.QUEEN));
+        ImageView queenImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(), PieceNames.QUEEN));
         queenImageView.setPreserveRatio(true);
         queenImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         queenImageView.setFitHeight(PROMOTION_PIECE_SIZE);
         Button queenButton = new Button("", queenImageView);
         promotionPiecesImagesGrid.add(queenButton, 1, 1);
         queenButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Queen(gameState.getCurrentColor()));
+            Move promotionMove = new PawnPromotionMove(from, to, new Queen(chessboard.getCurrentPlayerColor()));
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView rookImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.ROOK));
+        ImageView rookImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(), PieceNames.ROOK));
         rookImageView.setPreserveRatio(true);
         rookImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         rookImageView.setFitHeight(PROMOTION_PIECE_SIZE);
         Button rookButton = new Button("", rookImageView);
         promotionPiecesImagesGrid.add(rookButton, 2, 1);
         rookButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Rook(gameState.getCurrentColor()));
+            Move promotionMove = new PawnPromotionMove(from, to, new Rook(chessboard.getCurrentPlayerColor()));
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView knightImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.KNIGHT));
+        ImageView knightImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(), PieceNames.KNIGHT));
         knightImageView.setPreserveRatio(true);
         knightImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         knightImageView.setFitHeight(PROMOTION_PIECE_SIZE);
         Button knightButton = new Button("", knightImageView);
         promotionPiecesImagesGrid.add(knightButton, 3,1);
         knightButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Knight(gameState.getCurrentColor()));
+            Move promotionMove = new PawnPromotionMove(from, to, new Knight(chessboard.getCurrentPlayerColor()));
             handleMove(promotionMove, guiController);
             window.hide();
         });
-        ImageView bishopImageView = new ImageView (objectFactory.getPieceImage(gameState.getCurrentColor(), PieceNames.BISHOP));
+        ImageView bishopImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(), PieceNames.BISHOP));
         bishopImageView.setPreserveRatio(true);
         bishopImageView.setFitWidth(PROMOTION_PIECE_SIZE);
         bishopImageView.setFitHeight(PROMOTION_PIECE_SIZE);
         Button bishopButton = new Button("", bishopImageView);
         promotionPiecesImagesGrid.add(bishopButton, 4, 1);
         bishopButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Bishop(gameState.getCurrentColor()));
+            Move promotionMove = new PawnPromotionMove(from, to, new Bishop(chessboard.getCurrentPlayerColor()));
             handleMove(promotionMove, guiController);
             window.hide();
         });
@@ -287,11 +286,11 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void showHighlights() {
-     //   LOGGER.trace("In showHighlights");
+     //   log.trace("In showHighlights");
         for (Position to : movesCache.keySet()) {
-      //      LOGGER.debug("About to highlight square ({}, {}) from movecache: {}", to.row(), to.column(), movesCache);
+      //      log.debug("About to highlight square ({}, {}) from movecache: {}", to.row(), to.column(), movesCache);
             highlights[to.row()][to.column()].setFill(HIGHLIGHT_COLOR);
-     //       LOGGER.debug("Just highlighted square {} from movecache: {}", to, movesCache);
+     //       log.debug("Just highlighted square {} from movecache: {}", to, movesCache);
         }
     }
 
@@ -302,7 +301,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void initializeBoard(GUIController guiController){
-     //   LOGGER.trace("In initializeBoard()");
+     //   log.trace("In initializeBoard()");
         for (int row = 0; row < CHESSBOARD_NUMBER_OF_ROWS; row++){
             for (int column = 0; column < CHESSBOARD_NUMBER_OF_COLUMNS; column++) {
                 //First lay down an image of a square of the appropriate color
@@ -323,7 +322,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                         DIM_SQUARE_SIDE, Color.TRANSPARENT);
                 highlights[row][column] = transparentSquare;
                 guiController.highlightsGrid.add(highlights[row][column], column, row);
-       //         LOGGER.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
+       //         log.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
                    //     row, column, guiController.highlightsGrid.getChildren().size());
                 //Then initialize the pieces layer square with an empty image.
                 ImageView imageView = new ImageView (objectFactory.getPieceImage(PlayerColor.WHITE, PieceNames.NONE));
@@ -332,10 +331,10 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 imageView.setFitHeight(DIM_SQUARE_SIDE);
                 imageView.setFitWidth(DIM_SQUARE_SIDE);
                 guiController.piecesGrid.add(imageView, column, row);
-        //        LOGGER.debug("Number of piecesgrid cells after adding an empty square image: {}", guiController.piecesGrid.getChildren().size());
+        //        log.debug("Number of piecesgrid cells after adding an empty square image: {}", guiController.piecesGrid.getChildren().size());
             }
             guiController.piecesGrid.setCursor(Cursor.OPEN_HAND);
-            if (gameState.getCurrentColor().equals(PlayerColor.BLACK)){
+            if (chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK)){
                 guiController.moveToBlack.setVisible(true);
                 guiController.moveToWhite.setVisible(false);
             } else {
@@ -343,16 +342,16 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 guiController.moveToWhite.setVisible(true);
             }
         }
-  //      LOGGER.trace("Exiting initializeBoard()");
+  //      log.trace("Exiting initializeBoard()");
     }
 
     private void displayChessboard(Board chessBoard, GUIController guiController) {
- //       LOGGER.trace("In displayChessboard()");
+ //       log.trace("In displayChessboard()");
         guiController.piecesGrid.getChildren().clear();
         for (int row = 0; row < CHESSBOARD_NUMBER_OF_ROWS; row++) {
             for (int column = 0; column < CHESSBOARD_NUMBER_OF_COLUMNS; column++) {
                 Piece piece = chessBoard.getPiece(row, column);
-          //      LOGGER.debug("piece ({},{}): {}", row, column, piece);
+          //      log.debug("piece ({},{}): {}", row, column, piece);
                 ImageView imageToDisplay = new ImageView(objectFactory.getPieceImage(piece));
                 imageToDisplay.setPreserveRatio(true);
                 imageToDisplay.setSmooth(true);
@@ -360,7 +359,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 imageToDisplay.setFitHeight (DIM_SQUARE_SIDE);
                 imageToDisplay.setFitWidth (DIM_SQUARE_SIDE);
                 guiController.piecesGrid.add(imageToDisplay, column, row);
-          //      LOGGER.debug("Number of piecesgrid cells after adding: {}", guiController.piecesGrid.getChildren().size());
+          //      log.debug("Number of piecesgrid cells after adding: {}", guiController.piecesGrid.getChildren().size());
             }
         }
     }
