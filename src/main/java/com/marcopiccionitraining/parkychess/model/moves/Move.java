@@ -18,7 +18,7 @@ public abstract class Move implements Command {
     private MoveNames name;
 
     public boolean isLegal (@NonNull Board chessboard){
-        log.trace("Executing Move.isLegal()");
+        log.debug("Checking if move {} is Legal.", this);
         PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
         Board boardCopy = chessboard.copy();
         execute(boardCopy);

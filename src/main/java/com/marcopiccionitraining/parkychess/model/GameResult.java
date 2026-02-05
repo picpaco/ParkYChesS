@@ -1,5 +1,7 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import org.jetbrains.annotations.NotNull;
+
 public record GameResult(PlayerColor winner, GameEndReason gameEndReason) {
     /*   public GameResult win (PlayerColor winner, GameEndReason endReason){
         assert endReason == GameEndReason.CHECKMATE || endReason == GameEndReason.RESIGNATION :
@@ -14,6 +16,7 @@ public record GameResult(PlayerColor winner, GameEndReason gameEndReason) {
         return new GameResult(PlayerColor.UNDETERMINED, endReason);
     }*/
 
+    @NotNull
     @Override
     public String toString() {
         return "Winner: " + winner +

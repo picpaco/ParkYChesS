@@ -76,7 +76,7 @@ public class KingTests {
     }
 
     @Test
-    void whiteKkingHasNotMovedAfterThreeMovesWithUndoDepth_3(){
+    void kingsHaveNotMovedAfterThreeMovesWithUndoDepth_3(){
         ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
         ptu = new PerftUtils(gameState);
         King whiteKing = (King) gameState.getChessboard().getPiece (7,4);
@@ -104,20 +104,23 @@ public class KingTests {
                 "the white king should not be flagged as having already moved.");
         assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"After all the moves have been undone, " +
                 "the black king should not be flagged as having already moved.");
-        //TODO: fix the expected result with Stockfish
         assertEquals(1156, result, "There should be 1156 legal positions (leaf nodes).");
     }
 
     @Test
-    void whiteKingHasNotMovedAfterThreeMovesWithUndoDepth_3(){
+    void kingsHaveNotMovedAfterFiveMovesWithUndoDepth_5(){
         ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
         ptu = new PerftUtils(gameState);
         King whiteKing = (King) gameState.getChessboard().getPiece (7,4);
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"Initially, the king should not be flagged as having already moved.");
-        long result = ptu.perft(3, 3, stats);
+        King blackKing = (King) gameState.getChessboard().getPiece (0,4);
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"Initially, the white king should not be flagged as having already moved.");
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"Initially, the black king should not be flagged as having already moved.");
+        long result = ptu.perft(5, 5, stats);
         assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"After all the moves have been undone, " +
                 "the white king should not be flagged as having already moved.");
-        assertEquals(170, result, "There should be 170 legal positions (leaf nodes).");
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"After all the moves have been undone, " +
+                "the black king should not be flagged as having already moved.");
+        assertEquals(7922, result, "There should be 7922 legal positions (leaf nodes).");
     }
 
     @Test
@@ -492,8 +495,8 @@ public class KingTests {
         Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 3));
         assertTrue(whitePawnLegalMoves.size() == computedPawnMoves.size() &&
                 whitePawnLegalMoves.containsAll(computedPawnMoves) &&
-                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " + whitePawnLegalMoves +
-                " is not the same as the produced one: " + computedPawnMoves);
+                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
+                whitePawnLegalMoves + " is not the same as the produced one: " + computedPawnMoves);
     }
     @Test
     void whitePawnsNotPinnedByBlackQueen() {
@@ -507,7 +510,8 @@ public class KingTests {
                 " is not the same as the produced one: " + computedPawnC3Moves);
         Collection<Move> whitePawnD2LegalMoves = new ArrayList<>();
         whitePawnD2LegalMoves.add(new StandardMove(new Position(6,3), new Position(5,3)));
-        whitePawnD2LegalMoves.add(new DoublePawnMove(new Position(6,3), new Position(4,3)));
+        whitePawnD2LegalMoves.add(new DoublePawnMove(new Position(6,3), new Position(4,3),
+                gameState.getChessboard()));
         Collection<Move> computedPawnD2Moves = gameState.getLegalMovesForPieceAtPosition(new Position(6, 3));
         assertTrue(whitePawnD2LegalMoves.size() == computedPawnD2Moves.size() &&
                 whitePawnD2LegalMoves.containsAll(computedPawnD2Moves) &&
@@ -529,6 +533,7 @@ public class KingTests {
         assertEquals(GameEndReason.CHECKMATE, gameState.getGameResult().gameEndReason(), "A checkmate should be on the board.");
         assertEquals(PlayerColor.WHITE, gameState.getGameResult().winner(), "Winner should be white.");
     }
+
     @Test
     void whiteKnightTwoPossibleMovesOneIsDoubleCheckAndDiscovery() {
         ChessGame gameState = new ChessGame(FEN_KNIGHT_DOUBLE_CHECKS_AND_MATES_WHITE_KING);
@@ -538,12 +543,11 @@ public class KingTests {
         assertEquals(2, computedKnightMoves.size(), "Knight should have 2 moves.");
     }
 
-//TODO The following test dictates the app behavior in presence of a checker when the checker's color has the move.
     @Test
     void whiteRookInitialCheckAndWhiteMoves() {
         assertThrows(AssertionError.class, () -> {
             ChessGame gameState = new ChessGame(FEN_WHITE_ROOK_INITIAL_CHECKER);
             assertTrue(gameState.getChessboard().isPlayerInCheck(PlayerColor.WHITE), "White player should be in check");
-        }, "We are expecting an error.");
+        }, "A player cannot be in check and have the move at the same time.");
     }
 }

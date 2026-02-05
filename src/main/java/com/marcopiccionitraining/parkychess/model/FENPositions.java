@@ -139,7 +139,7 @@ public interface FENPositions {
     String FEN_POSITION_AFTER_A4_NC6_A5 = "r1bqkbnr/pppppppp/2n5/P7/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1";
     String FEN_POSITION_AFTER_A4_A5_B4 = "rnbqkbnr/1ppppppp/8/p7/PP6/8/2PPPPPP/RNBQKBNR b KQkq - 0 1";
     String FEN_POSITION_AFTER_A4_A5_B4_A5XB4 = "rnbqkbnr/1ppppppp/8/8/Pp6/8/2PPPPPP/RNBQKBNR w KQkq - 0 1";
-    String FEN_POSITION_AFTER_A4_A5_B4_A5XB4_C4 = "rnbqkbnr/1ppppppp/8/8/PpP5/8/3PPPPP/RNBQKBNR b KQkq c3 0 1";
+    String FEN_POSITION_AFTER_A4_A5_B4_A5XB4_C4 = "7k/8/8/8/PpP5/8/8/7K b - c3 0 1";
     String FEN_POSITION_AFTER_A4_A5_B4_RA6 = "1nbqkbnr/1ppppppp/r7/p7/PP6/8/2PPPPPP/RNBQKBNR w KQk - 0 1";
     String FEN_POSITION_AFTER_A4_A5_B4_RA6_PA4B5 = "1nbqkbnr/1ppppppp/r7/P7/P7/8/2PPPPPP/RNBQKBNR b KQk - 0 1";
     String FEN_POSITION_AFTER_C3 = "rnbqkbnr/pppppppp/8/8/8/2P5/PP1PPPPP/RNBQKBNR b KQkq - 0 1";

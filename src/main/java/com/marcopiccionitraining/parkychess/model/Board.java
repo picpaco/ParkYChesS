@@ -36,63 +36,52 @@ public class Board {
      * Each square can be empty or contain a piece.
      */
     private final Piece[][] pieces = new Piece[CHESSBOARD_ROW_SIZE][CHESSBOARD_COLUMN_SIZE];
+
     /**
      * List of pieces which are giving check.
      */
     @Getter
     private final ArrayList<Piece> checkingPieces = new ArrayList<>();
+
     /**
      * Custom data structure used to save game state and restore it when needed.
      */
     @Getter @Setter
     private GameStateContainer gameStateContainer;
+
     /**
      * Default size for saved game state.
      */
     public static final int MAX_CONTAINER_SIZE = 50;
     /**
-     * Given a valid game position, if the player who has the move makes a double pawn move, then the first square
+     * Given a valid game position, if the player who has the move makes a double pawn move, then the first position
      * associated to the double move is defined as pawnSkippedPosition.
-     * The following HashMap has as key the color (white or black), and as value the associated pawnSkippedPosition.
+     * The following HashMap has as key the color (White or Black), and as value the associated pawnSkippedPosition.
      * The association can be recorded in the HashMap either when a double pawn move is created or when declared by a FEN.
      * Example: if d2d4 is white's move, the HashMap will contain {White --> d3, Black --> null}.
      */
     private final HashMap<PlayerColor, Position> pawnSkippedPositionByColor = new HashMap<>();
-    /*
-    if (getColor().equals(PlayerColor.WHITE)) {
-            if (chessboard.getEnPassantCapturePosition().row() != 3) {
-                log.error("{}'s player pawn is not on row 3 and therefore cannot capture en passant.", getColor());
-                return null;
-            }
-        } else if (getColor().equals(PlayerColor.BLACK)){
-            if (chessboard.getEnPassantCapturePosition().row() != 4){
-                log.error("{}'s player pawn is not on row 4 and therefore cannot capture en passant.", getColor());
-                return null;
-            }
-        }
-     */
+
     /**
-     * Square on which an en passant capture may legally take place on the next move.
+     * Position on which an en passant capture may legally take place on the next move.
      * @param color: player which just made a double pawn move making an en passant capture possible on next move.
      */
     public Position getPawnSkippedPosition(@NonNull PlayerColor color) {
         return pawnSkippedPositionByColor.get(color);
     }
-
     /**
-     * Set a position for en passant capture.
-     * @param color: player which just made a double pawn move making an en passant capture possible on next move.
+     * Set a skipped position for en passant capture.
+     * @param oppositePlayerColor: color of player which just made a double pawn move making an en passant capture possible on next move.
      * @param position: skipped position, also called en passant capture position.
      */
-    public void setPawnSkippedPosition(@NonNull PlayerColor color, @NonNull Position position) {
-        assert ((position.row() == -1) && (position.column() == -1) || ((position.row() == 5) && (color.equals(PlayerColor.WHITE))) ||
-                ((position.row() == 2) && (color.equals(PlayerColor.BLACK)))):
+    public void setSkippedPawnPosition(@NonNull PlayerColor oppositePlayerColor, @NonNull Position position) {
+        assert (((oppositePlayerColor.equals(PlayerColor.WHITE)) && ((position.getRow() == 5))) ||
+                ((oppositePlayerColor.equals(PlayerColor.BLACK)) && ((position.getRow() == 2)))) :
                 "If there is a pawn skipped position, it must be on row 5 for White or on row 2 for Black. " +
-                        "However, this method was erroneously invoked on row " + position.row() + " for " + color;
-        pawnSkippedPositionByColor.put(color, position);
-        log.trace("Just set pawnSkippedPositionByColor to {} and position to {}", color, position);
+                        "However, this method was erroneously invoked on row " + position.getRow() + " for " + oppositePlayerColor;
+        pawnSkippedPositionByColor.put(oppositePlayerColor, position);
+        log.debug("Just set pawnSkippedPositionByColor to {} and position to {}", oppositePlayerColor, position);
     }
-
     /**
      * Last executed move. Useful to determine if a castling or an en passant capture are valid.
      */
@@ -124,29 +113,27 @@ public class Board {
     @Getter @Setter
     private PlayerColor currentPlayerColor;
 
-    public void switchCurrentPlayerColor(){
+    public void switchCurrentPlayerColor() {
         currentPlayerColor = PlayerColor.getOpponentColor(currentPlayerColor);
-        log.trace("Switched color to {}", currentPlayerColor);
+        log.debug("Switched color to {}", currentPlayerColor);
     }
 
-    public Board (PlayerColor currentColor) {
+    public Board(PlayerColor currentColor) {
         this.currentPlayerColor = currentColor;
-        log.trace("About to invoke setPawnSkippedPosition for both colors with undetermined position.");
-        setPawnSkippedPosition(PlayerColor.WHITE, new Position(-1, -1));
-        setPawnSkippedPosition(PlayerColor.BLACK, new Position(-1, -1));
         lastExecutedMove = new EmptyMove();
         gameStateContainer = new GameStateContainer(MAX_CONTAINER_SIZE);
         assert gameStateContainer.isEmpty() : "A game state object must be empty at game start.";
     }
 
+    /**
+     * @param position: the position on the chessboard.
+     * @return null if there is no piece at position,
+     * the piece at position otherwise.
+     */
     public Piece getPiece(Position position) {
-        assert (position == null || (0 <= position.row()) && (position.row() < 8) &&
-                (0 <= position.column()) && position.column() < 8) : "If exists, position should be within chessboard bounds.";
-        if (position != null) {
-            return pieces[position.row()][position.column()];
+        assert (position.isInsideBoard()) : "Position should be within chessboard bounds.";
+            return pieces[position.getRow()][position.getColumn()];
         }
-        return null;
-    }
 
     public Piece getPiece(int row, int column) {
         assert (0 <= row) && (row < 8) && (0 <= column) && column < 8 :
@@ -155,38 +142,42 @@ public class Board {
     }
 
     public void setPiece(@NonNull Piece piece, @NonNull Position position) {
-        assert (0 <= position.row()) && (position.row() < 8) && (0 <= position.column()) && position.column() < 8 :
+        assert (0 <= position.getRow()) && (position.getRow() < 8) && (0 <= position.getColumn()) && position.getColumn() < 8 :
                 "Position should be within chessboard bounds.";
         piece.setPosition(position);
-        pieces[position.row()][position.column()] = piece;
+        pieces[position.getRow()][position.getColumn()] = piece;
     }
 
-    public void setPiece(@NonNull Piece piece, int row, int column) {
+    public void setPiece (@NonNull Piece piece, int row, int column) {
         assert 0 <= row && row < 8 && 0 <= column && column < 8 : "Row and column should be within chessboard bounds.";
         piece.setPosition(new Position(row, column));
         pieces[row][column] = piece;
     }
 
-    public void setEmpty(@NonNull Position position) {
-        pieces[position.row()][position.column()] = null;
+    public void setEmpty (@NonNull Position position) {
+        assert position.isInsideBoard() : "position must be within this board.";
+        pieces[position.getRow()][position.getColumn()] = null;
     }
 
+    /**
+     *
+     * @param position on the chessboard.
+     * @return true if there is a piece at position, false otherwise.
+     */
     public boolean isEmpty(@NonNull Position position) {
-        return pieces[position.row()][position.column()] == null;
+        if (position.isInsideBoard()) {
+            return pieces[position.getRow()][position.getColumn()] == null;
+        }
+        return true;
     }
 
     public boolean isEmpty(int row, int column) {
         assert 0 <= row && row < 8 && 0 <= column && column < 8 : "Row and column should be within chessboard bounds.";
         return (pieces[row][column] == null);
     }
-
-    public boolean isInsideBoard(@NonNull Position position) {
-        return position.row() >= 0 && position.row() < 8 && position.column() >= 0 && position.column() < 8;
-    }
-
     /**
      * @param playerColor is the color we are interested in.
-     * @return a collection containing all the board positions containing pieces of playerColor.
+     * @return a collection containing all the board positions with pieces of playerColor.
      */
     public Collection<Position> getPiecesPositionsForColor(PlayerColor playerColor) {
         Collection<Position> blackPiecesPositions = new ArrayList<>();
@@ -235,15 +226,18 @@ public class Board {
      * @return true if playerColor's king is in check.
      */
     public boolean isPlayerInCheck(PlayerColor playerColor) {
+        log.debug("Checking if {} is in check.", playerColor);
         checkingPieces.clear();
-        Collection<Position> piecesPositions = getPiecesPositionsForColor(PlayerColor.getOpponentColor(playerColor));
-        log.debug("Pieces positions for {}: {}", PlayerColor.getOpponentColor(playerColor), piecesPositions);
-        for (Position pos : piecesPositions) {
-            Piece piece = getPiece(pos);
-            if (piece.canCaptureEnemyKing(pos, this)) {
-                log.trace("{} in {} can capture {} king.", piece.getName(), pos, playerColor);
-                checkingPieces.add(piece);
-                log.trace("{}'s king is in check.", playerColor);
+        Collection<Position> enemyPiecesPositions = getPiecesPositionsForColor(PlayerColor.getOpponentColor(playerColor));
+        log.debug("Enemy ({}) pieces positions: {}", PlayerColor.getOpponentColor(playerColor), enemyPiecesPositions);
+        for (Position pos : enemyPiecesPositions) {
+            Piece enemyPiece = getPiece(pos);
+            if (enemyPiece.canCaptureKing(getKingPosition(playerColor), this)){
+                log.debug("{} can capture {} king on {}.", enemyPiece.getName(), playerColor, pos);
+                log.debug("{}'s king is in check.", playerColor);
+                checkingPieces.add(enemyPiece);
+            } else {
+                log.debug("Piece {} cannot capture {} king.", enemyPiece, playerColor);
             }
         }
         log.debug("{}'s king is not in check.", playerColor);
@@ -268,16 +262,18 @@ public class Board {
         }
         boardCopy.gameStateContainer = gameStateContainer.copy();
         log.trace("{}", boardCopy);
-        //      boardCopy.setEnPassantCapturePosition(enPassantCapturePosition);
         boardCopy.setLastExecutedMove(lastExecutedMove);
         log.trace("Last executed move which was copied: {}", lastExecutedMove);
-      //  Piece pieceThatMovedLast = getPiece(lastExecutedMove.getTo());
         Position whiteSkippedPosition = pawnSkippedPositionByColor.get(PlayerColor.WHITE);
-        log.trace("About to invoke setPawnSkippedPosition ({}, {})", PlayerColor.WHITE, whiteSkippedPosition);
-        boardCopy.setPawnSkippedPosition(PlayerColor.WHITE, whiteSkippedPosition);
+        if (whiteSkippedPosition != null) {
+            log.debug("About to invoke setSkippedPawnPosition ({}, {})", PlayerColor.WHITE, whiteSkippedPosition);
+            boardCopy.setSkippedPawnPosition(PlayerColor.WHITE, whiteSkippedPosition);
+        }
         Position blackSkippedPosition = pawnSkippedPositionByColor.get(PlayerColor.BLACK);
-        log.trace("About to invoke setPawnSkippedPosition ({}, {})", PlayerColor.BLACK, blackSkippedPosition);
-        boardCopy.setPawnSkippedPosition(PlayerColor.BLACK, blackSkippedPosition);
+        if (blackSkippedPosition != null) {
+            log.debug("About to invoke setSkippedPawnPosition ({}, {})", PlayerColor.BLACK, blackSkippedPosition);
+            boardCopy.setSkippedPawnPosition(PlayerColor.BLACK, blackSkippedPosition);
+        }
         boardCopy.setBlackKingsideCastlingPossibleFromFEN(isBlackKingsideCastlingPossibleFromFEN);
         boardCopy.setBlackQueensideCastlingPossibleFromFEN(isBlackQueensideCastlingPossibleFromFEN);
         boardCopy.setWhiteQueensideCastlingPossibleFromFEN(isWhiteQueensideCastlingPossibleFromFEN);
@@ -332,7 +328,7 @@ public class Board {
         Position blackBishopPosition = findBishop(PlayerColor.BLACK);
         Position whiteBishopPosition = findBishop(PlayerColor.WHITE);
         if (blackBishopPosition != null && whiteBishopPosition != null) {
-            return blackBishopPosition.getSquareColor().equals(whiteBishopPosition.getSquareColor());
+            return getSquareColor(blackBishopPosition).equals(getSquareColor(whiteBishopPosition));
         } else {
             return false;
         }
@@ -350,20 +346,15 @@ public class Board {
     public boolean isKingsideCastlingPossibleFromFEN(PlayerColor playerColor) {
         if (playerColor.equals(PlayerColor.BLACK)) {
             return isBlackKingsideCastlingPossibleFromFEN;
-        } else if (playerColor.equals(PlayerColor.WHITE)) {
-            return isWhiteKingsideCastlingPossibleFromFEN;
         }
-        assert false : "Player color must be either black or white.";
-        return false;
+        return isWhiteKingsideCastlingPossibleFromFEN;
     }
 
     public boolean isQueensideCastlingPossibleFromFEN(PlayerColor playerColor) {
         if (playerColor.equals(PlayerColor.BLACK)) {
             return isBlackQueensideCastlingPossibleFromFEN;
-        } else if (playerColor.equals(PlayerColor.WHITE)) {
-            return isWhiteQueensideCastlingPossibleFromFEN;
         }
-        return false;
+        return isWhiteQueensideCastlingPossibleFromFEN;
     }
 
 /*    public boolean haveKingAndKingsideRookNeverMoved(PlayerColor playerColor) {
@@ -561,7 +552,7 @@ public class Board {
         if (!(obj instanceof Board board)) return false;
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
-                if (!(Objects.equals(pieces [row][column], board.pieces[row][column]))){
+                if (!(Objects.equals(pieces[row][column], board.pieces[row][column]))) {
                     return false;
                 }
             }
@@ -580,11 +571,11 @@ public class Board {
         charView.append("\n");
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
-                if (pieces [row][column] == null){
+                if (pieces[row][column] == null) {
                     charView.append("|___|");
                 } else {
                     charView.append("|_");
-                    charView.append ((pieces [row][column]).toOneChar());
+                    charView.append((pieces[row][column]).toOneChar());
                     charView.append("_|");
                 }
             }
@@ -592,10 +583,6 @@ public class Board {
         }
         return charView.toString();
     }
-
-    //   public void setBlackKingsideCastlingPossible(boolean isBlackKingsideCastlingPossible) {
-    //      this.isBlackKingsideCastlingPossible = isBlackKingsideCastlingPossible;
-    // }
 
     public Position getKingPosition(PlayerColor playerColor) {
         Collection<Position> piecesPositions = getPiecesPositions();
@@ -610,50 +597,19 @@ public class Board {
         return null;
     }
 
-    public King getKing (PlayerColor playerColor) {
+    public King getKing(PlayerColor playerColor) {
         Position kingPosition = getKingPosition(playerColor);
         return (King) getPiece(kingPosition);
     }
 
- /*   public Rook getNoCastlingRook(PlayerColor playerColor) {
-    Collection<Position> piecesPositions = getPiecesPositions();
-    for (Position piecePosition : piecesPositions) {
-        Piece piece = getPiece(piecePosition);
-        if (piece.getName().equals(PieceNames.ROOK) && piece.getColor().equals(playerColor)) {
-            Rook rook = (Rook) piece;
-            if (rook.isNoCastlingRook()) {
-                return rook;
-            }
+    /**
+     * @return the color of the chessboard square corresponding to position.
+     */
+    public PlayerColor getSquareColor(Position position) {
+        if ((position.getRow() + position.getColumn()) % 2 == 0) {
+            return PlayerColor.WHITE;
+        } else {
+            return PlayerColor.BLACK;
         }
     }
-    return null;
-}*/
-
- /*   public Rook getKingsideRook(PlayerColor playerColor) {
-        Collection<Position> piecesPositions = getPiecesPositions();
-        for (Position piecePosition : piecesPositions) {
-            Piece piece = getPiece(piecePosition);
-            if (piece.getName().equals(PieceNames.ROOK) && piece.getColor().equals(playerColor)) {
-                Rook rook = (Rook) piece;
-                if (rook.isKingsideRook()) {
-                    return rook;
-                }
-            }
-        }
-        return null;
-    }*/
-
- /*   public Rook getQueensideRook(PlayerColor playerColor) {
-        Collection<Position> piecesPositions = getPiecesPositions();
-        for (Position piecePosition : piecesPositions) {
-            Piece piece = getPiece(piecePosition);
-            if (piece.getName().equals(PieceNames.ROOK) && piece.getColor().equals(playerColor)) {
-                Rook rook = (Rook) piece;
-                if (rook.isQueensideRook()) {
-                    return rook;
-                }
-            }
-        }
-        return null;
-    }*/
 }

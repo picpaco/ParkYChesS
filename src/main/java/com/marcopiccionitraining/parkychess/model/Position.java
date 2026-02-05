@@ -1,9 +1,8 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import lombok.Getter;
 import lombok.NonNull;
-
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Position on the board, expressed as a pair of integers (row and column).
@@ -12,36 +11,52 @@ import java.util.Optional;
  * 2. rows increase from top (0) to bottom (7).
  * 3. columns increase from left (0) to right (7).
  */
-//TODO check everywhere else if you can avoid creating Position objects
-// TODO think about deleting this class altogether and refactor its code in the Board class.
-public record Position(int row, int column) {
-
-    public Position {
-        assert row >= -1 && row <= 7 : "invalid row: " + row;
-        assert column >= -1 && column <= 7 : "invalid column: " + column;
-    }
-
-    public PlayerColor getSquareColor() {
-        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";
-        if ((row + column) % 2 == 0) {
-            return PlayerColor.WHITE;
+public final class Position {
+    /**
+     * This position's row coordinate within the board.
+     */
+    @Getter
+    private final int row;
+    /**
+     * This position's column coordinate within the board.
+     */
+    @Getter
+    private final int column;
+    /**
+     * Is this position inside the board?
+     */
+    @Getter
+    private boolean isInsideBoard;
+    /**
+     * Creates a position.
+     * @param row this position's row.
+     * @param column this position's column.
+     */
+    public Position (int row, int column) {
+        if (row >= 0 && row <= 7 && column >= 0 && column <= 7) {
+            isInsideBoard = true;
+            this.row = row;
+            this.column = column;
         } else {
-            return PlayerColor.BLACK;
+            this.row = -1;
+            this.column = -1;
         }
     }
 
     public Position stepTowardsDirection (Direction direction) {
-        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";        int expectedRow = row + direction.rowDelta();
+        int expectedRow = row + direction.rowDelta();
         int expectedColumn = column + direction.columnDelta();
-        if (expectedRow >= 0 && expectedRow <= 7 && expectedColumn >= 0 && expectedColumn <= 7) {
-            return new Position(expectedRow, expectedColumn);
-        } else {
-            return null;
+        Position expectedPosition = new Position(expectedRow, expectedColumn);
+        if (expectedPosition.isInsideBoard){
+            return expectedPosition;
         }
+        return new Position(-1,-1);
     }
 
-    public @NonNull String toAlgebraic() {
-        assert row != -1 && column != -1 : "row and column must not be -1 to invoke this function.";
+    private @NonNull String toAlgebraic() {
+        if (row == -1 && column == -1) {
+            return "--";
+        }
         StringBuilder algebraicForm = new StringBuilder();
         switch (column) {
             case 0:
@@ -89,9 +104,6 @@ public record Position(int row, int column) {
 
     @Override
     public @NonNull String toString() {
-        if (row == -1 && column == -1) {
-            return "undetermined";
-        }
         return toAlgebraic();
     }
 }

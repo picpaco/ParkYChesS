@@ -33,15 +33,16 @@ public class PerftUtils {
         long numberOfNodesFromPosition;
         log.debug("{} can make {} legal moves at depth {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
                 movesList.size(), currentDepth, movesList);
-        //TODO: Why are we looping again? Refactoring: create just one loop through the pseudolegal moves
-        //If a pseudolegal move is legal then execute the code below
+        //TODO: Why are we looping again? Refactoring: create just one loop through the pseudolegal moves.
+        // If a pseudolegal move is legal then execute the code below
         for (Move move : movesList) {
-            log.trace("{} will now execute move {} at depth {}", gameState.getChessboard().getCurrentPlayerColor(),
+            log.debug("{} will now execute move {} at depth {}", gameState.getChessboard().getCurrentPlayerColor(),
                     move, currentDepth);
-            FENStateString savedGameState = new FENStateString(gameState);
-            log.debug("Position before push: {}", gameState.getChessboard());
-            log.debug("Current game state before push: {}", savedGameState);
-            gameState.getChessboard().getGameStateContainer().push(savedGameState);
+    //        FENStateString savedGameState = new FENStateString(gameState);
+    //        savedGameState.setLastExecutedMove(move);
+    //        log.debug("Position before push: {}", gameState.getChessboard());
+    //        log.debug("Current game state before push: {}", savedGameState);
+    //        gameState.getChessboard().getGameStateContainer().push(savedGameState);
             gameState.makeMove(move, movesList);
             gameState.getChessboard().switchCurrentPlayerColor();
             numberOfNodesFromPosition = perft(startingDepth, currentDepth - 1, stats);
@@ -90,9 +91,9 @@ public class PerftUtils {
         for (Move move : movesList) {
             log.trace("Move {} executed by {} at depth {}", move,
                     gameState.getChessboard().getCurrentPlayerColor(), depth);
-            FENStateString currentGameState = gameState.getChessboard().getGameStateContainer().peek();
+       //     FENStateString currentGameState = gameState.getChessboard().getGameStateContainer().peek();
         //    gameState.getChessboard().getGameStateContainer().push(currentGameState.copy(gameState.getChessboard()));
-            gameState.getChessboard().getGameStateContainer().push(new FENStateString(gameState));
+         //   gameState.getChessboard().getGameStateContainer().push(new FENStateString(gameState));
             log.debug("About to invoke ChessGame.makeMove");
             gameState.makeMove(move, movesList);
             gameState.getChessboard().switchCurrentPlayerColor();

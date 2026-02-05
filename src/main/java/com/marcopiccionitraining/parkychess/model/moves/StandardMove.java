@@ -26,13 +26,9 @@ import lombok.extern.slf4j.Slf4j;
     @Override
     public boolean isLegal(@NonNull Board chessboard) {
         assert chessboard.getPiece(getFrom()) != null : "There must be a piece in " + getFrom();
-        log.trace("Executing StandardMove isLegal()");
-        Position maybePawnSkippedPosition = chessboard.getPawnSkippedPosition(chessboard.getCurrentPlayerColor());
-        log.trace("While checking if standard move {} is legal, I am setting pawnSkipped Position to {}.",
-                this, maybePawnSkippedPosition);
-        chessboard.setPawnSkippedPosition(chessboard.getCurrentPlayerColor(), maybePawnSkippedPosition);
+        log.trace("In StandardMove.isLegal()");
         execute(chessboard);
-        PlayerColor playerColorOfPieceMoved = chessboard.getPiece(getTo()).copy().getColor();
+        PlayerColor playerColorOfPieceMoved = chessboard.getPiece(getTo()).getColor();
         boolean wasKingCaptured = (capturedPiece != null) && (capturedPiece.getName().equals(PieceNames.KING)) &&
                 capturedPiece.getColor().equals(PlayerColor.getOpponentColor(playerColorOfPieceMoved));
         return !(chessboard.isPlayerInCheck(playerColorOfPieceMoved)) && !(wasKingCaptured);
@@ -118,8 +114,8 @@ import lombok.extern.slf4j.Slf4j;
             chessboard.setPiece(capturedPiece, oldGameState.getLastExecutedMove().getTo());
             log.debug("Just set captured piece {} back on {}.", capturedPiece, oldGameState.getLastExecutedMove().getTo());
         } else {
-            chessboard.setEmpty(chessboard.getLastExecutedMove().getTo());
-            log.debug("Just set {} to empty.", chessboard.getLastExecutedMove().getTo());
+            chessboard.setEmpty(oldGameState.getLastExecutedMove().getTo());
+            log.debug("Just set {} to empty.", oldGameState.getLastExecutedMove().getTo());
         }
     }
 }

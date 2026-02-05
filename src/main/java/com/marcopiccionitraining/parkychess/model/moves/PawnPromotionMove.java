@@ -10,8 +10,6 @@ import lombok.NonNull;
 public class PawnPromotionMove extends Move {
 
     private final Piece promotionPiece;
-    private Piece capturedPiece;
-//    private final Logger LOGGER = LoggerFactory.getLogger(PawnPromotionMove.class);
 
     public PawnPromotionMove (Position from, Position to, Piece promotionPiece){
         assert from != null : "The from position must exist.";

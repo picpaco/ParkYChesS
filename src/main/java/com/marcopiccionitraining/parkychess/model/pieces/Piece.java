@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Collection;
 import java.util.Objects;
 
@@ -36,16 +35,34 @@ public abstract class Piece {
 
     public abstract Collection<Move> getPseudoLegalMoves(Position from, Board chessboard);
 
-    public boolean canCaptureEnemyKing (@NonNull Position from, @NonNull Board chessboard) {
-        assert chessboard.getPiece(from) != null : "Piece at position " + from + " must exist.";
-        for (Move move : getPseudoLegalMoves(from, chessboard)) {
-            Piece targetPiece = chessboard.getPiece(move.getTo());
-            if (targetPiece != null && targetPiece.getName().equals(PieceNames.KING)) {
+    public boolean canCaptureKing(Position kingPosition, Board chessboard){
+        Collection<Move> piecePseudolegalMoves = getPseudoLegalMoves(getPosition(), chessboard);
+        for (Move move : piecePseudolegalMoves) {
+            if (move.getTo().equals(kingPosition)) {
+                Piece piece = chessboard.getPiece(move.getFrom());
+                if (!(piece.isPinned(kingPosition, chessboard))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /** //FIXME: infinite recursion with canCaptureKing?
+     * Is this piece pinned? That is, among the enemy pieces, is there at least one
+     * that could capture our King with a pseudolegal move?
+     */
+    public final boolean isPinned(@NonNull Position friendlyKingPosition, @NonNull Board chessboard) {
+        Collection<Position> enemyPiecesPositions = chessboard.getPiecesPositionsForColor(PlayerColor.getOpponentColor(getColor()));
+        for (Position enemyPos : enemyPiecesPositions){
+            Piece piece = chessboard.getPiece(enemyPos);
+            if (piece.canCaptureKing(friendlyKingPosition, chessboard)){
                 return true;
             }
         }
         return false;
     }
+
+  //  public abstract boolean canCaptureKing(Position pos, Board chessboard);
 
     @Override
     public boolean equals(Object obj) {

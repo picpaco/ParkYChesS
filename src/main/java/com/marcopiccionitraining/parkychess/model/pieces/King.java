@@ -73,7 +73,7 @@ public class King extends Piece {
             log.debug("Kingside castling is not possible for {} because the king has already moved", getColor());
             return false;
         }
-        Position castlingRookInitialPosition = new Position(from.row(), 7);
+        Position castlingRookInitialPosition = new Position(from.getRow(), 7);
         if (chessboard.isEmpty(castlingRookInitialPosition)){
             log.debug("Kingside castling is not possible for {} because the rook is not on its home square {}. ",
                     getColor(), castlingRookInitialPosition);
@@ -90,8 +90,8 @@ public class King extends Piece {
             return false;
         }
         ArrayList<Position> positionsInBetween = new ArrayList<>();
-        positionsInBetween.add(new Position(from.row(), 5));
-        positionsInBetween.add(new Position(from.row(), 6));
+        positionsInBetween.add(new Position(from.getRow(), 5));
+        positionsInBetween.add(new Position(from.getRow(), 6));
         return (hasRookNeverMoved(castlingRookInitialPosition, chessboard)) &&
                 (isCastlingPathFree(positionsInBetween, chessboard));
     }
@@ -118,7 +118,7 @@ public class King extends Piece {
             log.trace("Queenside castling is not possible for {} because the king has already moved", getColor());
             return false;
         }
-        Position castlingRookInitialPosition = new Position(from.row(), 0);
+        Position castlingRookInitialPosition = new Position(from.getRow(), 0);
         if (chessboard.isEmpty(castlingRookInitialPosition)) {
             log.trace("Queenside castling is not possible for {} because there is a {} on {}. ",
                     getColor(), getName(), castlingRookInitialPosition);
@@ -130,18 +130,18 @@ public class King extends Piece {
             return false;
         }
         ArrayList<Position> positionsBetween = new ArrayList<>();
-        positionsBetween.add(new Position(from.row(), 1));
-        positionsBetween.add(new Position(from.row(), 2));
-        positionsBetween.add(new Position(from.row(), 3));
+        positionsBetween.add(new Position(from.getRow(), 1));
+        positionsBetween.add(new Position(from.getRow(), 2));
+        positionsBetween.add(new Position(from.getRow(), 3));
         return (hasRookNeverMoved(castlingRookInitialPosition, chessboard)) &&
                 (isCastlingPathFree(positionsBetween, chessboard));
     }
 
     private boolean isKingPositionIncorrectForCastling(Position from) {
-        if ((getColor().equals(PlayerColor.BLACK)) && ((from.row() != 0) || (from.column() != 4))) {
+        if ((getColor().equals(PlayerColor.BLACK)) && ((from.getRow() != 0) || (from.getColumn() != 4))) {
             return true;
         }
-        return (getColor().equals(PlayerColor.WHITE)) && ((from.row() != 7) || (from.column() != 4));
+        return (getColor().equals(PlayerColor.WHITE)) && ((from.getRow() != 7) || (from.getColumn() != 4));
     }
     /** Conditions that must hold in order to declare a king move 'pseudolegal':
      * 1. A valid king move (within the chessboard) to an empty square or a square occupied by
@@ -156,13 +156,11 @@ public class King extends Piece {
         Collection<Move> pseudoLegalMoves = new ArrayList<>();
         for (Direction direction : allowedDirections) {
             Position to = from.stepTowardsDirection(direction);
-            if (to != null) {
-                if (!(chessboard.isInsideBoard(to))) {
-                    continue;
-                }
-                if (chessboard.isEmpty(to) || !(chessboard.getPiece(to).getColor()).equals(getColor())) {
-                    pseudoLegalMoves.add(new StandardMove(from, to));
-                }
+            if (!(to.isInsideBoard())) {
+                continue;
+            }
+            if (chessboard.isEmpty(to) || !(chessboard.getPiece(to).getColor()).equals(getColor())) {
+                pseudoLegalMoves.add(new StandardMove(from, to));
             }
         }
         boolean isKingsideCastlingPseudoLegal = isKingsideCastlingPseudoLegal(from, chessboard);
@@ -180,14 +178,14 @@ public class King extends Piece {
     }
 
     @Override
-    public boolean canCaptureEnemyKing(@NonNull Position from, @NonNull Board chessboard) {
+    public boolean canCaptureKing(Position pos, Board chessboard) {
         return false;
     }
 
     @Override
     public Piece copy() {
         King kingCopy = new King(getColor());
-        kingCopy.setPosition(new Position(getPosition().row(), getPosition().column()));
+        kingCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         kingCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return kingCopy;
     }

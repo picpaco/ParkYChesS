@@ -9,6 +9,8 @@ public class EmptyMove
 extends Move {
 
     public EmptyMove() {
+        setFrom(new Position(-1,-1));
+        setTo(new Position(-1,-1));
         setName(MoveNames.EMPTY);
     }
     @Override

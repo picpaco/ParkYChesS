@@ -289,14 +289,14 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
      //   log.trace("In showHighlights");
         for (Position to : movesCache.keySet()) {
       //      log.debug("About to highlight square ({}, {}) from movecache: {}", to.row(), to.column(), movesCache);
-            highlights[to.row()][to.column()].setFill(HIGHLIGHT_COLOR);
+            (highlights [to.getRow()][to.getColumn()]).setFill(HIGHLIGHT_COLOR);
      //       log.debug("Just highlighted square {} from movecache: {}", to, movesCache);
         }
     }
 
     private void removeHighlights() {
              for (Position to : movesCache.keySet()) {
-                 highlights[to.row()][to.column()].setFill(Color.TRANSPARENT);
+                 (highlights [to.getRow()][to.getColumn()]).setFill(Color.TRANSPARENT);
         }
     }
 

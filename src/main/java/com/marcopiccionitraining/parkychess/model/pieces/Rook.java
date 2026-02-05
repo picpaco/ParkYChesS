@@ -32,21 +32,21 @@ public class Rook extends SliderPiece {
         setName(PieceNames.ROOK);
         if (getPosition() != null) {
             if (playerColor == PlayerColor.BLACK) {
-                if (getPosition().row() == 0) {
-                    if (getPosition().column() == 7) {
+                if (getPosition().getRow() == 0) {
+                    if (getPosition().getColumn() == 7) {
                         isBlackKingsideRook = true;
                     } else {
-                        if (getPosition().column() == 0) {
+                        if (getPosition().getColumn() == 0) {
                             isBlackQueensideRook = true;
                         }
                     }
                 }
             } else {
-                if (getPosition().row() == 7) {
-                    if (getPosition().column() == 7) {
+                if (getPosition().getRow() == 7) {
+                    if (getPosition().getColumn() == 7) {
                         isWhiteKingsideRook = true;
                     } else {
-                        if (getPosition().column() == 0) {
+                        if (getPosition().getColumn() == 0) {
                             isWhiteQueensideRook = true;
                         }
                     }
@@ -58,10 +58,11 @@ public class Rook extends SliderPiece {
     @Override
     public Piece copy() {
         Rook rookCopy = new Rook(getColor());
-        rookCopy.setPosition(new Position(getPosition().row(), getPosition().column()));
+        rookCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         rookCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return rookCopy;
     }
+
      public Collection<Move> getPseudoLegalMoves (Position from , Board chessboard){
         assert from != null : "Position 'from' must exist.";
         log.trace("Entering Rook.getPseudoLegalMoves(from = {})", from);

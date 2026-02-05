@@ -26,10 +26,8 @@ public class GameStateContainer {
      */
     public void push (FENStateString moveStateItem) {
         if (topIndex + 1 == maxSize) {
-            //moveStateStackImpl.add(moveStateItem);
             log.debug("Stack overflow! Can't push elements when the stack is full.");
             assert false : "Stack overflow! Can't push elements when the stack is full.";
-            //topIndex++;
         } else {
             topIndex++;
         //    if (moveStateStackImpl.size() > topIndex) {
@@ -46,13 +44,14 @@ public class GameStateContainer {
      * Top element is removed from the stack.
      */
     public FENStateString pop() {
-        log.debug("Popping element from stack.");
+        log.debug("Popping element from stack. Top index = {}", topIndex);
         if (topIndex < 0) {
             log.debug("Stack underflow! Can't remove elements from an empty stack.");
-       //     assert false : "Stack underflow! Can't remove elements from an empty stack.";
+            assert false : "Stack underflow! Can't remove elements from an empty stack.";
             return null;
         }
-        return moveStateStackImpl.remove(topIndex--);
+        topIndex--;
+        return moveStateStackImpl.remove(topIndex);
     }
 
     /**

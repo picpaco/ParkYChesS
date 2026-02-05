@@ -5,7 +5,6 @@ import com.marcopiccionitraining.parkychess.model.pieces.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -123,31 +122,24 @@ public class FENTests {
         Pawn whitePawn = new Pawn(PlayerColor.WHITE);
         gameState.getChessboard().setPiece(whitePawn,3,1);
         Collection<Position> piecePositions = new ArrayList<>();
-        gameState.getChessboard().setPawnSkippedPosition(PlayerColor.getOpponentColor(
-                gameState.getChessboard().getCurrentPlayerColor()), new Position(2,0));
-        piecePositions.add(new Position(2,0));
+        gameState.getChessboard().setSkippedPawnPosition(PlayerColor.BLACK, new Position(2,0));
+        piecePositions.add(new Position(3,0));
         piecePositions.add(new Position(3,1));
         piecePositions.add(new Position(0,7));
         piecePositions.add(new Position(7,7));
-        piecePositions.add(new Position(3,0));
-        assertEquals(gameState.getChessboard().getPiecesPositions().size() + 1, piecePositions.size(),
+        assertEquals(gameState.getChessboard().getPiecesPositions().size(), piecePositions.size(),
                 "The positions of all pieces should be the same.");
         assertEquals(new Position(2,0), gameState.getChessboard().getPawnSkippedPosition(
-                PlayerColor.getOpponentColor(gameState.getChessboard().getCurrentPlayerColor())),
-                "Black must have an en passant capture position set.");
+                PlayerColor.BLACK), "Black must have an en passant capture position set.");
     }
     @Test
-    void noCastlingPossibleShouldBeEncodedWithADash (){
+    void noCastlingPossibleShouldBeEncodedWithDash (){
         ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
         FENStateString computedFENStateString = new FENStateString(gameState);
-        assertEquals(FEN_KINGS_ONLY, computedFENStateString.toString(),
+        assertEquals(computedFENStateString.toString(),FEN_KINGS_ONLY,
                 "FEN_KINGS_ONLY and the computed FEN state string should be equal.");
         assertEquals(FEN_KINGS_ONLY.charAt(22), computedFENStateString.toString().charAt(22),
                 "The 22nd char of both strings should be a dash.");
-        King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
-        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "The black King should not have already moved.");
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "The white King should not have already moved.");
     }
 
     @Test

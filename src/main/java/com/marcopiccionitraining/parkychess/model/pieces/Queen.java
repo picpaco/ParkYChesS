@@ -21,13 +21,12 @@ public class Queen extends SliderPiece {
             queenPseudoLegalMoves.addAll(getPseudoLegalMovesInDirection(filePositions, from, chessboard));
         }
         return queenPseudoLegalMoves;
-        //    LOGGER.trace("Exiting getPseudoLegalMoves(Position from = {}, Board chessboard). Moves found: {}", from, moves);
     }
 
     @Override
     public Piece copy() {
         Queen queenCopy = new Queen(getColor());
-        queenCopy.setPosition(new Position(getPosition().row(), getPosition().column()));
+        queenCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         queenCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return queenCopy;
     }

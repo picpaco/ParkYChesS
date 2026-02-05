@@ -18,7 +18,6 @@ public class ObjectFactory {
     private static final String IMG_EXTENSION = ".png";
     private static final String BLACK_SQUARE_PATH = IMG_DIR + "blackSquare254" + IMG_EXTENSION;
     private static final String WHITE_SQUARE_PATH = IMG_DIR + "whiteSquare254" + IMG_EXTENSION;
- //   private static final Logger LOGGER = LoggerFactory.getLogger(ObjectFactory.class);
 
     public ObjectFactory() {
         blackPiecesImagePaths.put(PieceNames.BISHOP, (IMG_DIR + "blackBishop" + IMG_EXTENSION));

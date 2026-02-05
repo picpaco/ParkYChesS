@@ -17,7 +17,7 @@ public class CastlingMove extends Move {
     private Position rookToPosition;
 
     public CastlingMove (@NonNull MoveNames moveName, @NonNull Position kingPosition){
-        assert (kingPosition.row() == 0 || kingPosition.row() == 7 ) && kingPosition.column() == 4 :
+        assert (kingPosition.getRow() == 0 || kingPosition.getRow() == 7 ) && kingPosition.getColumn() == 4 :
                 "The king cannot perform move " + moveName + " because it is positioned on the wrong square: " + kingPosition;
         assert moveName.equals(MoveNames.KINGSIDE_CASTLE) || moveName.equals(MoveNames.QUEENSIDE_CASTLE) :
                 "This move has a wrong name.";
@@ -26,15 +26,15 @@ public class CastlingMove extends Move {
         setFrom(kingPosition);
         if (getName().equals(MoveNames.KINGSIDE_CASTLE)){
             kingCastlingSide = Direction.EAST;
-            setTo(new Position(kingPosition.row(), 6));
-            rookFromPosition = new Position(kingPosition.row(), 7);
-            rookToPosition = new Position(kingPosition.row(), 5);
+            setTo(new Position(kingPosition.getRow(), 6));
+            rookFromPosition = new Position(kingPosition.getRow(), 7);
+            rookToPosition = new Position(kingPosition.getRow(), 5);
         } else {
             if (getName().equals(MoveNames.QUEENSIDE_CASTLE)) {
                 kingCastlingSide = Direction.WEST;
-                setTo(new Position(kingPosition.row(), 2));
-                rookFromPosition = new Position(kingPosition.row(), 0);
-                rookToPosition = new Position(kingPosition.row(), 3);
+                setTo(new Position(kingPosition.getRow(), 2));
+                rookFromPosition = new Position(kingPosition.getRow(), 0);
+                rookToPosition = new Position(kingPosition.getRow(), 3);
             }
         }
         assert getFrom() != null : "The from position must exist when castling.";
@@ -122,7 +122,6 @@ public class CastlingMove extends Move {
         assert chessboard.getPiece(getFrom()) != null: "There must be a piece in " + getFrom();
         log.debug("kingCastlingSide: {}", kingCastlingSide);
         Position firstCastlingKingStep = getFrom().stepTowardsDirection(kingCastlingSide);
-        assert firstCastlingKingStep != null : "The first castling step must exist when attempting castling.";
         log.debug("Performing first castling king step on a separate chessboard and checking that the king is not in check..."   );
         new StandardMove(getFrom(), firstCastlingKingStep).execute(chessboard);
         if (chessboard.isPlayerInCheck(playerColor)) {
@@ -131,15 +130,15 @@ public class CastlingMove extends Move {
             return false;
         }
         Position secondCastlingKingStep = firstCastlingKingStep.stepTowardsDirection(kingCastlingSide);
-        assert secondCastlingKingStep != null : "The second castling step must exist when attempting a castling.";
-        log.debug("Performing second castling king step on a separate chessboard and checking that the king is not in check..."   );
+        log.debug("Performing second castling king step on a separate chessboard and checking if there is a discovery check."   );
         new StandardMove(firstCastlingKingStep, secondCastlingKingStep).execute(chessboard);
         if (chessboard.isPlayerInCheck(playerColor)) {
             log.trace("{} is illegal because {} would be in check after performing the second step of the castling path.",
                     getName(), playerColor);
             return false;
         }
-        new StandardMove(rookFromPosition, rookToPosition);
+        log.debug("Performing rook castling move on a separate chessboard and checking if there is a discovery check."   );
+        new StandardMove(rookFromPosition, rookToPosition).execute(chessboard);
         if (chessboard.isPlayerInCheck(playerColor)) {
             log.trace("{} is illegal because {} would be in check after moving the rook to complete castling.",
                     getName(), playerColor);

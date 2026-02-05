@@ -130,39 +130,46 @@ public class PawnTests {
     }
 
     @Test
-    void noEnPassantForBlackPawn(){
+    void noEnPassantCaptureForBlackPawn(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BASIC);
         assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(1, 0)).size());
+        log.debug("Chessboard after first assertion: {}", gameState.getChessboard());
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.WHITE);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
+        log.debug("Chessboard after second assertion: {}", gameState.getChessboard());
     }
     @Test
     void noEnPassantForWhitePawnWithBlackPawnAtStartingSquare(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BLACK_PAWN_START_SQUARE);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
-        assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
     }
     @Test
-    void enPassantBasicCaseLeft(){
+    void enPassantBasicCaseFromFENLeft(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_A5);
-        log.debug("Initial position: {}", gameState.getChessboard());
+        log.debug("{}", gameState.getChessboard());
+        gameState.getChessboard().setLastExecutedMove(new DoublePawnMove(new Position(1,0),
+                new Position(3,0), gameState.getChessboard()));
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
-        whitePawnLegalMoves.add(new EnPassantCapture(new Position(3,1), new Position(2,0)));
+        whitePawnLegalMoves.add(new EnPassantCapture(new Position(3,1),
+                new Position(2,0), gameState.getChessboard()));
         whitePawnLegalMoves.add(new StandardMove (new Position(3,1), new Position(2,1)));
         Collection<Move> computedWhitePawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 1));
         assertEquals(2, computedWhitePawnMoves.size(), "White pawn should have 2 possible moves.");
         assertTrue(whitePawnLegalMoves.containsAll(computedWhitePawnMoves) &&
-                computedWhitePawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " + whitePawnLegalMoves +
-                " is not the same as the produced one: " + computedWhitePawnMoves);
+                computedWhitePawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
+                whitePawnLegalMoves + " is not the same as the produced one: " + computedWhitePawnMoves);
     }
     @Test
-    void enPassantBasicCaseRight(){
+    void enPassantBasicCaseFromFENRight(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_H4);
-        log.debug("Here is the initial position: {}", gameState.getChessboard());
+        log.debug("{}", gameState.getChessboard());
+        gameState.getChessboard().setLastExecutedMove(new DoublePawnMove(new Position(6,6),
+                new Position(4,6), gameState.getChessboard()));
         Collection<Move> blackPawnLegalMoves = new ArrayList<>();
-        blackPawnLegalMoves.add(new StandardMove(new Position(4,7), new Position(5,7)));
-        blackPawnLegalMoves.add(new EnPassantCapture(new Position(4,7), new Position(5,6)));
-        Collection<Move> computedBlackPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(4, 7));
+        Position blackPawnInitialPosition = new Position(4,7);
+        blackPawnLegalMoves.add(new StandardMove(blackPawnInitialPosition, new Position(5,7)));
+        blackPawnLegalMoves.add(new EnPassantCapture(blackPawnInitialPosition, new Position(5,6), gameState.getChessboard()));
+        Collection<Move> computedBlackPawnMoves = gameState.getLegalMovesForPieceAtPosition(blackPawnInitialPosition);
         assertEquals(2, computedBlackPawnMoves.size(), "Black pawn should have 2 possible moves.");
         assertTrue(blackPawnLegalMoves.containsAll(computedBlackPawnMoves) &&
                 computedBlackPawnMoves.containsAll(blackPawnLegalMoves), "The expected list of moves: " + blackPawnLegalMoves +

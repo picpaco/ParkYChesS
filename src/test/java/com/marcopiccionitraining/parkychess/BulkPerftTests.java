@@ -263,6 +263,15 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(24, result, "From the initial position there are 24 possible positions at depth 1");
     }
+
+    @Test
+    void bulkPerft_id_033bis_NumberOfPositionsAfter_a4_a5_b4_a5xb4_c4Depth1() {
+        gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_A5XB4_C4);
+        log.debug("{}", gameState.getChessboard());
+        ptu = new PerftUtils(gameState);
+        long result = ptu.bulkPerft(1);
+        assertEquals(24, result, "From the initial position there are 24 possible positions at depth 1");
+    }
     @Test
     void bulkPerft_id_034_NumberOfPositionsAfter_a4_a5_b4_ra6Depth2() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_RA6);
