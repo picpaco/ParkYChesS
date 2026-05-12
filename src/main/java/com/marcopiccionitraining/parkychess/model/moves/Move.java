@@ -11,30 +11,30 @@ import java.util.Objects;
 @Slf4j
 public abstract class Move implements Command {
     @Getter @Setter
-    private Position from;
+    private @NonNull Position from;
     @Getter @Setter
-    private Position to;
+    private @NonNull Position to;
     @Getter @Setter
     private MoveNames name;
 
     public boolean isLegal (@NonNull Board chessboard){
-        log.debug("Checking if move {} is Legal.", this);
         PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
-        Board boardCopy = chessboard.copy();
-        execute(boardCopy);
-        return !(boardCopy.isPlayerInCheck(playerColorOfPieceToMove));
+        execute(chessboard);
+        boolean isMoveLegal = !(chessboard.isPlayerInCheck(playerColorOfPieceToMove));
+        log.debug("Is move {} Legal? {}", this, (isMoveLegal ? "Yes." : "No."));
+        return isMoveLegal;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Move move)) return false;
-        return Objects.equals(from, move.from) && Objects.equals(to, move.to);
+        return Objects.equals(from, move.from) && Objects.equals(to, move.to) && Objects.equals(name, move.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to);
+        return Objects.hash(from, to, name);
     }
 
     @Override
@@ -43,5 +43,6 @@ public abstract class Move implements Command {
     }
 
     public abstract boolean execute (Board chessboard);
-    public abstract void undo (Board chessboard, FENStateString oldGameState);
+
+    public abstract void undo (Board chessboard);
 }

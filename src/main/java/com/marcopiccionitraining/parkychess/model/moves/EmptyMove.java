@@ -19,12 +19,11 @@ extends Move {
     }
 
     @Override
-    public void undo(@NonNull Board chessboard, @NonNull FENStateString oldGameState) {
+    public void undo(@NonNull Board chessboard) {
     }
 
     @Override
     public String toString() {
         return "empty move.";
     }
-
 }

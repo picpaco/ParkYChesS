@@ -13,10 +13,17 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Collection<Move> getPseudoLegalMoves(Position from, Board chessboard){
-        Collection<Move> moves = new ArrayList<>();
-        for (Position to : PseudoLegalPiecesPositionsInitializer.getKnightPseudoLegalPositions(from)){
-            if (chessboard.isEmpty(to) || !(chessboard.getPiece(to).getColor().equals(getColor()))){
+    public List<Move> getPseudoLegalMoves(Position from, Board chessboard) {
+        List<Move> moves = new ArrayList<>();
+        List<Position> possiblePseudoLegalPositions =
+                PseudoLegalPiecesPositionsInitializer.getKnightPseudoLegalPositions(from);
+        for (Position to : possiblePseudoLegalPositions) {
+            if (chessboard.isEmpty(to)) {
+                moves.add(new StandardMove(from, to));
+                continue;
+            }
+            Piece pieceFound = chessboard.getPiece(to);
+            if (!(pieceFound.getColor().equals(chessboard.getPiece(from).getColor()))) {
                 moves.add(new StandardMove(from, to));
             }
         }
@@ -26,7 +33,6 @@ public class Knight extends Piece {
     @Override
     public Piece copy() {
         Knight knightCopy = new Knight(getColor());
-        knightCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         knightCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return knightCopy;
     }

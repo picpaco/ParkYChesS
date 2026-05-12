@@ -3,29 +3,170 @@ package com.marcopiccionitraining.parkychess.model;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * For Rooks, Knights, Bishops, Kings, and Queens maps a piece's position
+ * to the associated reachable positions (within the board) according to the chess rules.
+ * For pawns, this record contains 3 maps for black and 3 maps for white:
+ * 1. Maps a pawn's position to the possible (1 or 2) capture positions (no en passant).
+ * 2. Maps a pawn's skipped position to the possible (1 or 2) enemy en passant attacking pawn(s).
+ * 3. Maps a pawn's skipped position to the possible (1 or 2) friendly ghost pawn(s) positions
+ * located at the left and right (if within the board) of the attacking pawn.
+ */
 public record PseudoLegalPiecesPositionsInitializer() {
-    private static final HashMap<Position, ArrayList<Position>> knightPseudoLegalPositions = new HashMap<>();
-    private static final HashMap<Position, ArrayList<ArrayList<Position>>> bishopPseudoLegalPositions = new HashMap<>();
-    private static final HashMap<Position, ArrayList<ArrayList<Position>>> rookPseudoLegalPositions = new HashMap<>();
-    private static final HashMap<Position, ArrayList<ArrayList<Position>>> queenPseudoLegalPositions = new HashMap<>();
-    private static final HashMap<Position, ArrayList<Position>> blackPawnPseudoLegalCapturePositions = new HashMap<>();
-    private static final HashMap<Position, ArrayList<Position>> whitePawnPseudoLegalCapturePositions = new HashMap<>();
+
+    /**
+     * Knight's reachable (inside the board) positions from any 64 position on the chessboard.
+     * key: knight's current position.
+     * value: list of reachable positions inside the board.
+     */
+    private static final HashMap<Position, List<Position>> knightPseudoLegalPositions = new HashMap<>();
+
+    /**
+     * Bishop's reachable (inside the board) positions from any 64 position on the chessboard.
+     * key: bishop's current position.
+     * value: list of lists of reachable positions along the diagonals and inside the board.
+     */
+    private static final HashMap<Position, List<List<Position>>> bishopPseudoLegalPositions = new HashMap<>();
+
+    /**
+     * Rook's reachable (inside the board) positions from any 64 position on the chessboard.
+     * key: rook's current position.
+     * value: list of lists of reachable positions along the rows and columns, and inside the board.
+     */
+    private static final HashMap<Position, List<List<Position>>> rookPseudoLegalPositions = new HashMap<>();
+
+    /**
+     * Queen's reachable (inside the board) positions from any 64 position on the chessboard.
+     * key: queen's current position.
+     * value: list of lists of reachable positions along the rows, columns, and diagonals, and inside the board.
+     */
+    private static final HashMap<Position, List<List<Position>>> queenPseudoLegalPositions = new HashMap<>();
+
+    /**
+     * King's reachable (inside the board) positions from any 64 position on the chessboard.
+     * key: king's current position.
+     * value: list of reachable positions along the rows, columns, and diagonals, and inside the board.
+     */
+    private static final HashMap<Position, List<Position>> kingPseudoLegalPositions = new HashMap<>();
+
+    /**
+     * Attacking black pawn's reachable (inside the board) capture positions from any reachable
+     * position on the chessboard between rows 1 and 7. For en passant captures
+     * @see PseudoLegalPiecesPositionsInitializer#attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions
+     * @see PseudoLegalPiecesPositionsInitializer#attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions
+     * key: attacking black pawn's current position.
+     * value: 1 or 2 reachable (inside the board) diagonal capture positions.
+     */
+    private static final HashMap<Position, List<Position>> blackPawnPseudoLegalCapturePositions = new HashMap<>();
+
+    /**
+     * Attacking white pawn's reachable (inside the board) capture positions from any reachable
+     * position on the chessboard between rows 0 and 6. For en passant captures
+     * @see PseudoLegalPiecesPositionsInitializer#attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions
+     * @see PseudoLegalPiecesPositionsInitializer#attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions
+     * key: attacking white pawn's current position.
+     * value: 1 or 2 reachable (inside the board) diagonal capture positions.
+     */
+    private static final HashMap<Position, List<Position>> whitePawnPseudoLegalCapturePositions = new HashMap<>();
+
+    /**
+     * Attacking 1 or 2 inside the board white pawns' positions associated to black skipped positions.
+     * They are on row 3.
+     * key: black skipped position.
+     * value: 1 (certain) or 2 (1 certain, one of the 2 is certain) inside the board en passant capture white attacking pawns positions.
+     */
+    private static final HashMap<Position, List<Position>> attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions = new HashMap<>();
+
+    /**
+     * Attacking 1 or 2 inside the board black pawns' positions associated to white skipped positions.
+     * They are on row 4.
+     * key: white skipped position.
+     * value: 1 (certain) or 2 (one of the 2 is certain) inside the board en passant capture black attacking pawns positions.
+     */
+    private static final HashMap<Position, List<Position>> attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions = new HashMap<>();
 
     static {
+        initializeKingPseudoLegalPositions();
         initializeKnightPseudoLegalPositions();
         initializeBishopPseudoLegalPositions();
         initializeRookPseudoLegalPositions();
         initializeQueenPseudoLegalPositions();
         initializeBlackPawnPseudoLegalCapturePositions();
-        initializeWhitePawnCapturePseudoLegalPositions();
+        initializeWhitePawnPseudoLegalCapturePositions();
+        initializeBlackPawnPseudoLegalEnPassantCapturePositions();
+        initializeWhitePawnPseudoLegalEnPassantCapturePositions();
+    }
+
+    private static void initializeBlackPawnPseudoLegalEnPassantCapturePositions() {
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 2));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 6));
+        attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.put(new Position(5,7), destinations);
+    }
+
+    private static void initializeWhitePawnPseudoLegalEnPassantCapturePositions() {
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 6));
+        attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.put(new Position(2,7), destinations);
     }
 
     private static void initializeBlackPawnPseudoLegalCapturePositions() {
-        //row 1
         ArrayList<Position> destinations = new ArrayList<>();
         destinations.add(new Position(2, 1));
         blackPawnPseudoLegalCapturePositions.put(new Position(1,0), destinations);
@@ -87,7 +228,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 6));
         blackPawnPseudoLegalCapturePositions.put(new Position(2,7), destinations);
-        //row 3
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 1));
         blackPawnPseudoLegalCapturePositions.put(new Position(3,0), destinations);
@@ -118,7 +258,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 6));
         blackPawnPseudoLegalCapturePositions.put(new Position(3,7), destinations);
-        //row 4
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 1));
         blackPawnPseudoLegalCapturePositions.put(new Position(4,0), destinations);
@@ -149,7 +288,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 6));
         blackPawnPseudoLegalCapturePositions.put(new Position(4,7), destinations);
-        //row 5
         destinations = new ArrayList<>();
         destinations.add(new Position(6, 1));
         blackPawnPseudoLegalCapturePositions.put(new Position(5,0), destinations);
@@ -180,7 +318,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(6, 6));
         blackPawnPseudoLegalCapturePositions.put(new Position(5,7), destinations);
-        //row 6
         destinations = new ArrayList<>();
         destinations.add(new Position(7, 1));
         blackPawnPseudoLegalCapturePositions.put(new Position(6,0), destinations);
@@ -213,8 +350,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
         blackPawnPseudoLegalCapturePositions.put(new Position(6,7), destinations);
     }
 
-    private static void initializeWhitePawnCapturePseudoLegalPositions() {
-        //row 6
+    private static void initializeWhitePawnPseudoLegalCapturePositions() {
         ArrayList<Position> destinations = new ArrayList<>();
         destinations.add(new Position(5, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(6,0), destinations);
@@ -245,7 +381,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(5, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(6,7), destinations);
-        //row 5
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(5,0), destinations);
@@ -276,7 +411,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(4, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(5,7), destinations);
-        //row 4
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(4,0), destinations);
@@ -307,7 +441,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(3, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(4,7), destinations);
-        //row 3
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(3,0), destinations);
@@ -338,7 +471,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(2, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(3,7), destinations);
-        //row 2
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(2,0), destinations);
@@ -369,7 +501,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations = new ArrayList<>();
         destinations.add(new Position(1, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(2,7), destinations);
-        //row 1
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 1));
         whitePawnPseudoLegalCapturePositions.put(new Position(1,0), destinations);
@@ -402,6 +533,564 @@ public record PseudoLegalPiecesPositionsInitializer() {
         whitePawnPseudoLegalCapturePositions.put(new Position(1,7), destinations);
     }
 
+    private static void initializeKingPseudoLegalPositions(){
+        //row 0
+        ArrayList<Position> destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 1));
+        kingPseudoLegalPositions.put(new Position(0,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 0));
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 2));
+        kingPseudoLegalPositions.put(new Position(0,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 3));
+        kingPseudoLegalPositions.put(new Position(0,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 4));
+        kingPseudoLegalPositions.put(new Position(0,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 5));
+        kingPseudoLegalPositions.put(new Position(0,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 6));
+        kingPseudoLegalPositions.put(new Position(0,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 7));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(1, 7));
+        kingPseudoLegalPositions.put(new Position(0,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(1, 7));
+        kingPseudoLegalPositions.put(new Position(0,7), destinations);
+        //row 1
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 0));
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 1));
+        kingPseudoLegalPositions.put(new Position(1,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 0));
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 2));
+        kingPseudoLegalPositions.put(new Position(1,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 1));
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 3));
+        kingPseudoLegalPositions.put(new Position(1,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 2));
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 4));
+        kingPseudoLegalPositions.put(new Position(1,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 5));
+        kingPseudoLegalPositions.put(new Position(1,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 4));
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 6));
+        kingPseudoLegalPositions.put(new Position(1,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(0, 7));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 7));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(2, 7));
+        kingPseudoLegalPositions.put(new Position(1,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(0, 6));
+        destinations.add(new Position(0, 7));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(2, 7));
+        kingPseudoLegalPositions.put(new Position(1,7), destinations);
+        // row 2
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 1));
+        kingPseudoLegalPositions.put(new Position(2,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 0));
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 2));
+        kingPseudoLegalPositions.put(new Position(2,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 1));
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 3));
+        kingPseudoLegalPositions.put(new Position(2,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 2));
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 4));
+        kingPseudoLegalPositions.put(new Position(2,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 3));
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 5));
+        kingPseudoLegalPositions.put(new Position(2,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 4));
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 6));
+        kingPseudoLegalPositions.put(new Position(2,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 5));
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(1, 7));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(3, 7));
+        kingPseudoLegalPositions.put(new Position(2,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(1, 6));
+        destinations.add(new Position(1, 7));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(3, 7));
+        kingPseudoLegalPositions.put(new Position(2,7), destinations);
+        //row 3
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 1));
+        kingPseudoLegalPositions.put(new Position(3,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 0));
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 2));
+        kingPseudoLegalPositions.put(new Position(3,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 1));
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 3));
+        kingPseudoLegalPositions.put(new Position(3,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 2));
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 4));
+        kingPseudoLegalPositions.put(new Position(3,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 3));
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 5));
+        kingPseudoLegalPositions.put(new Position(3,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 4));
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 6));
+        kingPseudoLegalPositions.put(new Position(3,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 5));
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(4, 7));
+        kingPseudoLegalPositions.put(new Position(3,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(2, 6));
+        destinations.add(new Position(2, 7));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(4, 7));
+        kingPseudoLegalPositions.put(new Position(3,7), destinations);
+        //row 4
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 1));
+        kingPseudoLegalPositions.put(new Position(4,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 0));
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 2));
+        kingPseudoLegalPositions.put(new Position(4,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 1));
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 3));
+        kingPseudoLegalPositions.put(new Position(4,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 2));
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 4));
+        kingPseudoLegalPositions.put(new Position(4,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 3));
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 5));
+        kingPseudoLegalPositions.put(new Position(4,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 4));
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 6));
+        kingPseudoLegalPositions.put(new Position(4,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 5));
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(5, 7));
+        kingPseudoLegalPositions.put(new Position(4,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(3, 6));
+        destinations.add(new Position(3, 7));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(5, 7));
+        kingPseudoLegalPositions.put(new Position(4,7), destinations);
+        //row 5
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 1));
+        kingPseudoLegalPositions.put(new Position(5,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 0));
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 2));
+        kingPseudoLegalPositions.put(new Position(5,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 1));
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 3));
+        kingPseudoLegalPositions.put(new Position(5,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 2));
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 4));
+        kingPseudoLegalPositions.put(new Position(5,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 3));
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 5));
+        kingPseudoLegalPositions.put(new Position(5,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 4));
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 6));
+        kingPseudoLegalPositions.put(new Position(5,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 5));
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 7));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(6, 7));
+        kingPseudoLegalPositions.put(new Position(5,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(4, 6));
+        destinations.add(new Position(4, 7));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(6, 7));
+        kingPseudoLegalPositions.put(new Position(5,7), destinations);
+        //row 6
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 1));
+        kingPseudoLegalPositions.put(new Position(6,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 0));
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 2));
+        kingPseudoLegalPositions.put(new Position(6,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 1));
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 3));
+        kingPseudoLegalPositions.put(new Position(6,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 2));
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 4));
+        kingPseudoLegalPositions.put(new Position(6,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 3));
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 4));
+        destinations.add(new Position(7, 5));
+        kingPseudoLegalPositions.put(new Position(6,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 4));
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(7, 4));
+        destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 6));
+        kingPseudoLegalPositions.put(new Position(6,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 5));
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(5, 7));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 7));
+        destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 6));
+        destinations.add(new Position(7, 7));
+        kingPseudoLegalPositions.put(new Position(6,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(5, 6));
+        destinations.add(new Position(5,7));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(7, 6));
+        destinations.add(new Position(7, 7));
+        kingPseudoLegalPositions.put(new Position(6,7), destinations);
+        //row 7
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(7, 1));
+        kingPseudoLegalPositions.put(new Position(7,0), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 0));
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(7, 0));
+        destinations.add(new Position(7, 2));
+        kingPseudoLegalPositions.put(new Position(7,1), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 1));
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(7, 1));
+        destinations.add(new Position(7, 3));
+        kingPseudoLegalPositions.put(new Position(7,2), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 2));
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(7, 2));
+        destinations.add(new Position(7, 4));
+        kingPseudoLegalPositions.put(new Position(7,3), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 3));
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(7, 3));
+        destinations.add(new Position(7, 5));
+        kingPseudoLegalPositions.put(new Position(7,4), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 4));
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(7, 4));
+        destinations.add(new Position(7, 6));
+        kingPseudoLegalPositions.put(new Position(7,5), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 5));
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(6, 7));
+        destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 7));
+        kingPseudoLegalPositions.put(new Position(7,6), destinations);
+        destinations = new ArrayList<>();
+        destinations.add(new Position(6, 6));
+        destinations.add(new Position(6,7));
+        destinations.add(new Position(7, 6));
+        kingPseudoLegalPositions.put(new Position(7,7), destinations);
+    }
 
     private static void initializeKnightPseudoLegalPositions() {
         ArrayList<Position> destinations = new ArrayList<>();
@@ -869,16 +1558,14 @@ public record PseudoLegalPiecesPositionsInitializer() {
         knightPseudoLegalPositions.put(new Position(7,7), destinations);
     }
 
-
     private static void initializeBishopPseudoLegalPositions() {
-        ArrayList<ArrayList<Position>> positionsGroupedByDirection = new ArrayList<>();
+        List<List<Position>> positionsGroupedByDirection = new ArrayList<>();
         ArrayList<Position> positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,22,33,44,55,66,77
             positionsInDirection1.add(new Position(i, i));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
         bishopPseudoLegalPositions.put(new Position(0,0), positionsGroupedByDirection);
-
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 0));
@@ -1899,15 +2586,14 @@ public record PseudoLegalPiecesPositionsInitializer() {
         bishopPseudoLegalPositions.put(new Position(7,7), positionsGroupedByDirection);
     }
 
-
     private static void initializeRookPseudoLegalPositions(){
-        ArrayList<ArrayList<Position>> positionsGroupedByDirection = new ArrayList<>();
-        ArrayList<Position> positionsInDirection1 = new ArrayList<>();
+        List<List<Position>> positionsGroupedByDirection = new ArrayList<>();
+        List<Position> positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//10,20,30,40,50,60,70
             positionsInDirection1.add(new Position(i, 0));
         }
         positionsGroupedByDirection.add(positionsInDirection1);
-        ArrayList<Position> positionsInDirection2 = new ArrayList<>();
+        List<Position> positionsInDirection2 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//01,02,03,04,05,06,07
             positionsInDirection2.add(new Position(0, i));
         }
@@ -3135,7 +3821,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Position currentPosition = new Position(i, j);
-                ArrayList<ArrayList<Position>> setOfDirectionsPerPosition =
+                List<List<Position>> setOfDirectionsPerPosition =
                         new ArrayList<>(bishopPseudoLegalPositions.get(currentPosition));
                 setOfDirectionsPerPosition.addAll(rookPseudoLegalPositions.get(currentPosition));
                 queenPseudoLegalPositions.put(currentPosition, setOfDirectionsPerPosition);
@@ -3143,28 +3829,55 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
     }
 
+    // Public getters------------------------------------------------------------
+
+    public static List<Position> getKingPseudoLegalPositions(Position from){
+        return kingPseudoLegalPositions.get(from);
+    }
+
     public static List<Position> getKnightPseudoLegalPositions(Position from){
         return knightPseudoLegalPositions.get(from);
     }
 
-    public static ArrayList<ArrayList<Position>> getBishopPseudoLegalPoitions(Position from){
+    public static List<List<Position>> getBishopPseudoLegalPositions(Position from){
         return bishopPseudoLegalPositions.get(from);
     }
 
-    public static ArrayList<ArrayList<Position>> getRookPseudoLegalPositions(Position from){
+    public static List<List<Position>> getRookPseudoLegalPositions(Position from){
         return rookPseudoLegalPositions.get(from);
     }
 
-    public static ArrayList<ArrayList<Position>> getQueenPseudoLegalPositions(Position from){
+    public static List<List<Position>> getQueenPseudoLegalPositions(Position from){
         return queenPseudoLegalPositions.get(from);
     }
 
-    public static Collection<Position> getPawnCapturePseudoLegalPositions (@NonNull PlayerColor playerColor,
-                                                                           @NonNull Position pawnPosition){
+    public static List<Position> getPawnCapturePseudoLegalPositions(
+            @NonNull Position pawnPosition, @NonNull PlayerColor playerColor){
         if (playerColor.equals(PlayerColor.BLACK)){
             return blackPawnPseudoLegalCapturePositions.get(pawnPosition);
         } else {
             return whitePawnPseudoLegalCapturePositions.get(pawnPosition);
         }
     }
+
+    /**
+     * @param oppositeColorPawnSkippedPosition pawn skipped position for opposite color.
+     * @param currentPlayerColor color of current player.
+     * @return one position potentially containing a pawn of the current color, or two positions,
+     * one of which potentially containing a pawn of the current color.
+     * Such attacking pawn can capture en passant a pawn of the opposite color which has just moved
+     * two positions forward in the previous move.
+     */
+    public static List<Position> getAttackingPawnsAssociatedWithSkippedPositions(
+            @NonNull Position oppositeColorPawnSkippedPosition, @NonNull PlayerColor currentPlayerColor){
+        if (currentPlayerColor.equals(PlayerColor.WHITE)){
+            return attackingWhitePawnsPositionsAssociatedToBlackSkippedPositions.get(oppositeColorPawnSkippedPosition);
+        } else {
+            return attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions.get(oppositeColorPawnSkippedPosition);
+        }
+    }
+
+
+
+
 }

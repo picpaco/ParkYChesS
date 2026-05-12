@@ -2,31 +2,36 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+@Slf4j
 public class Queen extends SliderPiece {
 
     public Queen(PlayerColor playerColor) {
         super(playerColor);
         setName(PieceNames.QUEEN);
     }
-
-    public Collection<Move> getPseudoLegalMoves(Position from , Board chessboard){
-        Collection<Move> queenPseudoLegalMoves = new ArrayList<>();
-        ArrayList<ArrayList<Position>> existingFilesDestinations =
+    @Override
+    public List<Move> getPseudoLegalMoves(Position from, Board chessboard) {
+        List<Move> queenPseudoLegalMoves = new ArrayList<>();
+        List<List<Position>> allQueenFilesRanksAndDiagonals =
                 PseudoLegalPiecesPositionsInitializer.getQueenPseudoLegalPositions(from);
-        for (ArrayList<Position> filePositions : existingFilesDestinations) {
-            queenPseudoLegalMoves.addAll(getPseudoLegalMovesInDirection(filePositions, from, chessboard));
+        for (List<Position> positionsAlongOneDirection : allQueenFilesRanksAndDiagonals) {
+            List<Move> pseudoLegalMovesInOneDirection = getPseudoLegalMovesInDirection(positionsAlongOneDirection,
+                    from, chessboard);
+            queenPseudoLegalMoves.addAll(pseudoLegalMovesInOneDirection);
         }
+        log.debug("Pseudolegal moves for {} queen {} {}", getColor(), from, queenPseudoLegalMoves);
         return queenPseudoLegalMoves;
     }
 
     @Override
     public Piece copy() {
         Queen queenCopy = new Queen(getColor());
-        queenCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         queenCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return queenCopy;
     }

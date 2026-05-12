@@ -1,6 +1,7 @@
 package com.marcopiccionitraining.parkychess.model;
 
 import com.marcopiccionitraining.parkychess.model.moves.DoublePawnMove;
+import com.marcopiccionitraining.parkychess.model.moves.EmptyMove;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.MoveNames;
 import com.marcopiccionitraining.parkychess.model.pieces.King;
@@ -16,126 +17,21 @@ import java.util.Objects;
 @Slf4j
 public final class FENStateString {
     @NonNull
-    private StringBuilder customFENStringImpl;
-    @NonNull
-    private final ChessGame gameState;
-    @NonNull @Getter @Setter
-    private Move lastExecutedMove;
-    @Getter @Setter
-    private boolean isBlackQueensideRookFlaggedAsHavingAlreadyMoved;
-    @Getter @Setter
-    private boolean isWhiteQueensideRookFlaggedAsHavingAlreadyMoved;
-    @Getter @Setter
-    private boolean isBlackKingsideRookFlaggedAsHavingAlreadyMoved;
-    @Getter @Setter
-    private boolean isWhiteKingsideRookFlaggedAsHavingAlreadyMoved;
-    @Getter @Setter
-    private boolean isBlackKingFlaggedAsHavingAlreadyMoved;
-    @Getter @Setter
-    private boolean isWhiteKingFlaggedAsHavingAlreadyMoved;
-    //movedPiece must be not null.
-  //  @Getter @Setter
-  //  private Piece movedPiece;
-    // capturedPiece can be null
-    @Getter @Setter
-    private Piece capturedPiece;
-    /**
-     * The attribute capturedGhostPawnSquare is the landing square of the pawn which just made a double move.
-     * If the en-passant capture conditions are satisfied, an en-passant capture can take place on the next move.
-     */
-    @Getter @Setter
-    private Position capturedGhostPawnSquare;
-    /**
-     * The square on which an en passant capture will take place provided the necessary conditions are met.
-     */
-    @Getter @Setter
-    private Position pawnSkipSquare;
+    private final StringBuilder customFENStringImpl = new StringBuilder();
 
-    /**
-     * The square where sits a rook still capable of castling.
-     */
-    @Getter @Setter
-    private Position castlingRookFrom;
-
-    /**
-     * The square where will sit a rook once it has executed castling.
-     */
-    @Getter @Setter
-    private Position castlingRookTo;
-
-    public FENStateString(@NonNull ChessGame gameState) {
-        this.gameState = gameState;
-        customFENStringImpl = new StringBuilder();
-        addPiecePlacementInfo(gameState.getChessboard());
+    public FENStateString(@NonNull PlayerColor playerColor, Board chessboard) {
+        addPiecePlacementInfo(chessboard);
         customFENStringImpl.append(' ');
-        if (gameState.getChessboard().getCurrentPlayerColor() == PlayerColor.WHITE) {
+        if (chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE)) {
             customFENStringImpl.append("w");
         } else {
             customFENStringImpl.append("b");
         }
         customFENStringImpl.append(' ');
-        log.trace("Adding castling rights.");
-        addCastlingRights(gameState.getChessboard());
+        addCastlingRights(chessboard);
         customFENStringImpl.append(' ');
-        log.trace("Adding en-passant data.");
-        addEnPassantData(gameState.getChessboard());
-        log.trace("Adding number of half moves since last capture or pawn move.");
-        customFENStringImpl.append(' ');
-        customFENStringImpl.append(gameState.getNumberOfHalfMovesSinceLastCaptureOrPawnMove());
-        log.trace("Adding number of full moves in the game.");
-        customFENStringImpl.append(' ');
-        customFENStringImpl.append(gameState.getTotalNumberOfFullMoves());
-        King king = gameState.getChessboard().getKing(gameState.getChessboard().getCurrentPlayerColor());
-        log.trace("is {} King flagged as having already moved? ", gameState.getChessboard().getCurrentPlayerColor());
-        if (king.getColor() == PlayerColor.WHITE) {
-            isWhiteKingFlaggedAsHavingAlreadyMoved = king.isFlaggedAsHavingAlreadyMoved();
-            log.trace("{}", isWhiteKingFlaggedAsHavingAlreadyMoved);
-        } else {
-            isBlackKingFlaggedAsHavingAlreadyMoved = king.isFlaggedAsHavingAlreadyMoved();
-            log.trace("{}", isBlackKingFlaggedAsHavingAlreadyMoved);
-        }
-
-        Piece maybeBlackKingsideRook = gameState.getChessboard().getPiece(new Position(0,7));
-        if (maybeBlackKingsideRook != null) {
-            if (maybeBlackKingsideRook.getName().equals(PieceNames.ROOK) && maybeBlackKingsideRook.getColor().equals(PlayerColor.BLACK)) {
-                isBlackKingsideRookFlaggedAsHavingAlreadyMoved = maybeBlackKingsideRook.isFlaggedAsHavingAlreadyMoved();
-                castlingRookFrom = maybeBlackKingsideRook.getPosition();
-                castlingRookTo = Objects.requireNonNull(Objects.requireNonNull(castlingRookFrom.stepTowardsDirection(Direction.WEST)).
-                        stepTowardsDirection(Direction.WEST));
-            }
-        }
-        Piece maybeBlackQueensideRook = gameState.getChessboard().getPiece(new Position(0,0));
-        if (maybeBlackQueensideRook != null) {
-            if (maybeBlackQueensideRook.getName().equals(PieceNames.ROOK) &&
-                    maybeBlackQueensideRook.getColor().equals(PlayerColor.BLACK)) {
-                isBlackQueensideRookFlaggedAsHavingAlreadyMoved = maybeBlackQueensideRook.isFlaggedAsHavingAlreadyMoved();
-                castlingRookFrom = maybeBlackQueensideRook.getPosition();
-                castlingRookTo = Objects.requireNonNull(Objects.requireNonNull(castlingRookFrom.stepTowardsDirection(Direction.EAST)).
-                        stepTowardsDirection(Direction.EAST)).stepTowardsDirection(Direction.EAST);
-            }
-        }
-        Piece maybeWhiteKingsideRook = gameState.getChessboard().getPiece(new Position(7,7));
-        if (maybeWhiteKingsideRook != null) {
-            if (maybeWhiteKingsideRook.getName().equals(PieceNames.ROOK) &&
-                    maybeWhiteKingsideRook.getColor().equals(PlayerColor.WHITE)) {
-                isWhiteKingsideRookFlaggedAsHavingAlreadyMoved = maybeWhiteKingsideRook.isFlaggedAsHavingAlreadyMoved();
-                castlingRookFrom = maybeWhiteKingsideRook.getPosition();
-                castlingRookTo = Objects.requireNonNull(Objects.requireNonNull(castlingRookFrom.stepTowardsDirection(Direction.WEST)).
-                        stepTowardsDirection(Direction.WEST));
-            }
-        }
-        Piece maybeWhiteQueensideRook = gameState.getChessboard().getPiece(new Position(7,0));
-        if (maybeWhiteQueensideRook != null) {
-            if (maybeWhiteQueensideRook.getName().equals(PieceNames.ROOK) && maybeWhiteQueensideRook.getColor().equals(PlayerColor.WHITE)) {
-                isWhiteQueensideRookFlaggedAsHavingAlreadyMoved = maybeWhiteQueensideRook.isFlaggedAsHavingAlreadyMoved();
-                castlingRookFrom = maybeWhiteQueensideRook.getPosition();
-                castlingRookTo = Objects.requireNonNull(Objects.requireNonNull(castlingRookFrom.stepTowardsDirection(Direction.EAST)).
-                        stepTowardsDirection(Direction.EAST)).stepTowardsDirection(Direction.EAST);
-            }
-        }
-        lastExecutedMove = gameState.getChessboard().getLastExecutedMove();
-        log.debug("Set lastExecutedMove to {}", lastExecutedMove);
-        log.debug("Constructed FEN string: {}", this);
+        addEnPassantData(chessboard, chessboard.getCurrentPlayerColor());
+        log.debug("Constructed FEN state string: {}", this);
     }
 
     private char getCharForPiece(@NonNull Piece piece) {
@@ -195,88 +91,53 @@ public final class FENStateString {
             addRowOfData(chessboard, row);
         }
     }
-//TODO: Try here to assign a value to castlingRookFrom and castlingRookTo
+
     private void addCastlingRights(@NonNull Board chessboard) {
-        int castlingCounter = 0;
-        Piece maybeWhiteKingsideRook = chessboard.getPiece(7, 7);
-        if (maybeWhiteKingsideRook != null && (maybeWhiteKingsideRook.getName().equals(PieceNames.ROOK))) {
-         //   Rook whiteKingsideRook = (Rook) chessboard.getPiece(7, 7);
-
-            customFENStringImpl.append("K");
-            castlingCounter++;
+        boolean castleWKS = chessboard.isKingsideCastlingPossible(PlayerColor.WHITE);
+        boolean castleWQS = chessboard.isQueensideCastlingPossible(PlayerColor.WHITE);
+        boolean castleBKS = chessboard.isKingsideCastlingPossible(PlayerColor.BLACK);
+        boolean castleBQS = chessboard.isQueensideCastlingPossible(PlayerColor.BLACK);
+        if (!(castleWKS || castleWQS || castleBKS || castleBQS)) {
+            customFENStringImpl.append('-');
+            return;
         }
-        Piece maybeWhiteQueensideRook = chessboard.getPiece(7, 0);
-        if (maybeWhiteQueensideRook != null && (maybeWhiteQueensideRook.getName().equals(PieceNames.ROOK))) {
-            Rook whiteQueensideRook = (Rook) chessboard.getPiece(7, 0);
-            customFENStringImpl.append("Q");
-            castlingCounter++;
+        if (castleWKS) {
+            customFENStringImpl.append('K');
         }
-        Piece maybeBlackKingsideRook = chessboard.getPiece(0, 7);
-        if (maybeBlackKingsideRook != null && (maybeBlackKingsideRook.getName().equals(PieceNames.ROOK))) {
-            Rook blackKingsideRook = (Rook) chessboard.getPiece(0, 7);
-            customFENStringImpl.append("k");
-            castlingCounter++;
+        if (castleWQS) {
+            customFENStringImpl.append('Q');
         }
-        Piece maybeBlackQueensideRook = chessboard.getPiece(0, 0);
-        if (maybeBlackQueensideRook != null && (maybeBlackQueensideRook.getName().equals(PieceNames.ROOK))) {
-            Rook blackQueensideRook = (Rook) chessboard.getPiece(0, 0);
-            customFENStringImpl.append("q");
-            castlingCounter++;
+        if (castleBKS) {
+            customFENStringImpl.append('k');
         }
-        // Question: what about castling path free, king not ending up in check,
-        // and king not being in check along castling path?
-        // These are temporary conditions, should they be included in the state string?
-        // They could, I choose not to include them for now.
-        if (castlingCounter == 0) {
-            customFENStringImpl.append("-");
+        if (castleBQS) {
+            customFENStringImpl.append('q');
         }
     }
 
-    private void addEnPassantData (@NonNull Board chessboard) {
-/*        if (lastExecutedMove.getName().equals(MoveNames.EMPTY)) {
-            customFENStringImpl.append("-");
-            return;
-        }
-        if (!(lastExecutedMove.getName().equals(MoveNames.DOUBLE_PAWN))){
-            customFENStringImpl.append("-");
-            return;
-        }
-        DoublePawnMove doublePawnMove = (DoublePawnMove) lastExecutedMove;
-        Position skippedPawnPosition = doublePawnMove.getSkippedPawnPosition();
-        log.debug("Adding en passant data on a newly created FENStateString: player color is {} " +
-                        "doublePawnMove is {}, and skippedPawnPosition is {} ",
-                chessboard.getCurrentPlayerColor(), doublePawnMove, skippedPawnPosition);
-        if ((chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK) && skippedPawnPosition.getRow() == 2) ||
-        (chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE) && skippedPawnPosition.getRow() == 5)) {
-            chessboard.setSkippedPawnPosition(chessboard.getCurrentPlayerColor(), skippedPawnPosition);
-            char columnInAlgebraic = (char) ('a' + skippedPawnPosition.getColumn());
-            int rowInAlgebraic = 8 - skippedPawnPosition.getRow();
-            customFENStringImpl.append(columnInAlgebraic);
-            customFENStringImpl.append(rowInAlgebraic);
-        } else{
-            customFENStringImpl.append("-");
-        }*/
-        Position skippedPawnPosition = chessboard.getPawnSkippedPosition(chessboard.getCurrentPlayerColor());
-        if (skippedPawnPosition == null){
-            customFENStringImpl.append("-");
+    private void addEnPassantData (@NonNull Board chessboard, @NonNull PlayerColor playerColor) {
+        if (chessboard.getLastExecutedMove().getName().equals(MoveNames.DOUBLE_PAWN)) {
+            Position skippedPos = chessboard.getPawnSkippedPosition(PlayerColor.getOpponentColor(playerColor));
+            if (skippedPos != null) {
+                char file = (char) ('a' + skippedPos.getColumn());
+                int rank = 8 - skippedPos.getRow();
+                customFENStringImpl.append(file);
+                customFENStringImpl.append(rank);
+                log.debug("Added en passant data to FEN state string.");
+            } else  {
+                customFENStringImpl.append('-');
+                log.debug("Skipped position is null: added '-' to FEN state string.");
+            }
         } else {
-            char columnInAlgebraic = (char) ('a' + skippedPawnPosition.getColumn());
-            int rowInAlgebraic = 8 - skippedPawnPosition.getRow();
-            customFENStringImpl.append(columnInAlgebraic);
-            customFENStringImpl.append(rowInAlgebraic);
+            customFENStringImpl.append('-');
+            log.debug("Last executed move is not a double pawn move, but {} instead: added '-' to FEN state string.",
+                    chessboard.getLastExecutedMove().getName());
         }
     }
-    @NonNull
-    public String getCompactFENStateString() {
-        StringBuilder compactStringBuilder = new StringBuilder(customFENStringImpl.toString());
-        String compactString = compactStringBuilder.delete(compactStringBuilder.length() - 4,
-                compactStringBuilder.length()).toString();
-        log.trace("Compact string: {}", compactString);
-        return compactString;
-    }
+
     @Override
     public String toString(){
-        return String.valueOf(customFENStringImpl);
+        return customFENStringImpl.toString();
     }
 
     @Override
@@ -287,26 +148,7 @@ public final class FENStateString {
         if (!(o instanceof FENStateString fenStateString)) {
             return false;
         }
-        return customFENStringImpl.compareTo(fenStateString.customFENStringImpl) == 0;
-    }
-
-    /**
-     * @return a copy of the current state.
-     */
-    @NonNull //FIXME use a copy constructor instead? Do we need a copy feature at all?
-    public FENStateString copy () {
-        log.trace("Making a copy of the state.");
-        FENStateString stateCopy = new FENStateString(gameState);
-        stateCopy.customFENStringImpl = new StringBuilder(customFENStringImpl);
-        stateCopy.capturedGhostPawnSquare = capturedGhostPawnSquare;
-        stateCopy.isBlackKingsideRookFlaggedAsHavingAlreadyMoved = isBlackKingsideRookFlaggedAsHavingAlreadyMoved;
-        stateCopy.isWhiteKingsideRookFlaggedAsHavingAlreadyMoved = isWhiteKingsideRookFlaggedAsHavingAlreadyMoved;
-        stateCopy.isBlackQueensideRookFlaggedAsHavingAlreadyMoved = isBlackQueensideRookFlaggedAsHavingAlreadyMoved;
-        stateCopy.isWhiteQueensideRookFlaggedAsHavingAlreadyMoved = isWhiteQueensideRookFlaggedAsHavingAlreadyMoved;
-        stateCopy.isBlackKingFlaggedAsHavingAlreadyMoved = isBlackKingFlaggedAsHavingAlreadyMoved;
-        stateCopy.isWhiteKingFlaggedAsHavingAlreadyMoved = isWhiteKingFlaggedAsHavingAlreadyMoved;
-        stateCopy.lastExecutedMove = lastExecutedMove;
-        return stateCopy;
+        return fenStateString.toString().equals(this.toString());
     }
 
     @Override

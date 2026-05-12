@@ -26,16 +26,12 @@ public class GameStateContainer {
      */
     public void push (FENStateString moveStateItem) {
         if (topIndex + 1 == maxSize) {
-            log.debug("Stack overflow! Can't push elements when the stack is full.");
+            log.trace("Stack overflow! Can't push elements when the stack is full.");
             assert false : "Stack overflow! Can't push elements when the stack is full.";
         } else {
             topIndex++;
-        //    if (moveStateStackImpl.size() > topIndex) {
-        //        moveStateStackImpl.set(topIndex, moveStateItem);
-        //    } else{
             moveStateStackImpl.add(moveStateItem);
-            log.debug("Pushed element '{}' on stack.", moveStateItem);
-   //         }
+            log.trace("After pushing element '{}' into the stack, top index = {}", moveStateItem, topIndex);
         }
     }
 
@@ -44,14 +40,15 @@ public class GameStateContainer {
      * Top element is removed from the stack.
      */
     public FENStateString pop() {
-        log.debug("Popping element from stack. Top index = {}", topIndex);
         if (topIndex < 0) {
-            log.debug("Stack underflow! Can't remove elements from an empty stack.");
+            log.trace("Stack underflow! Can't remove elements from an empty stack.");
             assert false : "Stack underflow! Can't remove elements from an empty stack.";
             return null;
         }
+        FENStateString result = moveStateStackImpl.remove(topIndex);
         topIndex--;
-        return moveStateStackImpl.remove(topIndex);
+        log.trace("After popping element {} from stack, top index = {}", result, topIndex);
+        return result;
     }
 
     /**
@@ -60,7 +57,7 @@ public class GameStateContainer {
      */
     public FENStateString peek() {
         if (topIndex < 0) {
-            log.debug("Stack is Empty");
+            log.trace("Stack is Empty");
             return null;
         }
         return moveStateStackImpl.get(topIndex);
@@ -87,4 +84,3 @@ public class GameStateContainer {
         return gameStateContainerCopy;
     }
 }
-

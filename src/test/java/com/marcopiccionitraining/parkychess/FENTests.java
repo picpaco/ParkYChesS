@@ -112,31 +112,33 @@ public class FENTests {
     }
 
     @Test
-    void fromEnPassantEnabledFENToChessboard(){
+    void enPassantEnabledFENvsDirectPiecePlacement(){
         String expectedComputedFEN = "7k/8/8/pP6/8/8/8/7K w - a6 0 0";
         ChessGame gameState = new ChessGame(expectedComputedFEN);
         log.debug("{}", gameState.getChessboard().toString());
-        gameState.getChessboard().setPiece(new King(PlayerColor.BLACK), 0, 7);
-        gameState.getChessboard().setPiece(new King(PlayerColor.WHITE), 7, 7);
-        gameState.getChessboard().setPiece(new Pawn(PlayerColor.BLACK), 3, 0);
-        Pawn whitePawn = new Pawn(PlayerColor.WHITE);
-        gameState.getChessboard().setPiece(whitePawn,3,1);
+        Board chessboard2 = new Board(PlayerColor.WHITE);
+        chessboard2.setPiece(new King(PlayerColor.BLACK), 0, 7);
+        chessboard2.setPiece(new King(PlayerColor.WHITE), 7, 7);
+        chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 3, 0);
+        chessboard2.setPiece(new Pawn(PlayerColor.WHITE),3,1);
         Collection<Position> piecePositions = new ArrayList<>();
-        gameState.getChessboard().setSkippedPawnPosition(PlayerColor.BLACK, new Position(2,0));
+        chessboard2.setSkippedPawnPosition(PlayerColor.BLACK, new Position(2,0));
         piecePositions.add(new Position(3,0));
         piecePositions.add(new Position(3,1));
         piecePositions.add(new Position(0,7));
         piecePositions.add(new Position(7,7));
         assertEquals(gameState.getChessboard().getPiecesPositions().size(), piecePositions.size(),
-                "The positions of all pieces should be the same.");
-        assertEquals(new Position(2,0), gameState.getChessboard().getPawnSkippedPosition(
+                "The positions of pieces on both chessboards should be the same.");
+        assertEquals(chessboard2.getPawnSkippedPosition(PlayerColor.getOpponentColor(gameState.getChessboard().getCurrentPlayerColor()
+        )), gameState.getChessboard().getPawnSkippedPosition(
                 PlayerColor.BLACK), "Black must have an en passant capture position set.");
     }
     @Test
     void noCastlingPossibleShouldBeEncodedWithDash (){
         ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
-        FENStateString computedFENStateString = new FENStateString(gameState);
-        assertEquals(computedFENStateString.toString(),FEN_KINGS_ONLY,
+        Board chessboard = gameState.getChessboard();
+        FENStateString computedFENStateString = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard);
+        assertEquals(FEN_KINGS_ONLY, computedFENStateString.toString() + " 0 1",
                 "FEN_KINGS_ONLY and the computed FEN state string should be equal.");
         assertEquals(FEN_KINGS_ONLY.charAt(22), computedFENStateString.toString().charAt(22),
                 "The 22nd char of both strings should be a dash.");
@@ -145,16 +147,18 @@ public class FENTests {
     @Test
     void equalsTest(){
         ChessGame gameState = new ChessGame(FEN_KINGS_ONLY);
-        FENStateString computedFENStateString1 = new FENStateString(gameState);
-        FENStateString computedFENStateString2 = new FENStateString(gameState);
+        Board chessboard = gameState.getChessboard();
+        FENStateString computedFENStateString1 = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard);
+        FENStateString computedFENStateString2 = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard);
         assertEquals(computedFENStateString1, computedFENStateString2, "The two FENs should be equal.");
     }
     @Test
     void equalsTestWithDifferentTails(){
         ChessGame gameState = new ChessGame("4k3/8/8/8/8/8/8/4K3 w - - 50 31");
         ChessGame gameState2 = new ChessGame("4k3/8/8/8/8/8/8/4K3 w - - 50 31");
-        FENStateString computedFENStateString1 = new FENStateString(gameState);
-        FENStateString computedFENStateString2 = new FENStateString(gameState2);
+        Board chessboard = gameState.getChessboard();
+        FENStateString computedFENStateString1 = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard);
+        FENStateString computedFENStateString2 = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard);
         assertEquals(computedFENStateString1, computedFENStateString2, "The two FENs should be equal.");
         log.debug("computedFENStateString1: {}", computedFENStateString1);
         log.debug("computedFENStateString2: {}", computedFENStateString2);

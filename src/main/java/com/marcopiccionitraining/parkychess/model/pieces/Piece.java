@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,48 +21,58 @@ public abstract class Piece {
     @Getter @Setter
     private PieceNames name;
     @Getter @Setter
-    private Position position;
+    private boolean isFlaggedAsHavingAlreadyMoved;
 
-    Piece (PlayerColor color) {
+
+    public Piece (PlayerColor color) {
         assert color != null : "Player color cannot be null";
         this.color = color;
     }
 
-    @Getter @Setter
-    private boolean isFlaggedAsHavingAlreadyMoved;
-
     public abstract Piece copy();
 
-    public abstract Collection<Move> getPseudoLegalMoves(Position from, Board chessboard);
+    //TODO: Decide if it is better to use the argument 'from' evertwhere or
+    // to have pieces store their own position.
+    public abstract List<Move> getPseudoLegalMoves(Position from, Board chessboard);
 
-    public boolean canCaptureKing(Position kingPosition, Board chessboard){
-        Collection<Move> piecePseudolegalMoves = getPseudoLegalMoves(getPosition(), chessboard);
+    public boolean canCaptureOpponentKing(@NonNull Position from, @NonNull Board chessboard){
+        assert chessboard.getPiece(from) == null ||
+                chessboard.getPiece(from).getName().equals(PieceNames.BISHOP) ||
+                chessboard.getPiece(from).getName().equals(PieceNames.ROOK) ||
+                chessboard.getPiece(from).getName().equals(PieceNames.QUEEN) ||
+                chessboard.getPiece(from).getName().equals(PieceNames.KNIGHT) :
+                "If there is a piece on " + from + ", it must be a slider (bishop, rook, or queen) or a knight.";
+        log.trace("There is a piece on {}: {}", from,chessboard.getPiece(from));
+        List<Move> piecePseudolegalMoves = getPseudoLegalMoves(from, chessboard);
+        log.trace("piecePseudolegalMoves: {}", piecePseudolegalMoves);
         for (Move move : piecePseudolegalMoves) {
-            if (move.getTo().equals(kingPosition)) {
-                Piece piece = chessboard.getPiece(move.getFrom());
-                if (!(piece.isPinned(kingPosition, chessboard))) {
+            if (chessboard.isEmpty(move.getTo())) {
+                continue;
+            }
+            Piece piece = chessboard.getPiece(move.getTo());
+            assert !(piece.getColor().equals(chessboard.getPiece(from).getColor())) :
+                    "The piece located at the to position has to be of opposite color " +
+                            "with respect to the piece located at the from position";
+           //TODO: Check if the following loc is needed
+         //   if (!(piece.isPinned(from, chessboard))) {
+                if (piece.getName().equals(PieceNames.KING)) {
                     return true;
                 }
-            }
+       //     }
         }
         return false;
     }
-    /** //FIXME: infinite recursion with canCaptureKing?
-     * Is this piece pinned? That is, among the enemy pieces, is there at least one
-     * that could capture our King with a pseudolegal move?
-     */
+
     public final boolean isPinned(@NonNull Position friendlyKingPosition, @NonNull Board chessboard) {
-        Collection<Position> enemyPiecesPositions = chessboard.getPiecesPositionsForColor(PlayerColor.getOpponentColor(getColor()));
+        List<Position> enemyPiecesPositions = chessboard.getPiecesPositionsForColor(PlayerColor.getOpponentColor(getColor()));
         for (Position enemyPos : enemyPiecesPositions){
             Piece piece = chessboard.getPiece(enemyPos);
-            if (piece.canCaptureKing(friendlyKingPosition, chessboard)){
+            if (piece.canCaptureOpponentKing(friendlyKingPosition, chessboard)){
                 return true;
             }
         }
         return false;
     }
-
-  //  public abstract boolean canCaptureKing(Position pos, Board chessboard);
 
     @Override
     public boolean equals(Object obj) {
@@ -79,7 +89,7 @@ public abstract class Piece {
 
     @Override
     public String toString() {
-        return toOneChar() + ((getPosition() == null) ? "N.A." : getPosition().toString());
+        return String.valueOf(toOneChar());
     }
 
     public char toOneChar() {

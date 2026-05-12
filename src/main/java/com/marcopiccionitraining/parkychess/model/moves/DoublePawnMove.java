@@ -1,6 +1,7 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.*;
+import com.marcopiccionitraining.parkychess.model.pieces.Pawn;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.Getter;
@@ -16,23 +17,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DoublePawnMove extends Move {
     /**
-     Given a legal game position, if the player who has the move makes a double pawn move,
-     then the first square in the double move is defined as skippedPawnPosition.
+     * Given a legal game position, if the player who has the move makes a double pawn move,
+     * then the first square in the double move is defined as skippedPawnPosition.
      */
     @Getter
     private final Position skippedPawnPosition;
 
-    public DoublePawnMove(@NonNull Position from, @NonNull Position to, Board chessboard){
-        log.debug("{}'s DoublePawnMove constructor called with from: {}, to: {}",chessboard.getCurrentPlayerColor(),from,to);
+    public DoublePawnMove(@NonNull Position from, @NonNull Position to, Board chessboard) {
+        log.debug("from: {}; to: {}", from, to);
+        log.debug("from is empty?: {}; to is empty?: {}", chessboard.isEmpty(from), chessboard.isEmpty(to));
         assert from.getRow() == 1 || from.getRow() == 6 : "The pawn must be in its home square.";
-        assert from.getColumn() == to.getColumn():"The start and destination square must lie on the same column.";
+        assert from.getColumn() == to.getColumn() : "The start and destination square must lie on the same column.";
         assert Math.abs(to.getRow() - from.getRow()) == 2 : "From and to positions should differ by +-2.";
         assert !chessboard.isEmpty(from) : "On " + from + " there should be a pawn.";
-        assert chessboard.isEmpty(from) || chessboard.getPiece(from).getName().equals(PieceNames.PAWN) :
-                "The piece involved in a double pawn move must be a pawn.";
-        setName (MoveNames.DOUBLE_PAWN);
-        setFrom (from);
-        setTo (to);
+        assert chessboard.getPiece(from).getName().equals(PieceNames.PAWN) : "The piece performing a double pawn move must be a pawn.";
+        setName(MoveNames.DOUBLE_PAWN);
+        setFrom(from);
+        setTo(to);
         skippedPawnPosition = new Position(((from.getRow() + to.getRow()) / 2), from.getColumn());
         if (skippedPawnPosition.getRow() == 2) {
             chessboard.setSkippedPawnPosition(PlayerColor.BLACK, skippedPawnPosition);
@@ -40,33 +41,42 @@ public class DoublePawnMove extends Move {
             chessboard.setSkippedPawnPosition(PlayerColor.WHITE, skippedPawnPosition);
         }
         log.debug("DoublePawnMove for {}  {}-{} (({},{})-({},{})) created. skippedPawnPosition is {}",
-                chessboard.getCurrentPlayerColor(), from, to, from.getRow(), from.getColumn(), to.getRow(),
-                to.getColumn(),skippedPawnPosition);
+                chessboard.getPiece(from).getColor(), from, to, from.getRow(), from.getColumn(), to.getRow(),
+                to.getColumn(), skippedPawnPosition);
     }
+
     @Override
-    public boolean execute (@NonNull Board chessboard){
-        assert (chessboard.getPiece(getFrom()).getColor().equals(PlayerColor.BLACK) && getFrom().getRow() == 1) ||
-                (chessboard.getPiece(getFrom()).getColor().equals(PlayerColor.WHITE) && getFrom().getRow() == 6) :
+    public boolean execute (@NonNull Board chessboard) {
+        Pawn pawn = (Pawn) chessboard.getPiece(getFrom());
+        assert pawn.getColor().equals(PlayerColor.BLACK) && pawn.isOnStartingSquare(getFrom(), PlayerColor.BLACK) ||
+                (pawn.getColor().equals(PlayerColor.WHITE) && pawn.isOnStartingSquare(getFrom(), PlayerColor.WHITE)) :
                 "A pawn can execute a double move only from its starting square.";
         assert chessboard.isEmpty(skippedPawnPosition) : "The square in front of the pawn must be empty.";
-
-        Position twoBlackStepsForward = new Position (skippedPawnPosition.getRow() + 1, skippedPawnPosition.getColumn());
-        Position twoWhiteStepsForward = new Position (skippedPawnPosition.getRow() - 1, skippedPawnPosition.getColumn());
-        assert chessboard.isEmpty(twoBlackStepsForward) || chessboard.isEmpty(twoWhiteStepsForward) :
-                 "The second square in front of a black or white pawn must be empty.";
-        PlayerColor currentPlayerColor = chessboard.getPiece(getFrom()).getColor();
+        Position twoBlackStepsForward = new Position(skippedPawnPosition.getRow() + 1, skippedPawnPosition.getColumn());
+        Position twoWhiteStepsForward = new Position(skippedPawnPosition.getRow() - 1, skippedPawnPosition.getColumn());
+        //pawn.setHasJustMovedTwoSteps(true);
+        chessboard.setSkippedPawnPosition(chessboard.getCurrentPlayerColor(), skippedPawnPosition);
+        assert (chessboard.getPiece(getFrom())).getName().equals(PieceNames.PAWN);
+        PlayerColor currentPlayerColor = chessboard.getCurrentPlayerColor();
         if (currentPlayerColor.equals(PlayerColor.WHITE)) {
-            new StandardMove(getFrom(), twoWhiteStepsForward).execute (chessboard);
+            assert chessboard.isEmpty(twoWhiteStepsForward) : "The second square in front of a white pawn must be empty.";
+            new StandardMove(getFrom(), twoWhiteStepsForward).execute(chessboard);
         } else {
-            new StandardMove(getFrom(), twoBlackStepsForward).execute (chessboard);
+            assert chessboard.isEmpty(twoBlackStepsForward) : "The second square in front of a black pawn must be empty.";
+            new StandardMove(getFrom(), twoBlackStepsForward).execute(chessboard);
         }
         return true;
     }
 
     @Override
-        public void undo (@NonNull Board chessboard, @NonNull FENStateString oldGameState) {
-        Piece piece = chessboard.getPiece(oldGameState.getLastExecutedMove().getTo());
-        chessboard.setPiece(piece, oldGameState.getLastExecutedMove().getFrom());
-        chessboard.setEmpty(oldGameState.getLastExecutedMove().getTo());
+    public void undo (@NonNull Board chessboard) {
+        //   Piece piece = chessboard.getPiece(oldGameState.getLastExecutedMove().getTo());
+        Pawn pawn = (Pawn) chessboard.getPiece(getTo());
+        //   chessboard.setPiece(pawn, oldGameState.getLastExecutedMove().getFrom());
+        //   chessboard.setEmpty(oldGameState.getLastExecutedMove().getTo());
+        chessboard.setPiece(pawn, getFrom());
+        chessboard.setEmpty(getTo());
+        chessboard.setSkippedPawnPosition(chessboard.getCurrentPlayerColor(), skippedPawnPosition);
+     //   pawn.setHasJustMovedTwoSteps(false);
     }
 }

@@ -9,183 +9,204 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+
 @Slf4j
 public class King extends Piece {
 
-    public final Direction[] allowedDirections = new Direction[]{
-            Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.EAST,
-            Direction.NORTH_EAST, Direction.NORTH_WEST, Direction.SOUTH_EAST, Direction.SOUTH_WEST
-    };
-
-    public King (PlayerColor playerColor){
+    public King (PlayerColor playerColor) {
         super(playerColor);
         setName(PieceNames.KING);
+        setFlaggedAsHavingAlreadyMoved(false);
     }
 
-    private boolean hasRookNeverMoved (@NonNull Position rookPosition, @NonNull Board chessboard) {
+    private boolean isUnmovedRook(@NonNull Position rookPosition, @NonNull Board chessboard) {
+        assert (chessboard.isEmpty(rookPosition)) || (chessboard.getPiece(rookPosition).getName().equals(PieceNames.ROOK)) :
+                "If there is a piece on rookPosition it must be a " + getColor() + " rook. It is a " +
+                chessboard.getPiece(rookPosition).getName() + " instead.";
         if (chessboard.isEmpty(rookPosition)) {
-            log.trace("The rook is not at its initial square {} .", rookPosition);
             return false;
         }
-        Piece piece = chessboard.getPiece(rookPosition);
-        if (piece.getName().equals(PieceNames.ROOK)) {
-            Rook rook = (Rook) piece;
-            if (rook.isFlaggedAsHavingAlreadyMoved()){
-                log.trace("The rook at {} is flagged as having already moved.", rookPosition);
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            log.trace("The piece at {} is not a rook. It is a {}.", rookPosition, piece.getName());
-            return false;
-        }
+        Piece mayBeRook = chessboard.getPiece(rookPosition);
+        return mayBeRook.getName().equals(PieceNames.ROOK) && !(mayBeRook.isFlaggedAsHavingAlreadyMoved());
     }
 
-    private boolean isCastlingPathFree (@NonNull Collection<Position> positions, @NonNull Board chessboard){
-        for (Position pos : positions) {
-            if (!(chessboard.isEmpty(pos))){
-                log.trace("The castling path made of {} is not free.", positions);
+    private boolean areAllPositionsEmpty(@NonNull List<Position> positions, @NonNull Board chessboard) {
+        for (Position position : positions) {
+            if (!(chessboard.isEmpty(position))) {
                 return false;
             }
         }
         return true;
     }
-
-    public boolean isKingsideCastlingPseudoLegal(Position from, Board chessboard){
-        if (getColor() == PlayerColor.BLACK){
-            if (!chessboard.isBlackKingsideCastlingPossibleFromFEN()){
-                log.debug("Kingside castling is not possible for Black because FEN prohibits it.");
-                return false;
-            }
-        } else {
-                if (!chessboard.isWhiteKingsideCastlingPossibleFromFEN()){
-                    log.debug("Kingside castling is not possible for White because FEN prohibits it.");
-                    return false;
-            }
-        }
-        if (isKingPositionIncorrectForCastling(from)) {
-            log.debug("Kingside castling is not possible for {} because the king is on {}. ", getColor(), from);
-            return false;
-        }
-        if (isFlaggedAsHavingAlreadyMoved()){
-            log.debug("Kingside castling is not possible for {} because the king has already moved", getColor());
-            return false;
-        }
-        Position castlingRookInitialPosition = new Position(from.getRow(), 7);
-        if (chessboard.isEmpty(castlingRookInitialPosition)){
-            log.debug("Kingside castling is not possible for {} because the rook is not on its home square {}. ",
-                    getColor(), castlingRookInitialPosition);
-            return false;
-        }
-        Piece maybeRook = chessboard.getPiece(castlingRookInitialPosition);
-        if (!(maybeRook.getName().equals(PieceNames.ROOK))){
-            log.debug("Kingside castling is not possible for {} because there is a {} on {}. ",
-                    getColor(), getName(), castlingRookInitialPosition);
-            return false;
-        }
-        if (maybeRook.isFlaggedAsHavingAlreadyMoved()){
-            log.debug("Kingside castling is not possible for {} because the rook has already moved", getColor());
-            return false;
-        }
+    //TODO: choose between  isCastlingPathFree and areAllPositionsEmpty
+ /*   private boolean isCastlingPathFree (@NonNull Position from, @NonNull MoveNames castlingSide, @NonNull Board chessboard) {
+        assert castlingSide.equals(MoveNames.KINGSIDE_CASTLE) || castlingSide.equals(MoveNames.QUEENSIDE_CASTLE) :
+                "There are only two castling sides.";
         ArrayList<Position> positionsInBetween = new ArrayList<>();
-        positionsInBetween.add(new Position(from.getRow(), 5));
-        positionsInBetween.add(new Position(from.getRow(), 6));
-        return (hasRookNeverMoved(castlingRookInitialPosition, chessboard)) &&
-                (isCastlingPathFree(positionsInBetween, chessboard));
-    }
-
-    public boolean isQueensideCastlingPseudoLegal(Position from, Board chessboard) {
-        if (getColor() == PlayerColor.BLACK){
-            if (!chessboard.isBlackQueensideCastlingPossibleFromFEN()){
-                log.trace("Queenside castling is not possible for Black because FEN forbids it.");
+        if (castlingSide.equals(MoveNames.KINGSIDE_CASTLE)) {
+            positionsInBetween.add(new Position(from.getRow(), 5));
+            positionsInBetween.add(new Position(from.getRow(), 6));
+        }
+        if (castlingSide.equals(MoveNames.QUEENSIDE_CASTLE)) {
+            positionsInBetween.add(new Position(from.getRow(), 1));
+            positionsInBetween.add(new Position(from.getRow(), 2));
+            positionsInBetween.add(new Position(from.getRow(), 3));
+        }
+        for (Position pos : positionsInBetween) {
+            if (!(chessboard.isEmpty(pos))) {
+                log.trace("The castling path made of {} is not free.", positionsInBetween);
                 return false;
             }
-        } else {
-            if (getColor() == PlayerColor.WHITE) {
-                if (!chessboard.isWhiteQueensideCastlingPossibleFromFEN()) {
-                    log.trace("Queenside castling is not possible for White because FEN prohibits it. ");
-                    return false;
-                }
-            }
         }
-        if (isKingPositionIncorrectForCastling(from)) {
-            log.trace("Queenside castling is not possible for {} because the king is on {}. ", getColor(), from);
-            return false;
-        }
-        if (isFlaggedAsHavingAlreadyMoved()){
-            log.trace("Queenside castling is not possible for {} because the king has already moved", getColor());
-            return false;
-        }
-        Position castlingRookInitialPosition = new Position(from.getRow(), 0);
-        if (chessboard.isEmpty(castlingRookInitialPosition)) {
-            log.trace("Queenside castling is not possible for {} because there is a {} on {}. ",
-                    getColor(), getName(), castlingRookInitialPosition);
-            return false;
-        }
-        if (!(chessboard.getPiece(castlingRookInitialPosition).getName().equals(PieceNames.ROOK))) {
-            log.trace("Queenside castling is not permitted for {} because there is a {} on {}. ",
-                    getColor(), getName(), castlingRookInitialPosition);
-            return false;
-        }
-        ArrayList<Position> positionsBetween = new ArrayList<>();
-        positionsBetween.add(new Position(from.getRow(), 1));
-        positionsBetween.add(new Position(from.getRow(), 2));
-        positionsBetween.add(new Position(from.getRow(), 3));
-        return (hasRookNeverMoved(castlingRookInitialPosition, chessboard)) &&
-                (isCastlingPathFree(positionsBetween, chessboard));
-    }
+        return true;
+    }*/
 
-    private boolean isKingPositionIncorrectForCastling(Position from) {
-        if ((getColor().equals(PlayerColor.BLACK)) && ((from.getRow() != 0) || (from.getColumn() != 4))) {
-            return true;
+ /*   private boolean isKingPositionCorrectForCastling(PlayerColor color, Board chessboard) {
+        if (color.equals(PlayerColor.BLACK) && ((chessboard.getKingPosition(color).getRow() != 0) ||
+                (chessboard.getKingPosition(color).getColumn() != 4))) {
+            return false;
         }
-        return (getColor().equals(PlayerColor.WHITE)) && ((from.getRow() != 7) || (from.getColumn() != 4));
-    }
-    /** Conditions that must hold in order to declare a king move 'pseudolegal':
-     * 1. A valid king move (within the chessboard) to an empty square or a square occupied by
-     * an opposite color piece. It's OK if the king ends up with being under check.
-     * 2. A Castling move must be allowed by the initial FEN (if applicable), or
-     * 2.1. King and rook must be on their home square, and
-     * 2.2. Path between king and rook must be free of pieces, and
-     * 2.3. King and rook must not have moved before.
+        return (!color.equals(PlayerColor.WHITE)) || ((chessboard.getKingPosition(color).getRow() == 7)
+                && (chessboard.getKingPosition(color).getColumn() == 4));
+    }*/
+    /** 1. A king move is 'pseudolegal' if all the following conditions are true:
+     * 1.1 The king move is within the chessboard,
+     * 1.2 It is moving to an empty square, or
+     * 1.3 It is moving to a square occupied by an enemy piece.
+     * Note: It's OK if the king ends up with being under check.
+     * 2. A Castling move is pseudolegal if it allowed by the initial FEN (if applicable), and
+     * 2.1. King and rook which are involved in the castling move are on their home square, and
+     * 2.2. The path between king and rook is free of pieces, and
+     * 2.3. King and rook have not moved before.
      */
     @Override
-    public Collection<Move> getPseudoLegalMoves (Position from, Board chessboard){
-        Collection<Move> pseudoLegalMoves = new ArrayList<>();
-        for (Direction direction : allowedDirections) {
-            Position to = from.stepTowardsDirection(direction);
-            if (!(to.isInsideBoard())) {
-                continue;
+    public List<Move> getPseudoLegalMoves (@NonNull Position kingFromPos, @NonNull Board chessboard) {
+        List<Move> pseudoLegalMoves = new ArrayList<>();
+        List<Position> kingPseudoLegalPositionsTo = PseudoLegalPiecesPositionsInitializer.getKingPseudoLegalPositions(kingFromPos);
+        log.debug("King pseudolegal positions from {}: {}", kingFromPos, kingPseudoLegalPositionsTo);
+        for (Position kingToPosition : kingPseudoLegalPositionsTo) {
+            if (chessboard.isEmpty(kingToPosition) ||
+                    !(chessboard.getPiece(kingToPosition).getColor()).equals(getColor())) {
+                pseudoLegalMoves.add(new StandardMove(kingFromPos, kingToPosition));
             }
-            if (chessboard.isEmpty(to) || !(chessboard.getPiece(to).getColor()).equals(getColor())) {
-                pseudoLegalMoves.add(new StandardMove(from, to));
+        }
+        log.debug("Looking for castling moves...");
+        if (chessboard.getPiece(kingFromPos).getName().equals(PieceNames.KING)) {
+            log.debug("There is a king on {}", kingFromPos);
+            if (canCastleKingside(kingFromPos, chessboard)) {
+                log.debug("I can castle kingside.");
+                pseudoLegalMoves.add(new CastlingMove(MoveNames.KINGSIDE_CASTLE, kingFromPos));
+            }  
+            if (canCastleQueenside(kingFromPos, chessboard)) {
+                log.debug("I can castle queenside.");
+                pseudoLegalMoves.add(new CastlingMove(MoveNames.QUEENSIDE_CASTLE, kingFromPos));
             }
         }
-        boolean isKingsideCastlingPseudoLegal = isKingsideCastlingPseudoLegal(from, chessboard);
-        log.trace("Is {} kingside castle pseudolegal in this position? {}", getColor(), isKingsideCastlingPseudoLegal);
-        if (isKingsideCastlingPseudoLegal){
-            pseudoLegalMoves.add(new CastlingMove(MoveNames.KINGSIDE_CASTLE, from));
+        return pseudoLegalMoves;
+    }
+
+    private boolean canCastleKingside (@NonNull Position from, @NonNull Board chessboard) {
+        assert chessboard.getPiece(from).getName().equals(PieceNames.KING) : "This method can be invoked only on kings. "
+                + chessboard.getPiece(from).getName() + "s are not allowed.";
+        boolean isKingsideCastlePossibleFromFEN;
+        boolean isKingAtHome;
+        Position rookHomePosition;
+        if (isFlaggedAsHavingAlreadyMoved()) {
+            return false;
         }
-        boolean isQueensideCastlingPseudoLegal = isQueensideCastlingPseudoLegal(from, chessboard);
-        log.trace("Is {} queenside castle pseudolegal in this position? {}", getColor(), isQueensideCastlingPseudoLegal);
-        if (isQueensideCastlingPseudoLegal){
-            pseudoLegalMoves.add(new CastlingMove(MoveNames.QUEENSIDE_CASTLE, from));
+        PlayerColor color = chessboard.getCurrentPlayerColor();
+        if (color.equals(PlayerColor.BLACK)) {
+            isKingsideCastlePossibleFromFEN = chessboard.isBlackKingsideCastlingPossibleFromFEN();
+            isKingAtHome = ((from.getRow() == 0) && (from.getColumn() == 4));
+            rookHomePosition = new Position(0, 7);
+        } else {
+            isKingsideCastlePossibleFromFEN = chessboard.isWhiteKingsideCastlingPossibleFromFEN();
+            isKingAtHome = ((from.getRow() == 7) && (from.getColumn() == 4));
+            rookHomePosition = new Position(7, 7);
         }
-        log.debug("Pseudolegal moves for {} king {} {}", getColor(), from, pseudoLegalMoves);
-        return  pseudoLegalMoves;
+        if (areKingOrRookNotPositionedForCastling(chessboard, isKingAtHome, rookHomePosition, color)) {
+            return false;
+        }
+        if (isKingsideCastlePossibleFromFEN) {
+            ArrayList<Position> betweenPositions = new ArrayList<>();
+            betweenPositions.add(new Position(from.getRow(), 5));
+            betweenPositions.add(new Position(from.getRow(), 6));
+            return isUnmovedRook(rookHomePosition, chessboard) &&
+                    areAllPositionsEmpty(betweenPositions, chessboard);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean canCastleQueenside(@NonNull Position from, @NonNull Board chessboard) {
+        assert chessboard.getPiece(from).getName().equals(PieceNames.KING) : " This method is for kings only. "
+                + chessboard.getPiece(from).getName() + "s are not allowed.";
+        boolean isQueensideCastlePossibleFromFEN;
+        boolean isKingAtHome;
+        Position rookHomePosition;
+        if (isFlaggedAsHavingAlreadyMoved()) {
+            return false;
+        }
+        PlayerColor color = chessboard.getCurrentPlayerColor();
+        if (color.equals(PlayerColor.BLACK)) {
+            isQueensideCastlePossibleFromFEN = chessboard.isBlackQueensideCastlingPossibleFromFEN();
+            isKingAtHome = ((from.getRow() == 0) && (from.getColumn() == 4));
+            rookHomePosition = new Position(0, 0);
+        } else {
+            isQueensideCastlePossibleFromFEN = chessboard.isWhiteQueensideCastlingPossibleFromFEN();
+            isKingAtHome = ((from.getRow()) == 7 && (from.getColumn() == 4));
+            rookHomePosition = new Position(7, 0);
+        }
+        if (areKingOrRookNotPositionedForCastling(chessboard, isKingAtHome, rookHomePosition, color)) {
+            return false;
+        }
+        if (isQueensideCastlePossibleFromFEN) {
+            ArrayList<Position> betweenPositions = new ArrayList<>();
+            betweenPositions.add(new Position(from.getRow(), 1));
+            betweenPositions.add(new Position(from.getRow(), 2));
+            betweenPositions.add(new Position(from.getRow(), 3));
+            return isUnmovedRook(rookHomePosition, chessboard) &&
+                areAllPositionsEmpty(betweenPositions, chessboard);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean areKingOrRookNotPositionedForCastling(@NonNull Board chessboard, boolean isKingAtHome,
+                                                          Position rookHomePosition, PlayerColor color) {
+        if (!isKingAtHome) {
+            return true;
+        }
+        return chessboard.isEmpty(rookHomePosition) ||
+                !chessboard.getPiece(rookHomePosition).getColor().equals(color) ||
+                !chessboard.getPiece(rookHomePosition).getName().equals(PieceNames.ROOK);
     }
 
     @Override
-    public boolean canCaptureKing(Position pos, Board chessboard) {
+    public boolean canCaptureOpponentKing (@NonNull Position from, @NonNull Board chessboard) {
+        assert chessboard.getPiece(from) == null || chessboard.getPiece(from).getName().equals(PieceNames.KING) :
+                "If there is a piece on " + from + ", it must be a King.";
+        log.trace("King on {}: {}", from,chessboard.getPiece(from));
+        List<Position> pseudoLegalPositions = PseudoLegalPiecesPositionsInitializer.getKingPseudoLegalPositions(from);
+        for (Position pseudoLegalPosition : pseudoLegalPositions){
+            if (chessboard.isEmpty(pseudoLegalPosition)) {
+               continue;
+            }
+            if (chessboard.getPiece(pseudoLegalPosition).getColor().equals(getColor())){
+                continue;
+            }
+            if (!(chessboard.getPiece(pseudoLegalPosition).getName().equals(PieceNames.KING))){
+                continue;
+            }
+            return true;
+        }
         return false;
     }
 
     @Override
     public Piece copy() {
         King kingCopy = new King(getColor());
-        kingCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         kingCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return kingCopy;
     }

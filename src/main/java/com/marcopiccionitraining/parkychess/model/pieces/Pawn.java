@@ -7,12 +7,18 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import static com.marcopiccionitraining.parkychess.model.PseudoLegalPiecesPositionsInitializer.getPawnCapturePseudoLegalPositions;
+
 @Slf4j
 public class Pawn extends Piece {
 
     private final Direction forward;
 
-    public Pawn(PlayerColor playerColor) {
+    private PawnPromotionMove pawnPromotionMove;
+
+    public Pawn (PlayerColor playerColor) {
         super(playerColor);
         if (playerColor.equals(PlayerColor.BLACK)) {
             forward = Direction.SOUTH;
@@ -20,105 +26,174 @@ public class Pawn extends Piece {
             forward = Direction.NORTH;
         }
         setName(PieceNames.PAWN);
+        assert isPawnDirectionCorrect();
         log.trace("Created {} pawn", playerColor);
     }
 
-    private Collection<Move> getOneAndTwoStepsForwardMovesIncludingPromotions(@NonNull Position from, @NonNull Board chessboard) {
-        Collection<Move> forwardMoves = new ArrayList<>();
+    private boolean isPawnDirectionCorrect(){
+        if (getColor().equals(PlayerColor.BLACK) && forward.equals(Direction.SOUTH)) {
+            return true;
+        }
+        return getColor().equals(PlayerColor.WHITE) && forward.equals(Direction.NORTH);
+    }
+
+    private List<Move> getForwardMovesAndPromotions(@NonNull Position from, @NonNull Board chessboard) {
+        assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
+        List<Move> forwardMoves = new ArrayList<>();
         Position firstStepForward = from.stepTowardsDirection(forward);
-        if (!chessboard.isEmpty(firstStepForward)) {
-            return forwardMoves;
-        }
-        if (firstStepForward.getRow() == 0 || firstStepForward.getRow() == 7) {
-            forwardMoves.addAll(getPromotionMoves(from, firstStepForward));
-        } else {
-            log.trace("Adding a standard pawn forward move.");
-            forwardMoves.add(new StandardMove(from, firstStepForward));
-        }
-        DoublePawnMove twoStepsForwardMove;
-        Position secondStepForward = firstStepForward.stepTowardsDirection(forward);
-        if (!chessboard.isEmpty(secondStepForward)) {
-            return forwardMoves;
-        }
-        if (isPawnOnStartingSquare(from, getColor())) {
-            twoStepsForwardMove = new DoublePawnMove(from, secondStepForward, chessboard);
-            log.trace("Adding a DoublePawnMove: {}", twoStepsForwardMove);
-            forwardMoves.add(twoStepsForwardMove);
+        if (chessboard.isEmpty(firstStepForward)) {
+            if ((firstStepForward.getRow() == 0 && getColor().equals(PlayerColor.WHITE)) ||
+                    (firstStepForward.getRow() == 7 && getColor().equals(PlayerColor.BLACK))) {
+                log.debug("Adding promotion moves.");
+                PawnPromotionMove pawnPromotionToQueenMove = new PawnPromotionMove(from, firstStepForward,
+                        new Queen(getColor()), null);
+                forwardMoves.add(pawnPromotionToQueenMove);
+                PawnPromotionMove pawnPromotionToRookMove = new PawnPromotionMove(from, firstStepForward,
+                        new Rook(getColor()), null);
+                forwardMoves.add(pawnPromotionToRookMove);
+                PawnPromotionMove pawnPromotionToBishopMove = new PawnPromotionMove(from, firstStepForward,
+                        new Bishop(getColor()), null);
+                forwardMoves.add(pawnPromotionToBishopMove);
+                PawnPromotionMove pawnPromotionToKnightMove = new PawnPromotionMove(from, firstStepForward,
+                        new Knight(getColor()), null);
+                forwardMoves.add(pawnPromotionToKnightMove);
+            } else {
+                log.debug("Added standard pawn forward move {}.", firstStepForward);
+                forwardMoves.add(new StandardMove(from, firstStepForward));
+            }
+            if (isOnStartingSquare(from, getColor())) {
+                DoublePawnMove twoStepsForwardMove;
+                Position secondStepForward = firstStepForward.stepTowardsDirection(forward);
+                if (chessboard.isEmpty(secondStepForward)) {
+                    log.debug("From: {}, To: {}", from, secondStepForward);
+                    twoStepsForwardMove = new DoublePawnMove(from, secondStepForward, chessboard);
+                    log.debug("Adding a DoublePawnMove: {}", twoStepsForwardMove);
+                    forwardMoves.add(twoStepsForwardMove);
+                }
+            }
         }
         return forwardMoves;
     }
 
-    //FIXME Use precomputed data structures
-    private Collection<Move> getPseudolegalCaptureMoves(@NonNull Position from, @NonNull Board chessboard) {
-        log.debug("About to compute capture moves from {} {} ", chessboard.getCurrentPlayerColor(), chessboard.getPiece(from));
-        Collection<Move> captureMoves = new ArrayList<>();
-        final Direction[] sideSteps = {Direction.EAST, Direction.WEST};
-        Position oneStepForward = from.stepTowardsDirection(forward);
-        for (Direction dir : sideSteps) {
-            Position capturePos = oneStepForward.stepTowardsDirection(dir);
-            if (!(capturePos.isInsideBoard())) {
-                log.debug("Capture position must be inside the board.");
-                continue;
-            }
-            if (chessboard.isEmpty(capturePos)) {
-                log.debug("Cannot capture on {} because it is an empty square.", capturePos);
-                continue;
-            }
-            if (chessboard.getPiece(capturePos).getColor().equals(getColor())) {
-                log.debug("Cannot capture a friendly piece.");
-                continue;
-            }
-            if (capturePos.getRow() == 7 || capturePos.getRow() == 0) {
-                captureMoves.addAll(getPromotionMoves(from, capturePos));
-            } else {
-                captureMoves.add(new StandardMove(from, capturePos));
+    private List<Move> getCaptureMovesAndPromotions(@NonNull Position from, @NonNull Board chessboard) {
+        assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
+        List<Position> pseudoLegalPawnCapturePositions;
+        int lastRowNumber;
+        List<Move> captureMoves = new ArrayList<>();
+        if (chessboard.getPiece(from).getColor().equals(PlayerColor.BLACK)) {
+            pseudoLegalPawnCapturePositions = PseudoLegalPiecesPositionsInitializer.
+                    getPawnCapturePseudoLegalPositions(from, PlayerColor.BLACK);
+            lastRowNumber = 7;
+        } else {
+            pseudoLegalPawnCapturePositions = PseudoLegalPiecesPositionsInitializer.
+                    getPawnCapturePseudoLegalPositions(from, PlayerColor.WHITE);
+            lastRowNumber = 0;
+        }
+        log.debug("Entering pseudoLegalPawnCapturePositions loop.");
+        for (Position capturePosition : pseudoLegalPawnCapturePositions) {
+            if (chessboard.isEmpty(capturePosition)) {
+                log.debug("Cannot perform a standard capture on {} because it is empty.", capturePosition);
+                if (capturePosition.equals(chessboard.getPawnSkippedPosition(PlayerColor.getOpponentColor(getColor())))) {
+                    if (chessboard.canCaptureEnPassant(chessboard.getCurrentPlayerColor())) {
+                        log.debug("Adding an en passant capture from {} to {}.", from, capturePosition);
+                        captureMoves.add(new EnPassantCapture(from, capturePosition, chessboard));
+                    } else {
+                        log.debug("Cannot capture en passant on {} .", capturePosition);
+                    }
+                } else {
+                    log.debug("Cannot capture en passant because capture position: {} is different from pawn skipped " +
+                            " position: {}.", capturePosition, chessboard.getPawnSkippedPosition(getColor()));
+                }
+            } else {//there is a piece on capturePosition
+                if (chessboard.getPiece(capturePosition).getColor().equals(chessboard.getPiece(from).getColor())) {
+                    log.debug("Cannot capture {} because it is a friendly piece.", chessboard.getPiece(capturePosition));
+                    continue;
+                }
+                if (capturePosition.getRow() == lastRowNumber) {
+                    log.debug("Capturing with promotion.");
+                    if (!(chessboard.isEmpty(capturePosition))) {
+                        PawnPromotionMove pawnPromotionToQueenMove = new PawnPromotionMove(from, capturePosition,
+                                new Queen(getColor()), chessboard.getPiece(capturePosition));
+                        captureMoves.add(pawnPromotionToQueenMove);
+                        PawnPromotionMove pawnPromotionToRookMove = new PawnPromotionMove(from, capturePosition,
+                                new Rook(getColor()), chessboard.getPiece(capturePosition));
+                        captureMoves.add(pawnPromotionToRookMove);
+                        PawnPromotionMove pawnPromotionToBishopMove = new PawnPromotionMove(from, capturePosition,
+                                new Bishop(getColor()), chessboard.getPiece(capturePosition));
+                        captureMoves.add(pawnPromotionToBishopMove);
+                        PawnPromotionMove pawnPromotionToKnightMove = new PawnPromotionMove(from, capturePosition,
+                                new Knight(getColor()), chessboard.getPiece(capturePosition));
+                        captureMoves.add(pawnPromotionToKnightMove);
+                    }
+                } else {
+                    log.debug("Regular pawn capturing.");
+                    captureMoves.add(new StandardMove(from, capturePosition));
+                }
             }
         }
+        log.debug("Capture moves at getCaptureMovesAndPromotions exit: {}.", captureMoves);
         return captureMoves;
     }
 
-    private boolean isPawnOnStartingSquare(@NonNull Position from, @NonNull PlayerColor color) {
+    public boolean isOnStartingSquare (@NonNull Position from, @NonNull PlayerColor color) {
+        assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
         if (color.equals(PlayerColor.BLACK)) {
             return from.getRow() == 1;
         } else {
             return from.getRow() == 6;
         }
     }
-    //FIXME: where the argument 'from' comes from?
+
     @Override
-    public Collection<Move> getPseudoLegalMoves(Position from, Board chessboard){
-        Collection<Move> moves = new ArrayList<>();
-        Collection<Move> oneTwoStepForwardMovesWithPromotions =
-                getOneAndTwoStepsForwardMovesIncludingPromotions(from, chessboard);
-        if (!oneTwoStepForwardMovesWithPromotions.isEmpty()) {
-            log.debug("Pseudolegal non-capture pawn moves: {}", oneTwoStepForwardMovesWithPromotions);
+    public List<Move> getPseudoLegalMoves (Position from, Board chessboard){
+        List<Move> moves = new ArrayList<>();
+        assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
+        List<Move> oneTwoStepForwardMovesWithPromotions = getForwardMovesAndPromotions(from, chessboard);
+        if (oneTwoStepForwardMovesWithPromotions.isEmpty()) {
+            log.debug("There are no pseudolegal non-capture pawn moves inclusive of promotions to add for {}.",this);
+        }  else {
+            log.debug("Pseudolegal non-capture pawn moves inclusive of promotions for {}: {}",
+                    this, oneTwoStepForwardMovesWithPromotions);
             moves.addAll(oneTwoStepForwardMovesWithPromotions);
         }
-        Collection<Move> captureMovesWithPromotions = getPseudolegalCaptureMoves(from, chessboard);
-        if (!captureMovesWithPromotions.isEmpty()) {
-            moves.addAll(captureMovesWithPromotions);
+        List<Move> captureMovesWithPromotions = getCaptureMovesAndPromotions(from, chessboard);
+        if (captureMovesWithPromotions.isEmpty()) {
+            log.debug("There are no pseudolegal capture pawn moves inclusive of en passant and promotions to add for {}", this);
         }
+        moves.addAll(captureMovesWithPromotions);
+        log.debug("Moves returned by getPseudolegalMoves({}): {}", from, moves);
         return moves;
     }
 
-    /**
-     * @return a copy of current pawn.
-     */
+    @Override
+    public boolean canCaptureOpponentKing (@NonNull Position from, @NonNull Board chessboard) {
+        assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
+        assert chessboard.getPiece(from) == null || chessboard.getPiece(from).getName().equals(PieceNames.PAWN) :
+            "If there is a piece on " + from + ", it must be a pawn.";
+        log.trace("Pawn on {}: {}", from,chessboard.getPiece(from));
+        Collection<Position> capturePositions = getPawnCapturePseudoLegalPositions (from, chessboard.getPiece(from).getColor());
+        for (Position capturePosition : capturePositions) {
+            if (chessboard.isEmpty(capturePosition)) {
+                continue;
+            }
+            if (chessboard.getPiece(capturePosition).getColor().equals(chessboard.getPiece(from).getColor())) {
+                continue;
+            }
+            Move captureMove = new StandardMove(from, capturePosition);
+            if (chessboard.getPiece(captureMove.getTo()).getName().equals(PieceNames.KING)) {
+                return true;
+            }
+        }
+        return false;
+    }
+        /**
+         * @return a copy of current pawn.
+         */
         @Override
         public Piece copy () {
+            assert isPawnDirectionCorrect() : "Pawn direction is not correct.";
             Pawn pawnCopy = new Pawn(getColor());
             pawnCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
             return pawnCopy;
         }
-
-        private Collection<Move> getPromotionMoves (Position from, Position to){
-            assert from.getRow() == 1 || from.getRow() == 6 : "Pawn should be on 2nd or 7th row before promoting.";
-            assert to.getRow() == 0 || to.getRow() == 7 : "Pawn should be on 1st or 8th row after promoting.";
-            Collection<Move> promotionMoves = new ArrayList<>();
-            promotionMoves.add(new PawnPromotionMove(from, to, new Queen(getColor())));
-            promotionMoves.add(new PawnPromotionMove(from, to, new Knight(getColor())));
-            promotionMoves.add(new PawnPromotionMove(from, to, new Rook(getColor())));
-            promotionMoves.add(new PawnPromotionMove(from, to, new Bishop(getColor())));
-            return promotionMoves;
-    }
 }

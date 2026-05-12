@@ -105,7 +105,7 @@ public class KnightTests {
         Knight whiteKnight = (Knight) gameState.getChessboard().getPiece (7,6);
         assertEquals(PlayerColor.WHITE, whiteKnight.getColor(), "Knight at square g1 should be white.");
         assertEquals(PieceNames.KNIGHT, whiteKnight.getName(), "Knight's name should be 'KNIGHT'");
-        assertEquals("Ng1", whiteKnight.toString(), "Knight's name as string should be 'Ng1'");
+        assertEquals("N", whiteKnight.toString(), "Knight's name as string should be 'N'");
     }
     @Test
     void blackKnightNameCheck(){
@@ -113,7 +113,7 @@ public class KnightTests {
         Knight blackKnight = (Knight) gameState.getChessboard().getPiece (0,6);
         assertEquals(PlayerColor.BLACK, blackKnight.getColor(), "Knight at square g1 should be black.");
         assertEquals(PieceNames.KNIGHT, blackKnight.getName(), "Knight's name should be 'KNIGHT'");
-        assertEquals("ng8", blackKnight.toString(), "Knight's name as string should be 'ng8'");
+        assertEquals("n", blackKnight.toString(), "Knight's name as string should be 'n'");
     }
     @Test
     void whiteKnightOnTheCenterThreePossibleCaptureJumps() {

@@ -27,7 +27,7 @@ public class QueenTests {
         Queen whiteQueen = (Queen) gameState.getChessboard().getPiece (7,3);
         assertEquals(PlayerColor.WHITE, whiteQueen.getColor(), "Queen at square d1 should be white.");
         assertEquals(PieceNames.QUEEN, whiteQueen.getName(), "Queen's name should be 'QUEEN'");
-        assertEquals("Qd1", whiteQueen.toString(), "Queen's name as string should be 'Qd1'");
+        assertEquals("Q", whiteQueen.toString(), "Queen's name as string should be 'Q'");
     }
     @Test
     void blackQueenNameCheck(){
@@ -35,7 +35,7 @@ public class QueenTests {
         Queen blackQueen = (Queen) gameState.getChessboard().getPiece (0,3);
         assertEquals(PlayerColor.BLACK, blackQueen.getColor(), "Queen at square d8 should be black.");
         assertEquals(PieceNames.QUEEN, blackQueen.getName(), "Queen's name should be 'QUEEN'");
-        assertEquals("qd8", blackQueen.toString(), "Queen's name as string should be 'qd8'");
+        assertEquals("q", blackQueen.toString(), "Queen's name as string should be 'q'");
     }
     @Test
     void blackQueenAtD8CannotMoveAtStartingPosition() {

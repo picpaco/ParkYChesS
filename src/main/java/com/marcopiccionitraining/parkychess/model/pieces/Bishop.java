@@ -4,28 +4,34 @@ import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 public class Bishop extends SliderPiece {
+
     public Bishop(PlayerColor playerColor){
         super(playerColor);
         setName(PieceNames.BISHOP);
     }
 
-    public Collection<Move> getPseudoLegalMoves(Position from , Board chessboard){
-        Collection<Move> bishopPseudoLegalMoves = new ArrayList<>();
-        ArrayList<ArrayList<Position>> existingDiagonals =
-                PseudoLegalPiecesPositionsInitializer.getBishopPseudoLegalPoitions(from);
-        for (ArrayList<Position> diagonalPositions : existingDiagonals) {
-            bishopPseudoLegalMoves.addAll(getPseudoLegalMovesInDirection(diagonalPositions, from, chessboard));
+    @Override
+    public List<Move> getPseudoLegalMoves(Position from, Board chessboard){
+        List<Move> bishopPseudoLegalMoves = new ArrayList<>();
+        List<List<Position>> allBishopDiagonals =
+                PseudoLegalPiecesPositionsInitializer.getBishopPseudoLegalPositions(from);
+        for (List<Position> positionsAlongOneDiagonal : allBishopDiagonals) {
+            List<Move> pseudoLegalMovesInOneDirection = getPseudoLegalMovesInDirection(positionsAlongOneDiagonal,
+                    from, chessboard);
+            bishopPseudoLegalMoves.addAll(pseudoLegalMovesInOneDirection);
         }
+        log.debug("Pseudolegal moves for {} bishop {}: {}", getColor(), from, bishopPseudoLegalMoves);
         return bishopPseudoLegalMoves;
     }
 
     @Override
     public Piece copy() {
         Bishop bishopCopy = new Bishop(getColor());
-        bishopCopy.setPosition(new Position(getPosition().getRow(), getPosition().getColumn()));
         bishopCopy.setFlaggedAsHavingAlreadyMoved(isFlaggedAsHavingAlreadyMoved());
         return bishopCopy;
     }

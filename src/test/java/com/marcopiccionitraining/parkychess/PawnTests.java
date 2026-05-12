@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Slf4j
 public class PawnTests {
-
 
     @BeforeEach
     void setup(){}
@@ -28,7 +28,7 @@ public class PawnTests {
         Pawn whitePawn = (Pawn) gameState.getChessboard().getPiece (6,7);
         assertEquals(PlayerColor.WHITE, whitePawn.getColor(), "Pawn at square h2 should be white.");
         assertEquals(PieceNames.PAWN, whitePawn.getName(), "Pawn's name should be 'PAWN'");
-        assertEquals("Ph2", whitePawn.toString(), "Pawn's name as string should be 'Ph2'");
+        assertEquals("P", whitePawn.toString(), "Pawn's name as string should be 'P'");
     }
     @Test
     void blackPawnNameCheck(){
@@ -36,7 +36,7 @@ public class PawnTests {
         Pawn blackPawn = (Pawn) gameState.getChessboard().getPiece (1,7);
         assertEquals(PlayerColor.BLACK, blackPawn.getColor(), "Pawn at square h7 should be black.");
         assertEquals(PieceNames.PAWN, blackPawn.getName(), "Pawn's name should be 'PAWN'");
-        assertEquals("ph7", blackPawn.toString(), "Pawn's name as string should be 'ph7'");
+        assertEquals("p", blackPawn.toString(), "Pawn's name as string should be 'p'");
     }
     @Test
     void oppositeColorPawnsAtA5A4CannotMove() {
@@ -85,6 +85,37 @@ public class PawnTests {
                 computedPawn2Moves.containsAll(blackPawn2LegalMoves), "The expected list of moves: " + blackPawn1LegalMoves +
                 " is not the same as the produced one: " + computedPawn2Moves);
     }
+
+    @Test
+    void blackPawns_B5_C6_WhitePawnA5_Ep_Right() {
+        ChessGame gameState = new ChessGame(FEN_FOUR_PAWNS_ONE_EN_PASSANT_POSITION_BASIC);
+        Board chessboard = gameState.getChessboard();
+        assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(3, 0)).size());
+        Collection<Move> whitePawnLegalMoves = new ArrayList<>();
+        whitePawnLegalMoves.add(new StandardMove(new Position(3, 0), new Position(2, 0)));
+        whitePawnLegalMoves.add(new EnPassantCapture(new Position(3, 0), new Position(2, 1), chessboard));
+        Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 0));
+        assertTrue(whitePawnLegalMoves.size() == computedPawnMoves.size() &&
+                whitePawnLegalMoves.containsAll(computedPawnMoves) &&
+                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " + whitePawnLegalMoves +
+                " is not the same as the produced one: " + computedPawnMoves);
+    }
+
+    @Test
+    void blackPawns_E5_G5_WhitePawnF5_Ep_Right() {
+        ChessGame gameState = new ChessGame(FEN_THREE_PAWNS_ONE_EN_PASSANT_POSITION_BASIC);
+        Board chessboard = gameState.getChessboard();
+        assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(3, 5)).size());
+        Collection<Move> whitePawnLegalMoves = new ArrayList<>();
+        whitePawnLegalMoves.add(new StandardMove(new Position(3, 5), new Position(2, 5)));
+        whitePawnLegalMoves.add(new EnPassantCapture(new Position(3, 5), new Position(2, 6), chessboard));
+        Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 5));
+        assertTrue(whitePawnLegalMoves.size() == computedPawnMoves.size() &&
+                whitePawnLegalMoves.containsAll(computedPawnMoves) &&
+                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " + whitePawnLegalMoves +
+                " is not the same as the produced one: " + computedPawnMoves);
+    }
+
     @Test
     void oppositeColorPawnsAtE5F5G5E4F4G4CannotMoveCanCapture() {
         ChessGame gameState = new ChessGame(FEN_SIX_MUTUALLY_BLOCKING_PAWNS_POSITION);
@@ -133,11 +164,15 @@ public class PawnTests {
     void noEnPassantCaptureForBlackPawn(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BASIC);
         assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(1, 0)).size());
-        log.debug("Chessboard after first assertion: {}", gameState.getChessboard());
+    }
+
+    @Test
+    void noEnPassantCaptureForWhitePawn(){
+        ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BASIC);
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.WHITE);
         assertEquals(1, gameState.getLegalMovesForPieceAtPosition(new Position(3, 1)).size());
-        log.debug("Chessboard after second assertion: {}", gameState.getChessboard());
     }
+
     @Test
     void noEnPassantForWhitePawnWithBlackPawnAtStartingSquare(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_NO_EN_PASSANT_POSITION_BLACK_PAWN_START_SQUARE);
@@ -146,47 +181,55 @@ public class PawnTests {
     @Test
     void enPassantBasicCaseFromFENLeft(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_A5);
-        log.debug("{}", gameState.getChessboard());
-        gameState.getChessboard().setLastExecutedMove(new DoublePawnMove(new Position(1,0),
-                new Position(3,0), gameState.getChessboard()));
+        log.trace("{}", gameState.getChessboard());
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
         whitePawnLegalMoves.add(new EnPassantCapture(new Position(3,1),
                 new Position(2,0), gameState.getChessboard()));
         whitePawnLegalMoves.add(new StandardMove (new Position(3,1), new Position(2,1)));
-        Collection<Move> computedWhitePawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 1));
-        assertEquals(2, computedWhitePawnMoves.size(), "White pawn should have 2 possible moves.");
-        assertTrue(whitePawnLegalMoves.containsAll(computedWhitePawnMoves) &&
-                computedWhitePawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
-                whitePawnLegalMoves + " is not the same as the produced one: " + computedWhitePawnMoves);
+        Collection<Move> computedWhitePawnLegalMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 1));
+        assertEquals(2, computedWhitePawnLegalMoves.size(), "White pawn should have 2 possible moves.");
+        assertTrue(whitePawnLegalMoves.containsAll(computedWhitePawnLegalMoves) &&
+                computedWhitePawnLegalMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
+                whitePawnLegalMoves + " is not the same as the computed one: " + computedWhitePawnLegalMoves);
     }
     @Test
     void enPassantBasicCaseFromFENRight(){
         ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_H4);
-        log.debug("{}", gameState.getChessboard());
-        gameState.getChessboard().setLastExecutedMove(new DoublePawnMove(new Position(6,6),
-                new Position(4,6), gameState.getChessboard()));
+        log.trace("{}", gameState.getChessboard());
         Collection<Move> blackPawnLegalMoves = new ArrayList<>();
-        Position blackPawnInitialPosition = new Position(4,7);
-        blackPawnLegalMoves.add(new StandardMove(blackPawnInitialPosition, new Position(5,7)));
-        blackPawnLegalMoves.add(new EnPassantCapture(blackPawnInitialPosition, new Position(5,6), gameState.getChessboard()));
-        Collection<Move> computedBlackPawnMoves = gameState.getLegalMovesForPieceAtPosition(blackPawnInitialPosition);
-        assertEquals(2, computedBlackPawnMoves.size(), "Black pawn should have 2 possible moves.");
-        assertTrue(blackPawnLegalMoves.containsAll(computedBlackPawnMoves) &&
-                computedBlackPawnMoves.containsAll(blackPawnLegalMoves), "The expected list of moves: " + blackPawnLegalMoves +
-                " is not the same as the produced one: " + computedBlackPawnMoves);
+        blackPawnLegalMoves.add(new EnPassantCapture(new Position(4,7),
+                new Position(5,6), gameState.getChessboard()));
+        blackPawnLegalMoves.add(new StandardMove(new Position(4,7), new Position(5,7)));
+        Collection<Move> computedBlackPawnLegalMoves = gameState.getLegalMovesForPieceAtPosition(new Position(4,7));
+        assertEquals(2, computedBlackPawnLegalMoves.size(), "Black pawn should have 2 possible moves.");
+        assertTrue(blackPawnLegalMoves.containsAll(computedBlackPawnLegalMoves) &&
+                computedBlackPawnLegalMoves.containsAll(blackPawnLegalMoves), "The expected list of moves: " +
+                blackPawnLegalMoves + " is not the same as the computed one: " + computedBlackPawnLegalMoves);
+    }
+    @Test
+    void enPassantBasicCaseFromFENRightNonEpPlayerTurn(){
+        ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_H4_WHITE_MOVES);
+        log.trace("{}", gameState.getChessboard());
+        Collection<Move> whitePawnLegalMoves = new ArrayList<>();
+        whitePawnLegalMoves.add(new StandardMove(new Position(4,6), new Position(3,6)));
+        Collection<Move> computedWhitePawnLegalMoves = gameState.getLegalMovesForPieceAtPosition(new Position(4,6));
+        assertEquals(1, computedWhitePawnLegalMoves.size(), "White pawn should have 1 possible move.");
+        assertTrue(whitePawnLegalMoves.containsAll(computedWhitePawnLegalMoves) &&
+                computedWhitePawnLegalMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
+                whitePawnLegalMoves + " is not the same as the computed one: " + computedWhitePawnLegalMoves);
     }
     @Test
     void whitePawnPromotion(){
         ChessGame gameState = new ChessGame(FEN_WHITE_PAWN_PROMOTION);
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3),
-                new Queen(PlayerColor.WHITE)));
+                new Queen(PlayerColor.WHITE), null));
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3),
-                new Rook(PlayerColor.WHITE)));
+                new Rook(PlayerColor.WHITE), null));
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3),
-                new Bishop(PlayerColor.WHITE)));
+                new Bishop(PlayerColor.WHITE), null));
         whitePawnLegalMoves.add(new PawnPromotionMove(new Position(1,3), new Position(0,3),
-                new Knight(PlayerColor.WHITE)));
+                new Knight(PlayerColor.WHITE), null));
         Collection<Move> computedWhitePawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(1, 3));
         assertEquals(4, computedWhitePawnMoves.size(), "White pawn should have 4 possible promotion moves.");
         assertTrue(whitePawnLegalMoves.containsAll(computedWhitePawnMoves) &&
@@ -198,17 +241,75 @@ public class PawnTests {
         ChessGame gameState = new ChessGame(FEN_BLACK_PAWN_PROMOTION);
         Collection<Move> blackPawnLegalMoves = new ArrayList<>();
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0),
-                new Queen(PlayerColor.BLACK)));
+                new Queen(PlayerColor.BLACK), null));
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0),
-                new Rook(PlayerColor.BLACK)));
+                new Rook(PlayerColor.BLACK), null));
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0),
-                new Bishop(PlayerColor.BLACK)));
+                new Bishop(PlayerColor.BLACK), null));
         blackPawnLegalMoves.add(new PawnPromotionMove(new Position(6,0), new Position(7,0),
-                new Knight(PlayerColor.BLACK)));
+                new Knight(PlayerColor.BLACK), null));
         Collection<Move> computedBlackPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(6, 0));
         assertEquals(4, computedBlackPawnMoves.size(), "Black pawn should have 4 possible promotion moves.");
         assertTrue(blackPawnLegalMoves.containsAll(computedBlackPawnMoves) &&
                 computedBlackPawnMoves.containsAll(blackPawnLegalMoves), "The expected list of moves: " + blackPawnLegalMoves +
                 " is not the same as the produced one: " + computedBlackPawnMoves);
+    }
+
+    @Test
+    void testOnlyOnePawnEnPassantCapturePositionAssociatedWithBlackPawnSkippedPosition(){
+        assertEquals(1, PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(2, 0), PlayerColor.BLACK).size());
+        List<Position> positionsList = new ArrayList<>();
+        positionsList.add(new Position(3, 1));
+        List<Position> preComputedPositionsList = PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(2, 0), PlayerColor.BLACK);
+        assertTrue(preComputedPositionsList.contains(positionsList.get(0)) &&
+                        positionsList.contains(preComputedPositionsList.get(0)),
+                "The preconstructed list " + preComputedPositionsList + " and the computed list " +
+                        positionsList + " do not match.");
+    }
+
+    @Test
+    void testTwoPawnEnPassantCapturePositionsAssociatedWithBlackPawnSkippedPosition(){
+        assertEquals(2, PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(2, 6), PlayerColor.BLACK).size());
+        List<Position> positionsList = new ArrayList<>();
+        positionsList.add(new Position(3, 5));
+        positionsList.add(new Position(3, 7));
+        List<Position> preComputedPositionsList = PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(2, 6), PlayerColor.BLACK);
+        assertTrue(preComputedPositionsList.containsAll(positionsList) &&
+                        positionsList.containsAll(preComputedPositionsList),
+                "The preconstructed list " + preComputedPositionsList + " and the computed list " +
+                        positionsList + " do not match.");
+    }
+
+    @Test
+    void testOnlyOnePawnEnPassantCapturePositionAssociatedWithWhitePawnSkippedPosition(){
+        assertEquals(1, PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(5, 7), PlayerColor.WHITE).size());
+        List<Position> positionsList = new ArrayList<>();
+        positionsList.add(new Position(4, 6));
+        List<Position> preComputedPositionsList = PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(5, 7), PlayerColor.WHITE);
+        assertTrue(preComputedPositionsList.contains(positionsList.get(0)) &&
+                        positionsList.contains(preComputedPositionsList.get(0)),
+                "The preconstructed list " + preComputedPositionsList + " and the computed list " +
+                        positionsList + " do not match.");
+    }
+
+    @Test
+    void testTwoPawnEnPassantCapturePositionsAssociatedWithWhitePawnSkippedPosition(){
+        assertEquals(2, PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(5, 6), PlayerColor.WHITE).size());
+        List<Position> positionsList = new ArrayList<>();
+        positionsList.add(new Position(4, 5));
+        positionsList.add(new Position(4, 7));
+        List<Position> preComputedPositionsList = PseudoLegalPiecesPositionsInitializer.getAttackingPawnsAssociatedWithSkippedPositions(
+                new Position(5, 6), PlayerColor.WHITE);
+        assertTrue(preComputedPositionsList.containsAll(positionsList) &&
+                        positionsList.containsAll(preComputedPositionsList),
+                "The preconstructed list " + preComputedPositionsList + " and the computed list " +
+                        positionsList + " do not match.");
     }
 }

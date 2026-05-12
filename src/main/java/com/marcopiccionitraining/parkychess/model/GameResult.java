@@ -19,6 +19,9 @@ public record GameResult(PlayerColor winner, GameEndReason gameEndReason) {
     @NotNull
     @Override
     public String toString() {
+        if (winner.equals(PlayerColor.UNDETERMINED)){
+            return gameEndReason.toString();
+        }
         return "Winner: " + winner +
                 ", game end reason: " + gameEndReason;
     }

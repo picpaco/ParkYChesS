@@ -12,7 +12,7 @@ public class MoveGeneratorStatistics {
     }
     private final HashMap<String, Long> movesMap;
  //   private final Logger LOGGER = LoggerFactory.getLogger(MoveGeneratorStatistics.class);
-    private final HashMap<Integer, Long> numberOfCapturesPerDepth = new HashMap<>();
+    private final HashMap<Integer, Long> numberOfCapturesPerDepth;
     private long numberOfCaptures;
     private long numberOfEnPassantCaptures;
     private long numberOfChecks;
@@ -24,11 +24,12 @@ public class MoveGeneratorStatistics {
     private long numberOfPromotions;
 
     public MoveGeneratorStatistics(){
+        numberOfCapturesPerDepth = new HashMap<>();
         movesMap = new HashMap<>();
     }
-    public void addMoveNodes(String key, long numNodes){
+    public void addMoveNodes(String key, Long numNodes){
         if (movesMap.containsKey(key)) {
-            long currentValue = movesMap.get(key);
+            Long currentValue = movesMap.get(key);
             currentValue = currentValue + numNodes;
             movesMap.put(key, currentValue);
         } else {
@@ -107,12 +108,12 @@ public class MoveGeneratorStatistics {
     //       return numberOfCapturesPerDepth;
     //   }
 
- //   public long getNumberOfDepthRelatedLeaves(int currentDepth) {
- //       if (movesMap.get((long)currentDepth) == null) {
- //           return 0;
- //       }
- //       return movesMap.get((long)currentDepth);
- //   }
+    public long getNumberOfDepthRelatedLeaves(int currentDepth) {
+        if (movesMap.get(currentDepth) == null) {
+            return 0;
+        }
+        return movesMap.get((long)currentDepth);
+    }
     public void incrementNumberOfCheckmates() {
         numberOfCheckmates++;
       //  LOGGER.trace("Just incremented numberOfCheckmates to {}", numberOfCheckmates);

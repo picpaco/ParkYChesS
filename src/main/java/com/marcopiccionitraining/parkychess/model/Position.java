@@ -54,8 +54,8 @@ public final class Position {
     }
 
     private @NonNull String toAlgebraic() {
-        if (row == -1 && column == -1) {
-            return "--";
+        if (row == -1 || column == -1) {
+            return "OuT";
         }
         StringBuilder algebraicForm = new StringBuilder();
         switch (column) {

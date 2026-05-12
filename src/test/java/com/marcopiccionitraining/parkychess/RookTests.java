@@ -3,6 +3,7 @@ package com.marcopiccionitraining.parkychess;
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
+import com.marcopiccionitraining.parkychess.model.pieces.King;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.Rook;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,11 +31,25 @@ class RookTests {
     }
 
 	@Test
+	void shortCastlingFromFEN_isIncludedInPseudolegalMoves(){
+		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+		ptu = new PerftUtils(gameState);
+		log.debug("Current color after initialization: {}", gameState.getChessboard().getCurrentPlayerColor());
+		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+		King blackKing = (King) gameState.getChessboard().getPiece(0,4);
+		long result = ptu.perft(1, 1, stats);
+		gameState.getChessboard().switchCurrentPlayerColor();
+		Collection<Move> blackKingPseudolegalMoves = blackKing.getPseudoLegalMoves(
+				gameState.getChessboard().getKingPosition(PlayerColor.BLACK), gameState.getChessboard());
+		log.debug("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
+		assertEquals(6, blackKingPseudolegalMoves.size(),"There should be 6 black king pseudolegal moves.");
+		assertEquals(15, gameState.getLegalMovesForColor(PlayerColor.BLACK).size(), "There should be 15 legal moves for Black.");
+		assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
+	}
+	@Test
 	void blackRookHasNotMovedAfterAnyMoveWithUndo(){
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
-        log.debug("After creating chessGame, before creating PerftUtils");
 		ptu = new PerftUtils(gameState);
-        log.debug("Current color after initializing gameState: {}", gameState.getChessboard().getCurrentPlayerColor());
         Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
         log.debug("Current color before invoking perft: {}", gameState.getChessboard().getCurrentPlayerColor());
         assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Before the first move is made, " +
@@ -48,9 +64,7 @@ class RookTests {
 	void blackRookHasNotMovedAfterThreeMovesWithUndoDepth_3(){
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
         ptu = new PerftUtils(gameState);
-        //FENStateString positionState = new FENStateString(gameState);
-        //gameState.getChessboard().getGameStateContainer().push(positionState);
-        Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
 		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Initially, the rook should not be flagged as having already moved.");
 		long result = ptu.perft(3, 3, stats);
 		assertEquals(1197, result, "There should be 1197 legal moves (leaf nodes).");
@@ -61,7 +75,6 @@ class RookTests {
 	void blackRookHasMovedForGoodDepth5(){
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
 		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
-		assertTrue(blackRook.isBlackKingsideRook(), "The rook should be a black kingside rook");
         StandardMove standardRookMove1 = new StandardMove(new Position(0, 7), new Position(1, 7));
 		standardRookMove1.execute(gameState.getChessboard());
 		StandardMove standardRookMove2 = new StandardMove(new Position(1, 7), new Position(2, 7));
@@ -70,7 +83,6 @@ class RookTests {
 		standardRookMove3.execute(gameState.getChessboard());
 		StandardMove standardRookMove4 = new StandardMove(new Position(1, 7), new Position(0, 7));
 		standardRookMove4.execute(gameState.getChessboard());
-		assertTrue(blackRook.isBlackKingsideRookFlaggedAsHavingAlreadyMoved(),"The rook should be flagged as having already moved.");
 	//	assertTrue(blackRook.isFlaggedAsHavingAlreadyMoved(), "The rook should be flagged as having already moved.");
 	}
 
@@ -80,7 +92,7 @@ class RookTests {
 		Rook whiteRook = (Rook) gameState.getChessboard().getPiece (7,7);
 		assertEquals(PlayerColor.WHITE, whiteRook.getColor(), "Rook at square h1 should be white.");
 		assertEquals(PieceNames.ROOK, whiteRook.getName(), "Rook's name should be 'ROOK'");
-		assertEquals("Rh1", whiteRook.toString(), "Rook's name as string should be 'Rh1'");
+		assertEquals("R", whiteRook.toString(), "Rook's name as string should be 'R'");
 	}
 
 	@Test
@@ -89,7 +101,7 @@ class RookTests {
 		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
 		assertEquals(PlayerColor.BLACK, blackRook.getColor(), "Rook at square h8 should be black.");
 		assertEquals(PieceNames.ROOK, blackRook.getName(), "Rook's name should be 'ROOK'");
-		assertEquals("rh8", blackRook.toString(), "Rook's name as string should be 'rh8'");
+		assertEquals("r", blackRook.toString(), "Rook's name as string should be 'r'");
 	}
 
 	@Test
@@ -202,11 +214,11 @@ class RookTests {
 
 	@Test
 	void rookA1PseudoLegalMoves() {
-		ArrayList<Position> allPseudoLegalRookPositions = getPositions();
-		ArrayList<ArrayList<Position>> computedPseudoLegalRookTrajectories =
+		List<Position> allPseudoLegalRookPositions = getPositions();
+		List<List<Position>> computedPseudoLegalRookTrajectories =
 				PseudoLegalPiecesPositionsInitializer.getRookPseudoLegalPositions(new Position(7,0));
-		ArrayList<Position> allComputedPseudoLegalRookPositions = new ArrayList<>();
-		for (ArrayList<Position> rookTrajectory : computedPseudoLegalRookTrajectories) {
+		List<Position> allComputedPseudoLegalRookPositions = new ArrayList<>();
+		for (List<Position> rookTrajectory : computedPseudoLegalRookTrajectories) {
             allComputedPseudoLegalRookPositions.addAll(rookTrajectory);
 		}
 		assertEquals(allPseudoLegalRookPositions.size(), allComputedPseudoLegalRookPositions.size(),
