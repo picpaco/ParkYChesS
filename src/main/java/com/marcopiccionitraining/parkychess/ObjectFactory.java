@@ -5,7 +5,6 @@ import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
 import javafx.scene.ImageCursor;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -66,17 +65,17 @@ public class ObjectFactory {
         return getPieceImage(piece.getColor(), piece.getName());
     }
 
-    public static ImageCursor getWhiteCursor(){
+ /*   public static ImageCursor getWhiteCursor(){
         ImageView imageView = new ImageView(new Image(IMG_DIR + "whiteHandCursor" + IMG_EXTENSION));
         imageView.setFitHeight(25.0);
         imageView.setFitWidth(25.0);
         imageView.setCursor(imageView.getCursor());
         return new ImageCursor(imageView.getImage());
 
-    }
-    public static ImageCursor getBlackCursor(){
+    }*/
+/*    public static ImageCursor getBlackCursor(){
         return new ImageCursor(new Image(IMG_DIR + "blackHandCursor" + IMG_EXTENSION));
-    }
+    }*/
 
     public static Piece getPieceFromFENSymbol(Character pieceSymbol) {
         return switch (pieceSymbol) {

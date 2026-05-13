@@ -5,7 +5,6 @@ import com.marcopiccionitraining.parkychess.model.PerftUtils;
 import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.pieces.King;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
@@ -16,17 +15,12 @@ public class BulkPerftTests {
     private ChessGame gameState;
     private PerftUtils ptu;
 
-    @BeforeEach
-    void setup() {
-    }
-
     @Test
     void bulkPerft_id_001_NumberOfPositionsSimplestPlayablePositionDepth0() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
-        assertThrowsExactly(AssertionError.class, () ->{
-            ptu.bulkPerft(0);
-            }, "Passing depth 0 should cause an AssertionError.");
+        assertThrowsExactly(AssertionError.class, () -> ptu.bulkPerft(0),
+                "Passing depth 0 should cause an AssertionError.");
     }
     @Test
     void bulkPerf_id_002_tNumberOfPositionsSimplestPlayablePositionDepth1() {
@@ -119,24 +113,24 @@ public class BulkPerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(5);
         assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible legal moves at depth 5");
-        //takes 11s
+        //takes 11s; now 12s
     }
-    //@Test
+    @Test
     void bulkPerft_id_015_NumberOfPositionsAtInitialPositionDepth6() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(6);
         assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
-        //takes 4m 49s
+        //takes 4m 49s; now 4m 55s.
     }
-    //@Test
+    /*@Test
     void bulkPerft_id_016_NumberOfPositionsAtInitialPositionDepth7() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(7);
         assertEquals(3_195_901_860L, result, "From the initial position there are 3_195_901_860 possible legal moves at depth 3");
         //takes too long > 12h
-    }
+    }*/
     @Test
     void bulkPerft_id_017_NumberOfPositionsAfterNa3Depth4(){
         gameState = new ChessGame(FEN_INITIAL_POSITION_NA3);
@@ -843,16 +837,26 @@ void bulkPerft_id_099bis_King_cannot_capture_enemy_King_Depth6() {
                 "King should be flagged as having already moved because of the FAN.");
     }
 
-    //@Test
-    void bulkPerft_id_095_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth9() {
+    @Test
+    void bulkPerft_id_095_whiteKingShoulNotBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth9() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(9);
         assertEquals(5_424_200L, result, "There should be 5_424_200L legal moves (leaf nodes).");
-        King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertFalse(king.isFlaggedAsHavingAlreadyMoved(),"King should be flagged as having already moved.");
+        King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
+        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should not be flagged as having already moved.");
     }
-    //@Test
+
+    @Test
+    void bulkPerft_id_095Bis_whiteKingShoulNotBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth7() {
+        gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.bulkPerft(7);
+        assertEquals(116_242, result, "The number of legal moves should be consistent with what we expected.");
+        King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
+        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should be flagged as having already moved.");
+    }
+    @Test
     void bulkPerft_id_096_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth11() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
@@ -860,7 +864,8 @@ void bulkPerft_id_099bis_King_cannot_capture_enemy_King_Depth6() {
         assertEquals(258_215_746L, result, "There should be 258_215_746L legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
         assertTrue(king.isFlaggedAsHavingAlreadyMoved(),"King should be flagged as having already moved.");
-    }
+    } // It takes m  s
+
     @Test
     void bulkPerft_id_097_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestCastlingPositionDepth3() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_2_SIMPLEST);

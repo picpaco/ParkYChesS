@@ -1,8 +1,5 @@
 package com.marcopiccionitraining.parkychess.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 public class MoveGeneratorStatistics {
 
@@ -11,7 +8,6 @@ public class MoveGeneratorStatistics {
         return movesMap;
     }
     private final HashMap<String, Long> movesMap;
- //   private final Logger LOGGER = LoggerFactory.getLogger(MoveGeneratorStatistics.class);
     private final HashMap<Integer, Long> numberOfCapturesPerDepth;
     private long numberOfCaptures;
     private long numberOfEnPassantCaptures;
@@ -38,7 +34,6 @@ public class MoveGeneratorStatistics {
     }
     public void incrementNumberOfEnPassantCaptures(){
         numberOfEnPassantCaptures++;
-    //    LOGGER.debug("Just incremented numberOfEnPassantCaptures to {}", numberOfEnPassantCaptures);
     }
     public void setNumberOfLeaves(long numberOfLeaves) {
         this.numberOfLeaves = numberOfLeaves;

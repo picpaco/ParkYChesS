@@ -6,7 +6,6 @@ import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import com.marcopiccionitraining.parkychess.model.pieces.Rook;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,26 +48,6 @@ public class CastlingMove extends Move {
                 "There should be a king in the from position";
         assert (chessboard.getPiece(rookFromPosition).getName()).equals(PieceNames.ROOK) :
                 "There should be a rook in the rookFrom position";
-     /*   PlayerColor playerColor = chessboard.getCurrentPlayerColor();
-        King king = chessboard.getKing(playerColor);
-        Rook rook;
-        if (chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK)) {
-            if (getName().equals(MoveNames.KINGSIDE_CASTLE)) {
-                rook = (Rook) chessboard.getPiece(0,7);
-            } else {
-                if (getName().equals(MoveNames.QUEENSIDE_CASTLE)) {
-                    rook = (Rook) chessboard.getPiece(0,0);
-                }
-            }
-        } else {
-            if (getName().equals(MoveNames.KINGSIDE_CASTLE)) {
-                rook = (Rook) chessboard.getPiece(7,7);
-            } else {
-                if (getName().equals(MoveNames.QUEENSIDE_CASTLE)) {
-                    rook = (Rook) chessboard.getPiece(7,0);
-                }
-            }
-        } */
         kingStandardMove = new StandardMove (getFrom(), getTo());
         log.info("Executing castling part 1: moving king from {} to {}...", getFrom(), getTo());
         kingStandardMove.execute(chessboard);

@@ -20,6 +20,7 @@ public class PerftTests {
 
     @BeforeEach
     void setup() {
+
         stats = new MoveGeneratorStatistics();
     }
 
@@ -151,7 +152,6 @@ public class PerftTests {
         assertEquals(197_281L, result, "From the initial position there are 197_281 possible positions at depth 4");
         stats.setNumberOfLeaves(result);
         log.info(stats.toString());
-        //takes 1s
     }
 
     @Test
@@ -162,26 +162,26 @@ public class PerftTests {
         stats.setNumberOfLeaves(result);
         log.info(stats.getMovesMap().toString());
         assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible positions at depth 5");
-        //takes 35s
+        //takes 24s
     }
 
-    //@Test
+ /*   @Test
     void perft_id_015_NumberOfPositionsAtInitialPositionDepth6() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
         //takes 4m 49s
-    }
+    }*/
 
-    //@Test
+    /*@Test
     void perft_id_016_NumberOfPositionsAtInitialPositionDepth7() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(7, 7, stats);
         assertEquals(3_195_901_860L, result, "From the initial position there are 3_195_901_860 possible legal moves at depth 3");
         //takes too long > 12h
-    }
+    }*/
 
     @Test
     void perft_id_017_NumberOfPositionsAfterNa3Depth4() {
@@ -669,7 +669,7 @@ f2f3: 23 OK
 g2g3: 23 OK
 h2h3: 23 OK
 a4a5: 22 OK
-c2c4: 24 <----- NOK! ParkyChesS outputs 23 instead. In fact it does not take into account the ep capture b4xc3 after 1. c4.
+c2c4: 24 <----- NOK! ParkyChesS outputs 23 instead. In fact, it does not take into account the ep capture b4xc3 after 1. c4.
 d2d4: 23 OK
 e2e4: 23 OK
 f2f4: 23 OK
@@ -1607,7 +1607,7 @@ e1g1: 32 / OK
     @Test
     void perft_id_099_LosingCastleRights_3_WhiteMovesQueensideDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_0_W_QUEENSIDE_WHITE_D1);
-        log.info("Chessboard: {}", gameState.getChessboard());
+        log.info("Chessboard now: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1,1, stats);
         assertEquals(37, result, "There should be 37 legal moves (leaf nodes).");

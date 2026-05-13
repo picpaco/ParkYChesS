@@ -1,19 +1,12 @@
 package com.marcopiccionitraining.parkychess.model;
 
-import com.marcopiccionitraining.parkychess.model.moves.DoublePawnMove;
-import com.marcopiccionitraining.parkychess.model.moves.EmptyMove;
-import com.marcopiccionitraining.parkychess.model.moves.Move;
 import com.marcopiccionitraining.parkychess.model.moves.MoveNames;
-import com.marcopiccionitraining.parkychess.model.pieces.King;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
-import com.marcopiccionitraining.parkychess.model.pieces.Rook;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Objects;
+
 @Slf4j
 public final class FENStateString {
     @NonNull
@@ -22,7 +15,7 @@ public final class FENStateString {
     public FENStateString(@NonNull PlayerColor playerColor, Board chessboard) {
         addPiecePlacementInfo(chessboard);
         customFENStringImpl.append(' ');
-        if (chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE)) {
+        if (playerColor.equals(PlayerColor.WHITE)) {
             customFENStringImpl.append("w");
         } else {
             customFENStringImpl.append("b");

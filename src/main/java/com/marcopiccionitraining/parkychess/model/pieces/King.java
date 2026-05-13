@@ -39,37 +39,7 @@ public class King extends Piece {
         }
         return true;
     }
-    //TODO: choose between  isCastlingPathFree and areAllPositionsEmpty
- /*   private boolean isCastlingPathFree (@NonNull Position from, @NonNull MoveNames castlingSide, @NonNull Board chessboard) {
-        assert castlingSide.equals(MoveNames.KINGSIDE_CASTLE) || castlingSide.equals(MoveNames.QUEENSIDE_CASTLE) :
-                "There are only two castling sides.";
-        ArrayList<Position> positionsInBetween = new ArrayList<>();
-        if (castlingSide.equals(MoveNames.KINGSIDE_CASTLE)) {
-            positionsInBetween.add(new Position(from.getRow(), 5));
-            positionsInBetween.add(new Position(from.getRow(), 6));
-        }
-        if (castlingSide.equals(MoveNames.QUEENSIDE_CASTLE)) {
-            positionsInBetween.add(new Position(from.getRow(), 1));
-            positionsInBetween.add(new Position(from.getRow(), 2));
-            positionsInBetween.add(new Position(from.getRow(), 3));
-        }
-        for (Position pos : positionsInBetween) {
-            if (!(chessboard.isEmpty(pos))) {
-                log.trace("The castling path made of {} is not free.", positionsInBetween);
-                return false;
-            }
-        }
-        return true;
-    }*/
 
- /*   private boolean isKingPositionCorrectForCastling(PlayerColor color, Board chessboard) {
-        if (color.equals(PlayerColor.BLACK) && ((chessboard.getKingPosition(color).getRow() != 0) ||
-                (chessboard.getKingPosition(color).getColumn() != 4))) {
-            return false;
-        }
-        return (!color.equals(PlayerColor.WHITE)) || ((chessboard.getKingPosition(color).getRow() == 7)
-                && (chessboard.getKingPosition(color).getColumn() == 4));
-    }*/
     /** 1. A king move is 'pseudolegal' if all the following conditions are true:
      * 1.1 The king move is within the chessboard,
      * 1.2 It is moving to an empty square, or

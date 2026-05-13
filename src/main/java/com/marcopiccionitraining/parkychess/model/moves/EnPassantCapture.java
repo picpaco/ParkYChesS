@@ -2,7 +2,6 @@ package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.pieces.Pawn;
-import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.Getter;
 import lombok.NonNull;
@@ -65,9 +64,6 @@ public class EnPassantCapture extends Move{
      //   new StandardMove(getFrom(), getTo()).execute(chessboard);
         capturedPawn = (Pawn) chessboard.getPiece(capturedPawnGhostPosition);
         assert capturedPawn != null : "The pawn to capture must exist on " + capturedPawnGhostPosition;
-   //     if (!(chessboard.getGameStateContainer().isEmpty())) {
-   //         chessboard.getGameStateContainer().peek().setCapturedPiece(capturedPawn);
-   //     }
         chessboard.setPiece(chessboard.getPiece(getFrom()), getTo());
         assert (!(chessboard.isEmpty(getTo()))) : "The piece just set must exist.";
         chessboard.setEmpty(getFrom());
@@ -83,14 +79,7 @@ public class EnPassantCapture extends Move{
         assert chessboard.isEmpty(getFrom()) : "The from position must be empty,";
         assert !(chessboard.isEmpty(getTo())) : "The to position must contain a piece.";
         assert chessboard.getPiece(getTo()).getName().equals(PieceNames.PAWN) : "There must be a pawn on the to position";
-     //   assert getFrom().equals(oldGameState.getPawnSkipSquare()) : "The from position of the current move: " +
-     //           getFrom() + " and the one saved in oldGameState: " + oldGameState.getPawnSkipSquare() + " should be the same.";
-    //    chessboard.setPiece(chessboard.getPiece(oldGameState.getPawnSkipSquare()), getFrom());
-    /*    Position capturedGhostPawnSquare = oldGameState.getCapturedGhostPawnSquare();
-        chessboard.setPiece(oldGameState.getCapturedPiece(), capturedGhostPawnSquare);
-        chessboard.setEmpty(oldGameState.getPawnSkipSquare());
-        log.debug("I have just set position {} to empty", oldGameState.getPawnSkipSquare());
-        */
+
         chessboard.setPiece(capturedPawn, capturedPawnGhostPosition);
         chessboard.setPiece(chessboard.getPiece(getTo()), getFrom());
         chessboard.setEmpty(getTo());

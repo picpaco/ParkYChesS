@@ -2,7 +2,6 @@ package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.pieces.Pawn;
-import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.Getter;
 import lombok.NonNull;
@@ -70,13 +69,9 @@ public class DoublePawnMove extends Move {
 
     @Override
     public void undo (@NonNull Board chessboard) {
-        //   Piece piece = chessboard.getPiece(oldGameState.getLastExecutedMove().getTo());
         Pawn pawn = (Pawn) chessboard.getPiece(getTo());
-        //   chessboard.setPiece(pawn, oldGameState.getLastExecutedMove().getFrom());
-        //   chessboard.setEmpty(oldGameState.getLastExecutedMove().getTo());
         chessboard.setPiece(pawn, getFrom());
         chessboard.setEmpty(getTo());
         chessboard.setSkippedPawnPosition(chessboard.getCurrentPlayerColor(), skippedPawnPosition);
-     //   pawn.setHasJustMovedTwoSteps(false);
     }
 }

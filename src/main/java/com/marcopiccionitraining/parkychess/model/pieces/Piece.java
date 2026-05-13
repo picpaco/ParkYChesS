@@ -23,7 +23,6 @@ public abstract class Piece {
     @Getter @Setter
     private boolean isFlaggedAsHavingAlreadyMoved;
 
-
     public Piece (PlayerColor color) {
         assert color != null : "Player color cannot be null";
         this.color = color;
@@ -31,8 +30,7 @@ public abstract class Piece {
 
     public abstract Piece copy();
 
-    //TODO: Decide if it is better to use the argument 'from' evertwhere or
-    // to have pieces store their own position.
+    //TODO: Is it better to add the argument 'from' everywhere or to have pieces store their own position?
     public abstract List<Move> getPseudoLegalMoves(Position from, Board chessboard);
 
     public boolean canCaptureOpponentKing(@NonNull Position from, @NonNull Board chessboard){
@@ -51,23 +49,8 @@ public abstract class Piece {
             }
             Piece piece = chessboard.getPiece(move.getTo());
             assert !(piece.getColor().equals(chessboard.getPiece(from).getColor())) :
-                    "The piece located at the to position has to be of opposite color " +
-                            "with respect to the piece located at the from position";
-           //TODO: Check if the following loc is needed
-         //   if (!(piece.isPinned(from, chessboard))) {
-                if (piece.getName().equals(PieceNames.KING)) {
-                    return true;
-                }
-       //     }
-        }
-        return false;
-    }
-
-    public final boolean isPinned(@NonNull Position friendlyKingPosition, @NonNull Board chessboard) {
-        List<Position> enemyPiecesPositions = chessboard.getPiecesPositionsForColor(PlayerColor.getOpponentColor(getColor()));
-        for (Position enemyPos : enemyPiecesPositions){
-            Piece piece = chessboard.getPiece(enemyPos);
-            if (piece.canCaptureOpponentKing(friendlyKingPosition, chessboard)){
+                    "Piece at 'to' position must be of opposite color with respect to piece at from position";
+            if (piece.getName().equals(PieceNames.KING)) {
                 return true;
             }
         }
@@ -79,7 +62,6 @@ public abstract class Piece {
         if (this == obj) return true;
         if (!(obj instanceof Piece piece)) return false;
         return hashCode() == piece.hashCode();
-     //   return playerColor.equals(piece.playerColor) && name.toString().equals(piece.name.toString());
     }
 
     @Override

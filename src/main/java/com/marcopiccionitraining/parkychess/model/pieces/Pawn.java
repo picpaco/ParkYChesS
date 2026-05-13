@@ -16,8 +16,6 @@ public class Pawn extends Piece {
 
     private final Direction forward;
 
-    private PawnPromotionMove pawnPromotionMove;
-
     public Pawn (PlayerColor playerColor) {
         super(playerColor);
         if (playerColor.equals(PlayerColor.BLACK)) {

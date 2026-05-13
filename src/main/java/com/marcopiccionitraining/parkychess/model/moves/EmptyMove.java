@@ -1,7 +1,6 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.Board;
-import com.marcopiccionitraining.parkychess.model.FENStateString;
 import com.marcopiccionitraining.parkychess.model.Position;
 import lombok.NonNull;
 

@@ -1,14 +1,11 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.Board;
-import com.marcopiccionitraining.parkychess.model.PlayerColor;
 import com.marcopiccionitraining.parkychess.model.Position;
 import com.marcopiccionitraining.parkychess.model.pieces.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.marcopiccionitraining.parkychess.model.pieces.PieceNames.*;
 
 @Slf4j
 public class PawnPromotionMove extends Move {
@@ -19,7 +16,7 @@ public class PawnPromotionMove extends Move {
     @Getter
     private Piece capturedPiece = null;
 
-    //TODO Try varargs here below.
+    //TODO Try varargs here:
     public PawnPromotionMove (@NonNull Position from, @NonNull Position to,
                               @NonNull Piece promotionPiece, Piece capturedPiece){
         setFrom(from);
@@ -31,30 +28,17 @@ public class PawnPromotionMove extends Move {
         }
     }
 
-    private Piece getPromotionPiece (PieceNames pieceName, PlayerColor playerColor, Board chessboard) {
-        return switch (pieceName) {
-            case QUEEN -> new Queen(playerColor);
-            case KNIGHT -> new Knight(playerColor);
-            case ROOK -> new Rook(playerColor);
-            case BISHOP -> new Bishop(playerColor);
-            case PAWN -> new Pawn(playerColor);
-            default -> throw new RuntimeException("Unexpected piece string representation");
-        };
-    }
-
     @Override
     public boolean execute (Board chessboard) {
         assert chessboard.getPiece(getFrom()).getName().equals(PieceNames.PAWN);
+    //    promotionPiece = getPromotionPiece();
         chessboard.setEmpty(getFrom());
         if (!chessboard.isEmpty(getTo())) {
             capturedPiece = chessboard.getPiece(getTo());
             log.info("I have just saved the captured piece {}.", capturedPiece);
-            promotionPiece.setFlaggedAsHavingAlreadyMoved(true);
-            chessboard.setPiece(promotionPiece, getTo());
-        } else {
-            promotionPiece.setFlaggedAsHavingAlreadyMoved(true);
-            chessboard.setPiece(promotionPiece, getTo());
         }
+        promotionPiece.setFlaggedAsHavingAlreadyMoved(true);
+        chessboard.setPiece(promotionPiece, getTo());
         log.info("Chessboard after executing {}: {}.", this, chessboard);
         return true;
     }
@@ -63,8 +47,7 @@ public class PawnPromotionMove extends Move {
         public void undo (@NonNull Board chessboard) {
             assert chessboard.isEmpty(getFrom()) : "The 'from' position "  + getFrom() + "should be empty.";
             assert !(chessboard.isEmpty(getTo())) : "On the 'to' position "  + getTo() + "there should be a piece.";
-            Pawn oldNewPawn = (Pawn) getPromotionPiece(PieceNames.PAWN, chessboard.getCurrentPlayerColor(), chessboard);
-            chessboard.setPiece(oldNewPawn, getFrom());
+            chessboard.setPiece(new Pawn(chessboard.getCurrentPlayerColor()), getFrom());
             log.info("I have put back the promoting pawn on {}", getFrom());
             if (capturedPiece != null) {
                 chessboard.setPiece(capturedPiece, getTo());

@@ -2,12 +2,9 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j

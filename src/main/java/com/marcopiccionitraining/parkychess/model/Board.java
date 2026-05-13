@@ -27,7 +27,7 @@ public class Board {
     /**
      * Default max depth search.
      */
-    public static final int MAX_DEPTH = 10;
+    public static final int MAX_DEPTH = 14;
 
     /**
      * Internal representation of the current chessboard as an array of arrays of squares.
@@ -184,7 +184,6 @@ public class Board {
      * @return a list containing all the board positions with pieces having playerColor.
      */
     public List<Position> getPiecesPositionsForColor(PlayerColor playerColor) {
-        List<Position> allPiecesPositions = getPiecesPositions();
         List<Position> filteredPiecesPositions = new ArrayList<>();
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
@@ -216,10 +215,7 @@ public class Board {
     }
 
     public boolean isPlayerInDoubleCheck(PlayerColor playerColor) {
-        if (checkingPieces.size() == 2){
-            return true;
-        }
-        return false;
+        return isPlayerInCheck(playerColor) && checkingPieces.size() == 2;
     }
 
     /**
@@ -279,9 +275,7 @@ public class Board {
         return boardCopy;
     }
 
-    public void flip() {
-        //TODO implement me
-    }
+  /*  public void flip() {//TODO implement me}*/
 
     public PieceCounter getPiecesCounter() {
         PieceCounter counter = new PieceCounter();
@@ -380,64 +374,8 @@ public class Board {
         if (!king.getName().equals(PieceNames.KING) || !rook.getName().equals(PieceNames.ROOK)) {
             return false;
         }
-        //log.debug("Piece at kingInitialPosition: {}", king);
-        //assert king.getName().equals(PieceNames.KING) : "There should be a king on " + kingInitialPosition;
-        //log.debug("Piece at rookInitialPosition: {}", rook);
-        //assert rook.getName().equals(PieceNames.ROOK) : "There should be a rook on " + rookInitialPosition;
         return !king.isFlaggedAsHavingAlreadyMoved() && !rook.isFlaggedAsHavingAlreadyMoved();
     }
-
-  /*  private List<Pawn> getPawnsInPositionForCapturingEnPassant(@NonNull PlayerColor playerColor,
-                                                               @NonNull Position skippedPosition) {
-        List<Pawn> readyForEnPassantPawns = new ArrayList<>();
-        List<Position> possibleAttackersPositions = PseudoLegalPiecesPositionsInitializer.
-                getAttackingPawnsAssociatedWithSkippedPositions(skippedPosition, playerColor);
-        for (Position attackingPiecefromPosition : possibleAttackersPositions) {
-            Piece piece = getPiece(attackingPiecefromPosition);
-            if (isEmpty(attackingPiecefromPosition)) {
-                continue;
-            }
-            if (!(piece.getColor().equals(playerColor))) {
-                continue;
-            }
-            if (!(piece.getName().equals(PieceNames.PAWN))){
-                continue;
-            }
-            Pawn pawn = (Pawn) piece;
-            readyForEnPassantPawns.add(pawn);
-        }
-        return readyForEnPassantPawns;
-    }*/
-//-----------------------------------------------------------------
- /* public bool CanCaptureEnPassant(Player player){
-      Position skipPos = GetPawnSkipPosition(player.Opponent());
-      if (skipPos == null){
-          return false;
-      }
-      Position[] pawnPositions = player switch{
-          Player.White => new Position[] { skipPos + Direction.SouthWest, skipPos + Direction.SouthEast },
-          Player.Black => new Position[] { skipPos + Direction.NorthWest, skipPos + Direction.NorthEast },
-                     _ => Array.Empty<Position>()
-      };
-      return HasPawnInPosition(player, pawnPositions, skipPos);
-  }
-
-   private bool HasPawnInPosition(Player player, Position[] pawnPositions, Position skipPos){
-            foreach (Position pos in pawnPositions.Where(IsInside)){
-                Piece piece = this[pos];
-                if (piece == null || piece.Color != player || piece.Type != PieceType.Pawn){
-                    continue;
-                }
-                EnPassant move = new EnPassant(pos, skipPos);
-                if (move.IsLegal(this)){
-                    return true;
-                }
-            }
-            return false;
-        }*/
-  /// //////////////////////////////////////////////////////////////////////////
-
-
 
     public boolean canCaptureEnPassant(@NonNull PlayerColor playerColor) {
         Position skippedPosition = getPawnSkippedPosition(PlayerColor.getOpponentColor(playerColor));
