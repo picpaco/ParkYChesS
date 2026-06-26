@@ -1,6 +1,8 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.*;
+import com.marcopiccionitraining.parkychess.model.pieces.Piece;
+import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -16,13 +18,22 @@ public abstract class Move implements Command {
     private @NonNull Position to;
     @Getter @Setter
     private MoveNames name;
+    @Getter @Setter
+    private Piece capturedPiece;
 
-    public boolean isLegal (@NonNull Board chessboard){
+
+    public boolean isLegal (@NonNull Board chessboard){//, LocalGameState localGameState) {
+        assert chessboard.getPiece(from) != null : "There must be a piece on the from square.";
         PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
-        execute(chessboard);
-        boolean isMoveLegal = !(chessboard.isPlayerInCheck(playerColorOfPieceToMove));
-        log.debug("Is move {} Legal? {}", this, (isMoveLegal ? "Yes." : "No."));
-        return isMoveLegal;
+        Board chessboardCopy = chessboard.copy();
+        LocalGameState dummyLocalGameState = new LocalGameState();
+        execute(chessboardCopy);//, dummyLocalGameState);
+        log.debug("Chessboard copy: {} Captured piece: {}", chessboardCopy, capturedPiece);
+        boolean wasEnemyKingCaptured = (capturedPiece != null) &&
+                (capturedPiece.getName().equals(PieceNames.KING)) &&
+                (capturedPiece.getColor().equals(PlayerColor.getOpponentColor(playerColorOfPieceToMove)));
+        return (!(chessboardCopy.isPlayerInCheck(playerColorOfPieceToMove)) &&
+                !(wasEnemyKingCaptured));
     }
 
     @Override
@@ -42,7 +53,7 @@ public abstract class Move implements Command {
         return "" + from + to;
     }
 
-    public abstract boolean execute (Board chessboard);
+    public abstract boolean execute (Board chessboard);//, LocalGameState localGameState);
 
-    public abstract void undo (Board chessboard);
+    public abstract void undo (Board chessboard, LocalGameState localGameState);
 }

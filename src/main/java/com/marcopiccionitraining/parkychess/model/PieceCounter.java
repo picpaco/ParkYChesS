@@ -24,26 +24,28 @@ public class PieceCounter {
         whitePiecesCounter.put(PieceNames.BISHOP, 0);
         whitePiecesCounter.put(PieceNames.QUEEN, 0);
         whitePiecesCounter.put(PieceNames.KING, 0);
-        assert checkInvariant() : "Class invariant failure. Total number of pieces is wrong or there is some wrong key or value.";
+        assert checkInvariant() : "Class invariant failure. Total number of pieces is wrong: " + totalNumberOfPieces + " is wrong or there is some wrong key or value.";
     }
 
-    public void incrementNumberOfPiecesForColor (PlayerColor playerColor, PieceNames pieceKey){
-        if (playerColor.equals(PlayerColor.BLACK)){
-            blackPiecesCounter.put(pieceKey, blackPiecesCounter.get(pieceKey) + 1);
+    public void incrementNumberOfPiecesForColor (PlayerColor color, PieceNames pieceKey){
+        if (color.equals(PlayerColor.BLACK)){
+            Integer blackPiecesCount = blackPiecesCounter.get(pieceKey);
+            int incrementedValue = blackPiecesCount + 1;
+            blackPiecesCounter.put(pieceKey, incrementedValue);
         } else {
-            if (playerColor.equals(PlayerColor.WHITE)) {
-                whitePiecesCounter.put(pieceKey, whitePiecesCounter.get(pieceKey) + 1);
-            }
+            Integer whitePiecesCount = whitePiecesCounter.get(pieceKey);
+            int incrementedValue = whitePiecesCount + 1;
+            whitePiecesCounter.put(pieceKey, incrementedValue);
         }
         totalNumberOfPieces++;
-        assert checkInvariant() : "Class invariant failure. Total number of pieces is wrong or there is some wrong key or value.";
+        assert checkInvariant() : "Class invariant failure. Total number of pieces is wrong: " + totalNumberOfPieces + " is wrong or there is some wrong key or value.";
     }
-    public int getBlackNumberOfPiecesNamed(PieceNames pieceNames){
-        return blackPiecesCounter.get(pieceNames);
+    public int getNumberOfBlackPiecesNamed(PieceNames pieceName){
+        return blackPiecesCounter.get(pieceName);
     }
 
-    public int getWhiteNumberOfPiecesNamed(PieceNames pieceNames){
-        return whitePiecesCounter.get(pieceNames);
+    public int getNumberOfWhitePiecesNamed(PieceNames pieceName){
+        return whitePiecesCounter.get(pieceName);
     }
 
     @Override

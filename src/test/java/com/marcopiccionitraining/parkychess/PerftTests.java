@@ -20,12 +20,11 @@ public class PerftTests {
 
     @BeforeEach
     void setup() {
-
         stats = new MoveGeneratorStatistics();
     }
 
     @Test
-    void perft_id_001_NumberOfPositionsSimplestPlayablePositionDepth0() {
+    void perft_id_0010_NumberOfPositionsSimplestPlayablePositionDepth0() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(0, 0, stats);
@@ -35,7 +34,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_002_NumberOfPositionsSimplestPlayablePositionDepth1() {
+    void perft_id_0020_NumberOfPositionsSimplestPlayablePositionDepth1() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
@@ -45,7 +44,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_003_NumberOfPositionsSimplestPlayablePositionDepth2() {
+    void perft_id_0030_NumberOfPositionsSimplestPlayablePositionDepth2() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
@@ -55,7 +54,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_004_oneBlackOneWhitePawnAtHomeDepth1() {
+    void perft_id_0040_oneBlackOneWhitePawnAtHomeDepth1() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
@@ -65,7 +64,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_005_oneBlackOneWhitePawnAtHomeDepth2() {
+    void perft_id_0050_oneBlackOneWhitePawnAtHomeDepth2() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
@@ -75,7 +74,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_006_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth1() {
+    void perft_id_0060_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth1() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE_ON_ADJACENT_COLUMNS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
@@ -85,7 +84,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_007_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth2() {
+    void perft_id_0070_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth2() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE_ON_ADJACENT_COLUMNS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
@@ -95,7 +94,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_008_twoBlackTwoWhitePawnsAllAtHomeDepth1() {
+    void perft_id_0080_twoBlackTwoWhitePawnsAllAtHomeDepth1() {
         gameState = new ChessGame(FEN_TWO_BLACK_TWO_WHITE_PAWNS_AT_STARTING_SQUARE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
@@ -105,7 +104,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_009_twoBlackTwoWhitePawnsAllAtHomeDepth2() {
+    void perft_id_0090_twoBlackTwoWhitePawnsAllAtHomeDepth2() {
         gameState = new ChessGame(FEN_TWO_BLACK_TWO_WHITE_PAWNS_AT_STARTING_SQUARE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
@@ -115,7 +114,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_010_NumberOfPositionsAtInitialPositionDepth1() {
+    void perft_id_0100_NumberOfPositionsAtInitialPositionDepth1() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
@@ -125,7 +124,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_011_NumberOfPositionsAtInitialPositionDepth2() {
+    void perft_id_0110_NumberOfPositionsAtInitialPositionDepth2() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
@@ -135,7 +134,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_012_NumberOfPositionsAtInitialPositionDepth3() {
+    void perft_id_0120_NumberOfPositionsAtInitialPositionDepth3() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
@@ -145,7 +144,7 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_013_NumberOfPositionsAtInitialPositionDepth4() {
+    void perft_id_0130_NumberOfPositionsAtInitialPositionDepth4() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
@@ -155,24 +154,28 @@ public class PerftTests {
     }
 
     @Test
-    void perft_id_014_NumberOfPositionsAtInitialPositionDepth5() {
+    void perft_id_0140_NumberOfPositionsAtInitialPositionDepth5() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible positions at depth 5");
-        //takes 24s
+        stats.getMovesMapAsString(gameState.getChessboard().getCurrentPlayerColor());
+        assertEquals(4_865_609L, result,"The computed result does not match the expected one.");
+        //takes 23-40s
     }
 
- /*   @Test
-    void perft_id_015_NumberOfPositionsAtInitialPositionDepth6() {
+    //FIXME-test below runs for too long: goes in OutOfMemoryError after 41m 25s
+    //@Test
+    void perft_id_0150_NumberOfPositionsAtInitialPositionDepth6() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
-        assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
-        //takes 4m 49s
-    }*/
+        stats.setNumberOfLeaves(result);
+        log.info("{} moves map: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMovesMapAsString(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(119_060_324L, result, "The number of expected legsl moves does not match the produced one.");
+        //takes 4m 49s -
+    }
 
     /*@Test
     void perft_id_016_NumberOfPositionsAtInitialPositionDepth7() {
@@ -189,7 +192,8 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(198_572L, result, "From the initial position there are 198_572 possible positions at depth 4");
     }
 
@@ -199,8 +203,10 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(402_988L, result, "From the initial position there are 402_988 possible positions at depth 4");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(402_988L, result,
+                "From the initial position there are 402_988L possible positions at depth 4");        assertEquals(402_988L, result, "From the initial position there are 402_988 possible positions at depth 4");
     }
 
     @Test
@@ -209,7 +215,8 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(23_960L, result, "From the initial position there are 23_960L possible positions at depth 3");
     }
 
@@ -219,7 +226,9 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                //FIXME
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(1_111L, result, "From the initial position there are 1_111L possible positions at depth 2");
     }
 
@@ -229,7 +238,8 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(168L, result, "From the initial position there are 168 possible positions at depth 2");
     }
 
@@ -239,7 +249,8 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(34L, result, "From the initial position there are 34 possible positions at depth 1");
     }
 
@@ -249,8 +260,10 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(5_363_555L, result, "From the initial position there are 5_363_555 possible positions at depth 5");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(5_363_555L, result,
+                "From the initial position there are 5_363_555 possible positions at depth 5");
     /*
      --Stockfish-vs. ParkyChesS----------------------------------------------------------------
     a7a6: 198827 OK
@@ -284,8 +297,10 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(244_282L, result, "From the initial position there are 244_282 possible positions at depth 4");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(244_282L, result,
+                "From the initial position there are 244_282 possible positions at depth 4");
     }
 
     @Test
@@ -294,8 +309,10 @@ public class PerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(10_292L, result, "From the initial position there should be 10_292 possible positions at depth 3");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(10_292L, result,
+                "From the initial position there should be 10_292 possible positions at depth 3");
     }/* Stockfish vs. ParkyChesS:
 c6c5: 463 vs 463 OK
 a7a6: 399 vs 399 OK
@@ -322,44 +339,84 @@ Nodes searched: 10292 vs 10271
 */
 
     @Test
-    void perft_id_025_bis_NumberOfPositionsAfter_a4_c6_a5_b5Depth2() {
+    void perft_id_025_bis_NumberOfPositionsAfter_a4_c6_a5_b5_Depth2() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_C6_A5_B5);
+        log.error("Chessboard just set: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(483, result, "From the initial position there should be 483 possible positions at depth 3");
-    } /* Stockfish vs. ParkyChess:
-{a5a6=20, h2h3=21, h2h4=21, b2b3=21, b1a3=21, c2c4=22, a1a2=21, a1a3=21, b2b4=20, a1a4=22, d2d4=21, c2c3=21,
-e2e4=21, b1c3=21, d2d3=21, e2e3=21, f2f4=21, f2f3=21, g2g4=21, g2g3=21, g1f3=21, g1h3=21}
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(483, result,
+                "The number of possible moves does not match the expected one.");
+    } /* Stockfish vs. ParkyChess: 483 vs 482
+b2b3: 21 ok
+c2c3: 21 ok
+d2d3: 21 ok
+e2e3: 21 ok
+f2f3: 21 ok
+g2g3: 21 ok
+h2h3: 21 ok
+a5a6: 20 ok
+b2b4: 20 nok (21) After executing b2b4, Black generates the 20 correct moves at depth 1.
+The generated moves are: a7a6, b8a6, c8b7, c8a6, d8c7, d8b6, d8a5, c6c5, d7d6, d7d5,
+ e7e6, e7e5, f7f6, f7f5, g7g6, g7g5, h7h6, h7h5, g8f6, g8h6, plus it generates ???,
+  which is incorrect.
+c2c4: 22 nok (21) After executing c2c4, at depth 1 Black generates one less move.
+The 22 moves generated by Stockfish are: a7a6, b5b4, b5c4, b8a6, c8b7, c8a6, d8c7, d8b6, d8a5, c6c5,
+d7d6, d7d5, e7e6, e7e5, f7f6, f7f5, g7g6, g7g5, h7h6, h7h5, g8f6, g8h6.
+ It seems that the move not generated b5b4.
 
-    b2b3: 21 OK
-    c2c3: 21 OK
-    d2d3: 21 OK
-    e2e3: 21 OK
-    f2f3: 21 OK
-    g2g3: 21 OK
-    h2h3: 21 OK
-    a5a6: 20 OK
-    b2b4: 20 OK
-    c2c4: 22 OK
-    d2d4: 21 OK
-    e2e4: 21 OK
-    f2f4: 21 OK
-    g2g4: 21 OK
-    h2h4: 21 OK
-    a5b6: 21 MISSING
-    b1a3: 21 OK
-    b1c3: 21 OK
-    g1f3: 21 OK
-    g1h3: 21 OK
-    a1a2: 21 OK
-    a1a3: 21 OK
-    a1a4: 22 OK
+d2d4: 21 ok
+e2e4: 21 ok
+f2f4: 21 ok
+g2g4: 21 ok
+h2h4: 21 ok
+a5b6: 21 ok
+b1a3: 21 ok
+b1c3: 21 ok
+g1f3: 21 ok
+g1h3: 21 ok
+a1a2: 21 ok
+a1a3: 21 ok
+a1a4: 22 nok (21) After executing Ra1a4, Black generates the correct moves at depth 1.
+It must then be a move at depth 2 that is not generated
+*/
+    @Test
+    void perft_id_025_ter_NumberOfPositionsAfter_a4_c6_a5_b5_Ra4_Depth1() {
+        gameState = new ChessGame(FEN_POSITION_AFTER_A4_C6_A5_B5_RA4);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(1, 1, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(22, result,
+                "The number of possible moves does not match the expected one.");
+    }
 
-Nodes searched: 483 vs 462
-    */
+    @Test
+    void perft_id_025_quater_NumberOfPositionsAfter_a4_c6_a5_b5_b4_Depth1() {
+        gameState = new ChessGame(FEN_POSITION_AFTER_A4_C6_A5_B5_B4);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(1, 1, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(20, result,
+                "The number of possible moves does not match the expected one.");
+    }
 
+    @Test
+    void perft_id_025_quinquies_NumberOfPositionsAfter_a4_c6_a5_b5_c4_Depth1() {
+        gameState = new ChessGame(FEN_POSITION_AFTER_A4_C6_A5_B5_C4);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(1, 1, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(22, result,
+                "The number of possible moves does not match the expected one.");
+    }
     @Test
     void perft_id_026_NumberOfPositionsAfter_a4_e5Depth4() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_E5);
@@ -367,8 +424,10 @@ Nodes searched: 483 vs 462
         log.debug("Current situation: {}", gameState.getChessboard());
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(447_849L, result, "From the initial position there are 447_849 possible positions at depth 4");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(447_849L, result,
+                "From the initial position there are 447_849 possible positions at depth 4");
     /* Stockfish vs ParkyChesS:
     +++++++++++++++++++++++++
     {h2h3=18365, h2h4=20289, a4a5=18978,
@@ -435,9 +494,11 @@ Nodes searched: 447849
         log.debug("Current chessboard: {}", gameState.getChessboard());
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(3386, result, "The expected number of leaf nodes does not match the computed one.");
     }
+
     /*
     a4a5: 407
     d4d5: 283
@@ -455,7 +516,8 @@ Nodes searched: 3386
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(28_212L, result, "From the initial position there are 28_212 possible positions at depth 3");
     }
 
@@ -465,7 +527,8 @@ Nodes searched: 3386
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(28_212L, result, "From the initial position there are 28_212 possible positions at depth 3");
     /* Stockfish vs ParkyChesS (Nodes searched: 28212):
     e5e4: 835 OK
@@ -508,8 +571,10 @@ Nodes searched: 3386
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(20448, result, "From the initial position there are 20448 possible positions at depth 3");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(20448, result,
+                "From the initial position there are 20448 possible positions at depth 3");
     /* Stockfish vs ParkyChesS (Nodes searched: 20448 vs. 20448 ok):
 e5e4: 599
 a7a6: 654
@@ -545,6 +610,7 @@ e8e7: 542
 Nodes searched: 20448
      */
     }
+
     @Test
     void perft_id_027Ter_NumberOfPositionsAfter_a4_e5_d4_ke7Depth2() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_E5_D4_KE7);
@@ -552,8 +618,10 @@ Nodes searched: 20448
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(722, result, "From the initial position there are 722 possible positions at depth 3");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(722, result,
+                "From the initial position there are 722 possible positions at depth 3");
     /* Stockfish vs ParkyChesS (Nodes searched: 722):
     b2b3: 25 OK
     c2c3: 25 OK
@@ -594,35 +662,41 @@ Nodes searched: 20448
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(257_893L, result, "From the initial position there are 257_893 possible positions at depth 4");
     }
+
     @Test
     void perft_id_029_NumberOfPositionsAfter_a4_Nc6_a5Depth3() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_NC6_A5);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(10_729L, result, "From the initial position there are 10_729 possible positions at depth 3");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));        assertEquals(10_729L, result, "From the initial position there are 10_729 possible positions at depth 3");
     }
+
     @Test
     void perft_id_030_NumberOfPositionsAfter_a4_a5Depth4() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(204_508L, result, "From the initial position there are 204_508 possible positions at depth 4");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));        assertEquals(204_508L, result, "From the initial position there are 204_508 possible positions at depth 4");
     }
+
     @Test
     void perft_id_031_NumberOfPositionsAfter_a4_a5_b4Depth3() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(10_798L, result, "From the initial position there are 10_798 possible positions at depth 3");
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(10_798L, result,
+                "From the initial position there are 10_798 possible positions at depth 3");
     /*
     ParkyChesS: moves map for BLACK at depth 3: {a8a6=592, a8a7=460, b8c6=505, b7b6=483, b7b5=486, b8a6=481, c7c6=462,
     d7d5=636, a5b4=487, c7c5=523, d7d6=613, e7e5=661, h7h5=482, e7e6=660, h7h6=438, g8f6=504, f7f6=438, f7f5=461,
@@ -652,16 +726,27 @@ a8a7: 460 OK
 Nodes searched: 10798
      */
     }
+
     @Test
     void perft_id_032_NumberOfPositionsAfter_a4_a5_b4_a5xb4Depth2() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_A5XB4);
         ptu = new PerftUtils(gameState);
+        assertEquals(PlayerColor.WHITE, gameState.getChessboard().getCurrentPlayerColor(),
+                "Current player color should be " + gameState.getChessboard().getCurrentPlayerColor());
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
-        assertEquals(488, result, "From the initial position there are 488 possible positions at depth 2");
+        log.error("\nFinal moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                (gameState.getChessboard().getCurrentPlayerColor().equals(PlayerColor.WHITE)) ?
+                        stats.getMovesMapAsString(PlayerColor.BLACK) : stats.getMovesMapAsString(PlayerColor.WHITE));
+                //stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()).toString());
+        assertEquals(488, result, "The number of leaf positions does not match the expected one.");
     /* ParkyChesS moves map for WHITE at depth 2: {h2h3=23, h2h4=23, a4a5=22, b1a3=24, c2c4=23, a1a2=23, c1a3=24, a1a3=24,
     d2d4=23, c2c3=24, e2e4=23, b1c3=24, d2d3=23, c1b2=23, e2e3=23, f2f4=23, f2f3=23, g2g4=23, g2g3=23, g1f3=23, g1h3=23}
+{h2h3=23, h2h4=23, a4a5=22, b1a3=24, c2c4=23, a1a2=23, c1a3=24, a1a3=24, d2d4=23, c2c3=24, e2e4=23, b1c3=24, d2d3=23,
+c1b2=23, e2e3=23, f2f4=23, f2f3=23, g2g4=23, g2g3=23, g1f3=23, g1h3=23}
+
+
+
 c2c3: 24 OK
 d2d3: 23 OK
 e2e3: 23 OK
@@ -684,43 +769,74 @@ c1a3: 24 OK
 a1a2: 23 OK
 a1a3: 24 OK
 Nodes searched: 488
+c2c3: 24
+d2d3: 23
+e2e3: 23
+f2f3: 23
+g2g3: 23
+h2h3: 23
+a4a5: 22
+c2c4: 24
+d2d4: 23
+e2e4: 23
+f2f4: 23
+g2g4: 23
+h2h4: 23
+b1a3: 24
+b1c3: 24
+g1f3: 23
+g1h3: 23
+c1b2: 23
+c1a3: 24
+a1a2: 23
+a1a3: 24
+
+Nodes searched: 488
  */
     }
+
     @Test
     void perft_id_033_NumberOfPositionsAfter_a4_a5_b4_a5xb4_c4Depth1() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_A5XB4_C4);
-        log.debug("Position: {}", gameState.getChessboard());
+        log.error("Position: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.debug("Moves map: {}", stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(5, result, "From the initial position there are 5 possible positions at depth 1");
     }
+
     @Test
     void perft_id_034_NumberOfPositionsAfter_a4_a5_b4_ra6Depth2() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_RA6);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(592L, result, "From the initial position there are 592 possible positions at depth 2");
     }
+
     @Test
     void perft_id_035_NumberOfPositionsAfter_a4_a5_b4_ra6_b4a5Depth1() {
         gameState = new ChessGame(FEN_POSITION_AFTER_A4_A5_B4_RA6_PA4B5);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(27L, result, "From the initial position there are 27 possible positions at depth 1");
     }
+
     @Test
     void perft_id_036_KiwiPeteNumberOfPositionsDepth1() {
         gameState = new ChessGame(FEN_KIWIPETE_POSITION);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1,stats);
+        long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(48L, result, "There should be 48 legal moves (leaf nodes).");
         /*Stockfish vs. ParkyChesS:
             a2a3: 1 a2a3=2
@@ -774,14 +890,16 @@ Nodes searched: 488
             Nodes searched: 48
            */
     }
+
     @Test
     void perftK_id_037_KiwiPeteNumberOfPositionsDepth2() {
         gameState = new ChessGame(FEN_KIWIPETE_POSITION);
         ptu = new PerftUtils(gameState);
         log.debug("Initial board: {}", gameState.getChessboard());
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(2039L, result, "There should be 2039 legal moves (leaf nodes).");
         /*
         Stockfish vs. ParkyChesS
@@ -844,22 +962,26 @@ Nodes searched: 488
         Same as above + e8c8, e8g8
          */
     }
+
     @Test
     void perft_id_038_KiwiPeteNumberOfPositionsDepth3() {
         gameState = new ChessGame(FEN_KIWIPETE_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(97_862L, result, "There should be 97862 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_039_AvoidIllegalEnPassantCaptureWhiteMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_AVOID_ILLEGAL_EP_CAPTURE_WHITE_MOVES);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(824_064L, result, "There should be 824_064 legal moves (leaf nodes).");
     }
 
@@ -869,7 +991,8 @@ Nodes searched: 488
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.error("Map of moves at depth 6: {}", stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(31_704L, result, "The expected moves do not coincide with the computed ones.");
     }
 
@@ -879,7 +1002,8 @@ Nodes searched: 488
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.error("Moves map depth 5: {}", stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(44964L, result, "The expected moves do not coincide with the computed ones.");
     }
 
@@ -889,7 +1013,8 @@ Nodes searched: 488
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.error("Moves map depth 6: {}", stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(759_841L, result, "The expected moves do not coincide with the computed ones.");
     }
 
@@ -899,7 +1024,8 @@ Nodes searched: 488
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info("Moves map at depth 6: {}", stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(148_335L, result, "The expected moves do not coincide with the computed ones.");
     }
 
@@ -909,80 +1035,98 @@ Nodes searched: 488
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(1_440_467L, result,
                 "The number of expected legal moves is not equal to the number of the computed ones.");
     }
+
     @Test
     void perf_id_042_tEnPassantCaptureCheckOpponentBlackMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_EP_CAPTURE_CHECK_OPPONENT_BLACK_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(6,6,stats);
+        long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(1_440_467L, result, "There should be 1_440_467 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_043_ShortCastleWithCheckWhiteMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_SHORT_CASTLE_WITH_CHECK_WHITE_MOVES);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(661_072L, result, "There should be 661_072 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_044_ShortCastleWithCheckBlackMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_SHORT_CASTLE_WITH_CHECK_BLACK_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(6,6,stats);
+        long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(661_072L, result, "There should be 661_072 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_045_LongCastleWithCheckWhiteMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_LONG_CASTLE_WITH_CHECK_WHITE_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(6,6,stats);
+        long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(803_711L, result, "There should be 803_711 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_046_LongCastleWithCheckBlackMovesDepth6() {
         gameState = new ChessGame(FEN_TEST_LONG_CASTLE_WITH_CHECK_BLACK_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(6,6,stats);
+        long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(803_711L, result, "There should be 803_711 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_047_LosingCastleRights_0_Rb1_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_RB1_D1);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1,stats);
+        long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(15L, result, "There should be 15 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_048_LosingCastleRights_0_Kd1_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_KD1_D1);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(15L, result, "There should be 15 legal moves (leaf nodes).");
     }
-    @Test //FIXME now
+
+    @Test
+        //FIXME now
     void perft_id_049_LosingCastleRights_0_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_W_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(2,2,stats);
+        long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(221L, result, "There should be 221 legal moves (leaf nodes).");
         /* Issue: after 1.Ra1c1 Black moves should include ke8g8 (KINGSIDE_CASTLE)
          WHITE Moves map for Stockfish (221) and ParkYChesS (207) at depth 2:
@@ -1004,58 +1148,70 @@ Nodes searched: 488
         e1c1: 13 e1c1=0
          */
     }
+
     @Test
     void perft_id_050_LosingCastleRights_0_BlackMovesDepth3() {
         gameState = new ChessGame(FEN_KING_ROOK_CHECK_LOSING_CASTLE_RIGHTS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(951L, result, "There should be 951 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_051_LosingCastleRights_0_WhiteMovesDepth4() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_W_MOVES);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(57_515L, result, "There should be 57515 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_052_LosingCastleRights_0_BlackMovesDepth5() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_B_MOVES);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(961_399, result, "There should be 961_399 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_053_LosingCastleRights_0_WhiteCastledBlackMovesDepth5() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_WHITE_LOST_CASTLE_RIGHTS);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(5,5,stats);
+        long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(656_771L, result, "There should be 656_771 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_054_LosingCastleRights_0_WhiteMovesDepth6() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BOTH_COLORS_W_MOVES);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(6, 6, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(15_874_227L, result, "There should be 15_874_227 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_055_LosingCastleRights_0a_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1,stats);
+        long result = ptu.perft(1, 1, stats);
         assertEquals(10L, result, "There should be 10 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_056_LosingCastleRights_0a_BlackMovesDepth2() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A);
@@ -1063,11 +1219,12 @@ Nodes searched: 488
         long result = ptu.perft(2, 2, stats);
         assertEquals(90L, result, "There should be 90 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_057_LosingCastleRights_0a_BlackMovesDepth3() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3,stats);
+        long result = ptu.perft(3, 3, stats);
         assertEquals(1134L, result, "There should be 1134 legal moves (leaf nodes).");
         /*
 BLACK will now execute move h7h6 at depth 3
@@ -1089,6 +1246,7 @@ e8g8: 137 e8g8=137 OK
  "4k2r/7p/8/8/8/8/3P4/2KR4 b k - 0 0"
          */
     }
+
     @Test
     void perft_id_058_LosingCastleRights_0a_BlackMovesDepth4() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A);
@@ -1096,13 +1254,15 @@ e8g8: 137 e8g8=137 OK
         long result = ptu.perft(4, 4, stats);
         assertEquals(15607L, result, "There should be 15607 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_059_LosingCastleRights_0a_BlackMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(5,5,stats);
+        long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(236169L, result, "There should be 236169 legal moves (leaf nodes).");
     }/*
     h7h6: 14355 OK
@@ -1139,88 +1299,105 @@ e8g8: 437310
 Nodes searched: 3687809
     */
     }
+
     @Test
     void perft_id_061_LosingCastleRights_0_BlackMovesRc1Depth1() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOSING_CASTLE_RIGHTS_BLACK_MOVES_D1);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_062_LostCastleRights_0_BothColorsCastledWhiteMovesDepth4() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_LOST_CASTLE_RIGHTS_BOTH_COLORS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(51_509L, result, "There should be 51509 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_063_LostCastleRights_0_WhiteCastledBlackMovesDepth5() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_WHITE_LOST_CASTLE_RIGHTS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(5, 5, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(656_771L, result, "There should be 656_771 legal moves (leaf nodes).");
         /*
         ParkyChess: {h8h1=18763, e8f7=77984, e8g8=51509, h8h2=37996, e8e7=68999, e8f8=43190, h8h3=55554, h8h4=57151, h8h5=57402, h8h6=57669, h8h7=55001, h8g8=40564, h8f8=36592}
         Stockfish: {h8h1: 18700,e8f7: 77892,e8g8: 51509,h8h2:37878,e8e7: 68908, e8f8: 43099,h8h3: 55390,h8h4: 56987,h8h5: 57238,h8h6: 57505,h8h7: 54837, h8g8: 40400, h8f8: 36428}
 */
     }
+
     @Test
     void perft_id_064_BothColorsLostCastleRights_0_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS_D1);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(12L, result, "There should be 12 legal moves (leaf nodes).");
         /* 13; {e8g8=1} castling should not be possible at this point for black*/
     }
+
     @Test
     void perft_id_065_BothColorsLostCastleRights_0_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS_D2);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(179L, result, "There should be 179 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_066_LostCastleRights_0_WhiteCastledBlackMovesDepth3() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS_D3);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(2087L, result, "There should be 2087 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_067_LostCastleRights_0_WhiteCastledWhiteMovesDepth4() {
         gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(18_700L, result, "There should be 18700 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_068_LosingCastleRights_0a_Rg8_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_RG8);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(5,5,stats);
+        long result = ptu.perft(5, 5, stats);
         assertEquals(461_098L, result, "There should be 461_098 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_069_LosingCastleRights_0a_Rf8_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_RF8);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(5,5,stats);
+        long result = ptu.perft(5, 5, stats);
         assertEquals(424_079L, result, "There should be 424079 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_070_LosingCastleRights_0a_Ke7_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_KE7);
@@ -1228,6 +1405,7 @@ Nodes searched: 3687809
         long result = ptu.perft(5, 5, stats);
         assertEquals(465_039L, result, "There should be 465_039 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_071_LosingCastleRights_0a_Kd7_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_KD7);
@@ -1235,6 +1413,7 @@ Nodes searched: 3687809
         long result = ptu.perft(5, 5, stats);
         assertEquals(551_144L, result, "There should be 551_144 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_072_LosingCastleRights_0a_Kf7_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_KF7);
@@ -1242,6 +1421,7 @@ Nodes searched: 3687809
         long result = ptu.perft(5, 5, stats);
         assertEquals(426_733L, result, "There should be 426733 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_073_LosingCastleRights_0a_Kd8_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_KD8);
@@ -1249,6 +1429,7 @@ Nodes searched: 3687809
         long result = ptu.perft(5, 5, stats);
         assertEquals(282_602L, result, "There should be 282_602 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_074_LosingCastleRights_0a_Kf8_WhiteMovesDepth5() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0A_KF8);
@@ -1256,13 +1437,15 @@ Nodes searched: 3687809
         long result = ptu.perft(5, 5, stats);
         assertEquals(152_519L, result, "There should be 152_519 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_075_LosingCastleRights_0b_BlackMovesDepth3() {
         gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0B);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(828L, result, "There should be 828 legal moves (leaf nodes).");
         /*
 Stockfish vd ParkYChess
@@ -1278,15 +1461,17 @@ e8f8: 48 e8f8=48 OK
 e8g8: 102 e8g8=102 OK
          */
     }
-        @Test
-        void perft_id_075_LosingCastleRights_0b_BlackMovesDepth5() {
-            gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0B);
-            ptu = new PerftUtils(gameState);
-            long result = ptu.perft(5, 5, stats);
-            stats.setNumberOfLeaves(result);
-            log.info(stats.getMovesMap().toString());
-            assertEquals(92_688L, result, "The expected number of legal moves " +
-                    "should be the same as the computed number.");
+
+    @Test
+    void perft_id_075_LosingCastleRights_0b_BlackMovesDepth5() {
+        gameState = new ChessGame(FEN_NO_CHECK_LOST_CASTLE_RIGHTS_0B);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(5, 5, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(92_688L, result, "The expected number of legal moves " +
+                "should be the same as the computed number.");
     /* culprit: after 1)...;e8f8 2)d2d3; f8e8 3) d3d4;... e8g8 should not be a valid move,
     because the black king has moved and then moved back to e8.
     h7h6: 5878 vs. 5878 OK
@@ -1302,7 +1487,7 @@ e8g8: 102 e8g8=102 OK
 
 Nodes searched: 92688
      */
-        }
+    }
 
     @Test
     void perft_id_075Bis_LosingCastleRights_0b_WhiteMovesDepth4() {
@@ -1310,7 +1495,8 @@ Nodes searched: 92688
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(3947, result, "The expected number of legal moves should be the same" +
                 " as the computed number.");
     /*
@@ -1323,24 +1509,29 @@ Nodes searched: 92688
 Nodes searched: 3947
      */
     }
+
     @Test
     void perft_id_076_LosingCastleRights_1_WhiteMovesDepth4() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_4);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(1_274_206L, result, "There should be 1_274_206L legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_077_LosingCastleRights_1_Rxa8_BlackMovesDepth3() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_BLACK_MOVES_DEPTH_3_RxA8);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(4427L, result, "There should be 4427 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_078_LosingCastleRights_1_Rxa8_bxa8_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BxA8);
@@ -1348,7 +1539,8 @@ Nodes searched: 3947
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(518L, result, "There should be 518 legal moves (leaf nodes).");
     /* Stockfish  "b3k2r/6bq/8/8/8/8/7B/4K2R w Kk - 0 1"
     * Note: After every bishop move black does not castle, while it should be so only afterh2d6.
@@ -1372,129 +1564,148 @@ e1f2: 35 / 34
 e1g1: 32 / OK
     * */
     }
+
     @Test
     void perft_id_079_LosingCastleRights_1_Rxa8_Ke7_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_KE7);
         ptu = new PerftUtils(gameState);
         log.debug("Initial chessboard position: {}", gameState.getChessboard());
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         assertEquals(1077L, result, "There should be 1077L legal moves (leaf nodes).");
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
         assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should not be flagged as already moved.");
     }
+
     @Test
     void perft_id_080_LosingCastleRights_1_Rxa8_Kd7_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_KD7);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
         assertEquals(1091L, result, "There should be 1091L legal moves (leaf nodes).");
         assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should not be flagged as already moved.");
     }
+
     @Test
     void perft_id_081_LosingCastleRights_1_Rxa8_Kf7_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_KF7);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
         assertEquals(1048L, result, "There should be 1048L legal moves (leaf nodes).");
         assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved.");
     }
+
     @Test
     void perft_id_082_LosingCastleRights_1_Rxa8_bc8_WhiteMovesDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_WHITE_MOVES_DEPTH_2_BC8);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         assertEquals(693L, result, "There should be 693L legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_083_LosingCastleRights_1_Rxa8_bxa8_Kf1_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_BLACK_MOVES_DEPTH_1_KF1);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(35L, result, "There should be 35 legal moves (leaf nodes).");
         /* Stockfish () vs ParkYChesS () "b3k2r/6bq/8/8/8/8/7B/5K1R b k - 0 1"*/
     }
+
     @Test
     void perft_id_084_LosingCastleRights_1_Rxa8_bxa8_Rf1_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_BLACK_MOVES_DEPTH_1_RF1);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(32L, result, "There should be 32 legal moves (leaf nodes).");
         /* Stockfish () vs ParkYChesS () "b3k2r/6bq/8/8/8/8/7B/5K1R b k - 0 1"*/
     }
+
     @Test
     void perf_id_085_tLosingCastleRights_1_Rxa8_bxa8_Bb8_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_BLACK_MOVES_DEPTH_1_BB8);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(36L, result, "There should be 36 legal moves (leaf nodes).");
     }
+
     @Test
     void perft_id_086_LosingCastleRights_1_Rxa8_bxa8_Be5_BlackMovesDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1_BLACK_MOVES_DEPTH_1_BE5);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(1, 1, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(32, result, "The number of computed positions does not match the expected one.");
-    /* Stockfish vs ParkYChesS */
+        /* Stockfish vs ParkYChesS */
     }
+
     @Test
     void perft_id_087_LosingCastleRights_1a_BlackMovesDepth4() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_1A_BLACK_MOVES_DEPTH_4);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(4,4, stats);
+        long result = ptu.perft(4, 4, stats);
         assertEquals(1_274_206L, result, "There should be 1_274_206L legal moves (leaf nodes).");
-        log.info("Moves map: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
+
     @Test
     void perft_id_088_LosingCastleRights_2_WhiteMovesDepth4() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_2_WHITE_MOVES);
         log.debug("Chessboard situation: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(4,4, stats);
+        long result = ptu.perft(4, 4, stats);
         assertEquals(1_720_476L, result, "There should be 1_720_476L legal moves (leaf nodes).");
-        log.debug("Moves so far: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
 
     @Test
     void perft_id_089_LosingCastleRights_2_BlackMovesDepth4() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_2_BLACK_MOVES);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(4,4, stats);
+        long result = ptu.perft(4, 4, stats);
         assertEquals(1_720_476L, result, "There should be 1_720_476L legal moves (leaf nodes).");
     }
+
     @Test
-    void perft_id_090_BlackRookHasMovedForGoodDepth3(){
+    void perft_id_090_BlackRookHasMovedForGoodDepth3() {
         gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3, stats);
+        long result = ptu.perft(3, 3, stats);
         King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"The white king should not be flagged as having already moved.");
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "The white king should not be flagged as having already moved.");
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
-        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"The black king should not be flagged as having already moved.");
-        Rook blackRook = (Rook)gameState.getChessboard().getPiece(0, 7);
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"The white king should not be flagged as having already moved.");
-        assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"The black rook should not be flagged as having already moved.");
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "The black king should not be flagged as having already moved.");
+        Rook blackRook = (Rook) gameState.getChessboard().getPiece(0, 7);
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "The white king should not be flagged as having already moved.");
+        assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(), "The black rook should not be flagged as having already moved.");
         assertEquals(1197L, result, "There should be 1197 legal moves (leaf nodes).");
     }
+
     /// ///
     @Test
     void perft_id_091_whiteKingShouldBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth3() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3, stats);
+        long result = ptu.perft(3, 3, stats);
         assertEquals(69, result, "There should be 69 legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertTrue(king.isFlaggedAsHavingAlreadyMoved(),"King should be flagged as having already moved.");
+        assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "King should be flagged as having already moved.");
     }
+
     @Test
     void perft_id_092_whiteKingShouldBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth2() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE_2);
@@ -1513,32 +1724,34 @@ e1g1: 32 / OK
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.WHITE);
         King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
-        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should be flagged as having already moved.");
-        assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(),"Black king should be flagged as having already moved.");
+        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(), "White king should be flagged as having already moved.");
+        assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as having already moved.");
         log.debug("Position at game start: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1, stats);
+        long result = ptu.perft(1, 1, stats);
         assertEquals(6, result, "There should be 6 legal moves (leaf nodes).");
-        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should be flagged as having already moved.");
-        assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(),"Black king should be flagged as having already moved.");
+        assertTrue(whiteKing.isFlaggedAsHavingAlreadyMoved(), "White king should be flagged as having already moved.");
+        assertTrue(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as having already moved.");
     }
+
     @Test
     void perft_id_094_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth7() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(7,7, stats);
+        long result = ptu.perft(7, 7, stats);
         assertEquals(116242, result, "There should be 116242 legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertTrue(king.isFlaggedAsHavingAlreadyMoved(),"King should not be flagged as having already moved.");
+        assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "King should not be flagged as having already moved.");
     }
+
     @Test
     void perft_id_095_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth9() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(9,9, stats);
+        long result = ptu.perft(9, 9, stats);
         assertEquals(5_424_200L, result, "There should be 5_424_200L legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertTrue(king.isFlaggedAsHavingAlreadyMoved(),"King should be flagged as having already moved.");
+        assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "King should be flagged as having already moved.");
     }
  /*   @Test
     void perft_id_096_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth11() {
@@ -1554,11 +1767,12 @@ e1g1: 32 / OK
     void perft_id_096bis_whiteKingShouldBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth3() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE_KING_AT_HOME_WHITE);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3, stats);
+        long result = ptu.perft(3, 3, stats);
         assertEquals(280, result, "There should be 280 legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertFalse(king.isFlaggedAsHavingAlreadyMoved(),"King should not be flagged as having already moved.");
+        assertFalse(king.isFlaggedAsHavingAlreadyMoved(), "King should not be flagged as having already moved.");
     }
+
     @Test
     void perft_id_092_whiteKingShouldNotBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth2() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE_KING_AT_HOME_WHITE);
@@ -1570,30 +1784,33 @@ e1g1: 32 / OK
         assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "White king should not be flagged as having already moved.");
         assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should not be flagged as having already moved.");
     }
+
     @Test
     void perft_id_093_whiteKingShouldNotBeMarkedAsAlreadyMovedInTheSimplestPlayablePosition_Depth1() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE_KING_AT_HOME_BLACK);
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
         King whiteKing = gameState.getChessboard().getKing(PlayerColor.WHITE);
         King blackKing = gameState.getChessboard().getKing(PlayerColor.BLACK);
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should be flagged as having already moved.");
-        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"Black king should be flagged as having already moved.");
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "White king should be flagged as having already moved.");
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as having already moved.");
         log.debug("Position at start: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1, stats);
+        long result = ptu.perft(1, 1, stats);
         assertEquals(5, result, "There should be 5 legal moves (leaf nodes).");
-        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(),"White king should be flagged as having already moved.");
-        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(),"Black king should be flagged as having already moved.");
+        assertFalse(whiteKing.isFlaggedAsHavingAlreadyMoved(), "White king should be flagged as having already moved.");
+        assertFalse(blackKing.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as having already moved.");
     }
+
     @Test
     void perft_id_097_whiteKingShoulBeMarkedAsAlreadyMovedInTheSimplestCastlingPositionDepth3() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_2_SIMPLEST);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3, stats);
+        long result = ptu.perft(3, 3, stats);
         assertEquals(1197, result, "There should be 1197 legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertFalse(king.isFlaggedAsHavingAlreadyMoved(),"King should be flagged as having already moved.");
+        assertFalse(king.isFlaggedAsHavingAlreadyMoved(), "King should be flagged as having already moved.");
     }
+
     @Test
     void perft_id_098_EnPassant_Minimal_Depth2() {
         gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_BASIC_DEPTH2);
@@ -1601,26 +1818,31 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.debug(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(22, result, "From the initial position there are 22 possible positions at depth 2.");
     }
+
     @Test
     void perft_id_099_LosingCastleRights_3_WhiteMovesQueensideDepth1() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_0_W_QUEENSIDE_WHITE_D1);
         log.info("Chessboard now: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(1,1, stats);
+        long result = ptu.perft(1, 1, stats);
         assertEquals(37, result, "There should be 37 legal moves (leaf nodes).");
-        log.info("Final moves map: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
+
     @Test
     void perft_id_100_LosingCastleRights_3_WhiteMovesQueensideDepth2() {
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_0_W_QUEENSIDE_WHITE_D2);
         log.info("Chessboard: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(2,2, stats);
+        long result = ptu.perft(2, 2, stats);
         assertEquals(92, result, "There should be 92 legal moves (leaf nodes).");
-        log.info("At the end, moves map: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
 
     @Test
@@ -1628,9 +1850,10 @@ e1g1: 32 / OK
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_0_W_QUEENSIDE_WHITE_D3);
         log.info("Chessboard snapshot: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(3,3, stats);
+        long result = ptu.perft(3, 3, stats);
         assertEquals(3826, result, "Number of positions does not match the expected value.");
-        log.info("Detailed moves map: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
 
     @Test
@@ -1638,35 +1861,49 @@ e1g1: 32 / OK
         gameState = new ChessGame(FEN_TEST_LOSING_CASTLE_RIGHTS_0_W_QUEENSIDE_WHITE_D4);
         log.info("Chessboard visualization: {}", gameState.getChessboard());
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(4,4, stats);
+        long result = ptu.perft(4, 4, stats);
         assertEquals(15481, result, "Number of positions does not match the expected value.");
-        log.info("Complete moves map: {}", stats.getMovesMap());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
     }
 
     @Test
-    void perft_id_105depth4_white_NumOfPos_PawnVsPawnAdjacentColumns(){
+    void perft_id_105_white_NumOfPos_PawnVsPawnAdjacentColumnsDepth4() {
         gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_W);
         ptu = new PerftUtils(gameState);
-        long result = ptu.perft(4, 4 , stats);
+        long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(2084, result, "Number of positions does not match the expected value.");
-    /* Stockfish vs. ParkYChesS
-    Stockfish vs. ParkyChesS:
-    d2d3: 285 nook 286
-    d2d4: 351 nook 356
-    e1d1: 277 ok, e1f1: 322 ok, e1e2: 399 ok, e1f2: 450 ok
-        Nodes searched: 2084
-    * */
+    /* Stockfish vs. ParkYChesS: 2084 VS 2085
+    --d2d3: 285 OK
+    --d2d4: 351 NOOK 356
+    e1d1: 277 NOOK 276
+    e1f1: 322 NOOK 321
+    e1e2: 399 NOOK 398
+    e1f2: 450 NOOK 449
+    */
     }
+
     @Test
     void perft_id_105depth3_black_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
         gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(351, result, "Number of positions does not match the expected value.");
+        /*go perft 3
+        e5e4: 36
+        e5d4: 30
+        e8d7: 64
+        e8e7: 64
+        e8f7: 65
+        e8d8: 46
+        e8f8: 46
+        Nodes searched: 351 */
     }
 
     @Test
@@ -1675,19 +1912,165 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(285, result, "Number of positions does not match the expected value.");
     }
+
     @Test
-    void perft_id_106depth3_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+    void perft_id_107depth3_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
         gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_2);
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.WHITE);
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(271, result, "Number of positions does not match the expected value.");
     }
+
+    @Test
+    void perft_id_108depth3_black_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+        gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_3);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(3, 3, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(322, result, "Number of positions does not match the expected value.");
+/* 44 is the correct number but only 43 are computed.
+ The move which is not computed is (1..;e5e4 2. d2d4;) e4d3ep
+ 1..;e5e4
+    2. d2d4; e4d3ep
+    3. d2d4; e4e3
+    4. d2d4; kd8
+    5. d2d4; kd7
+    6. d2d4; ke7
+    7. d2d4; kf7
+    8. d2d4; kf8
+1..;e5e4
+    2. d2d3; e4d3
+    3. d2d3; e4e3
+    4. d2d3; kd8
+    5. d2d3; kd7
+    6. d2d3; ke7
+    7. d2d3; kf7
+    8. d2d3; kf8
+1..;e5e4
+    2. Ke2; e4e3
+    3. Ke2; kd8
+    4. Ke2; kd7
+    5. Ke2; ke7
+    6. Ke2; kf7
+    7. Ke2; kf8
+
+1..;e5e4
+    2. Ke1; e4e3
+    3. Ke1; kd8
+    4. Ke1; kd7
+    5. Ke1; ke7
+    6. Ke1; kf7
+    7. Ke1; kf8
+
+ 1..;e5e4
+    2. Kf2; e4e3
+    3. Kf2; kd8
+    4. Kf2; kd7
+    5. Kf2; ke7
+    6. Kf2; kf7
+    7. Kf2; kf8
+
+ 1..;e5e4
+    2. Kg1; e4e3
+    3. Kg1; kd8
+    4. Kg1; kd7
+    5. Kg1; ke7
+    6. Kg1; kf7
+    7. Kg1; kf8
+
+ 1..;e5e4
+    2. Kg2; e4e3
+    3. Kg2; kd8
+    4. Kg2; kd7
+    5. Kg2; ke7
+    6. Kg2; kf7
+    7. Kg2; kf8
+                */
+    }
+
+    @Test
+    void perft_id_112depth3_black_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+        gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_6);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(3, 3, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(331, result, "Number of positions does not match the expected value.");
+/*
+d2d3: 37
+d2d4: 46
+f1e1: 36
+f1g1: 42
+f1e2: 52
+f1f2: 59
+f1g2: 59
+Nodes searched: 331
+ */
+    }
+
+
+    @Test
+    void perft_id_109depth3_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+        gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_5);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(3, 3, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(135, result, "Number of positions does not match the expected value.");
+    }
+
+    @Test
+    void perft_id_114depth4_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+        gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_5);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(4, 4, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(863, result, "Number of positions does not match the expected value.");
+    } /*
+    e2e3: 109
+e2e4: 139
+a1b1: 180
+a1a2: 180
+a1b2: 255
+
+Nodes searched: 863
+
+    */
+
+    @Test
+    void perft_id_109_depth2_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
+        gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_4);
+        ptu = new PerftUtils(gameState);
+        long result = ptu.perft(2, 2, stats);
+        stats.setNumberOfLeaves(result);
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
+        assertEquals(44, result, "Number of positions does not match the expected value.");
+    }
+    /* Stockfish vs ParkyChesS: 44 vs 68 {d2d4=7, d2d3=7, f1e2=10, f1f2=10, f1e1=14, f1g2=10, f1g1=10}
+    d2d3: 7 ok
+    d2d4: 7 ok
+    f1e1: 6 vs 14
+    f1g1: 6 vs 10
+    f1e2: 6 vs 10
+    f1f2: 6 vs 10
+    f1g2: 6 vs 10
+     */
+
     @Test
     void perft_id_106depth4_white_NumOfPos_PawnVsPawnAdjacentCentralColumns() {
         gameState = new ChessGame(FEN_POSITION_PAWN_VS_PAWN_ADJACENT_CENTRAL_COLUMNS_B_2);
@@ -1695,7 +2078,8 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(2081, result, "Number of positions does not match the expected value.");
     }
 
@@ -1706,7 +2090,8 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(1492, result, "Number of positions does not match the expected value.");
     }
 
@@ -1716,7 +2101,8 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(862, result, "Number of positions does not match the expected value.");
     } /* Stockfish vs. ParkyChesS {d2d4=141, d2d3=110, a1b1=180, a1b2=255, a1a2=180}
     d2d3: 109 NOK 110
@@ -1732,7 +2118,8 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(3, 3, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(109, result, "Number of positions does not match the expected value.");
     }/*
     e5e4: 22
@@ -1747,8 +2134,8 @@ e1g1: 32 / OK
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(4, 4, stats);
         stats.setNumberOfLeaves(result);
-        log.info(stats.getMovesMap().toString());
+        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+                stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(699, result, "Number of positions does not match the expected value.");
     }
-
 }

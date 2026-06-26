@@ -166,7 +166,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         removeHighlights();
         Move cachedMove = movesCache.get(pos);
         if (cachedMove != null) {
-            chessboard.switchCurrentPlayerColor();
+           // chessboard.switchCurrentPlayerColor();
             if (cachedMove.getName().equals(MoveNames.PAWN_PROMOTION)){
                 handlePromotion(cachedMove.getFrom(), cachedMove.getTo(), guiController);
             } else {
@@ -176,10 +176,11 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void handleMove (Move aMove, GUIController guiController) {
-        List<Move> generatedMoves = gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor());
-        gameState.makeMove (aMove, generatedMoves);
+        //List<Move> generatedMoves = gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor());
+        //FIXME the following invocation to makeMove looks fishy to me
+        //gameState.makeMove (aMove, generatedMoves);
         displayChessboard (gameState.getChessboard(), guiController);
-        gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()));
+        gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
         if (gameState.isGameOver()) {
             log.debug("Game over!");
             showGameOver(guiController);

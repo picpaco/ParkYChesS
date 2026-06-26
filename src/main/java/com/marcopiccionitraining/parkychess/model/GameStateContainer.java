@@ -1,16 +1,20 @@
 package com.marcopiccionitraining.parkychess.model;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.function.IntFunction;
 
 /**
  * Incremental game state implemented as a Stack with a fixed array of known size, with O(1) operations.
- * Objects of this class are used for test and search functions to store game state incrementally before making moves
- * and to restore game state when undoing moves.
+ * Objects of this class are used by test and search functions to store game state incrementally before
+ * making a move and to restore game state before undoing the same move.
  */
 @Slf4j
-public class GameStateContainer {
+public class GameStateContainer implements EssentialStack<FENStateString>{
     private int topIndex;
     private int maxSize;
     private ArrayList<FENStateString> moveStateStackImpl;
@@ -24,6 +28,7 @@ public class GameStateContainer {
     /**
      * @param moveStateItem element to push on top.
      */
+    @Override
     public void push (FENStateString moveStateItem) {
         if (topIndex + 1 == maxSize) {
             log.trace("Stack overflow! Can't push elements when the stack is full.");
@@ -39,6 +44,7 @@ public class GameStateContainer {
      * @return top element, or null if stack underflowed.
      * Top element is removed from the stack.
      */
+    @Override
     public FENStateString pop() {
         if (topIndex < 0) {
             log.trace("Stack underflow! Can't remove elements from an empty stack.");
@@ -55,6 +61,7 @@ public class GameStateContainer {
      * @return top element, or null if stack is empty.
      * Top element is not removed from the stack.
      */
+    @Override
     public FENStateString peek() {
         if (topIndex < 0) {
             log.trace("Stack is Empty");
@@ -66,13 +73,12 @@ public class GameStateContainer {
     public int size(){
         return topIndex + 1;
     }
-
+    
     public boolean isEmpty() {
         return topIndex < 0;
     }
 
     /**
-     *
      * @return a deep copy of this GameStateContainer
      */
     public GameStateContainer copy() {

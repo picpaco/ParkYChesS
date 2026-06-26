@@ -29,7 +29,8 @@ public class Pawn extends Piece {
     }
 
     private boolean isPawnDirectionCorrect(){
-        if (getColor().equals(PlayerColor.BLACK) && forward.equals(Direction.SOUTH)) {
+        if (getColor().equals(PlayerColor.BLACK) && forward.equals(Direction.SOUTH)
+        ) {
             return true;
         }
         return getColor().equals(PlayerColor.WHITE) && forward.equals(Direction.NORTH);
@@ -40,6 +41,7 @@ public class Pawn extends Piece {
         List<Move> forwardMoves = new ArrayList<>();
         Position firstStepForward = from.stepTowardsDirection(forward);
         if (chessboard.isEmpty(firstStepForward)) {
+            log.info("First step forward is {}", firstStepForward);
             if ((firstStepForward.getRow() == 0 && getColor().equals(PlayerColor.WHITE)) ||
                     (firstStepForward.getRow() == 7 && getColor().equals(PlayerColor.BLACK))) {
                 log.debug("Adding promotion moves.");
@@ -56,8 +58,8 @@ public class Pawn extends Piece {
                         new Knight(getColor()), null);
                 forwardMoves.add(pawnPromotionToKnightMove);
             } else {
-                log.debug("Added standard pawn forward move {}.", firstStepForward);
                 forwardMoves.add(new StandardMove(from, firstStepForward));
+                log.debug("Added standard pawn forward move {}.", new StandardMove(from, firstStepForward));
             }
             if (isOnStartingSquare(from, getColor())) {
                 DoublePawnMove twoStepsForwardMove;
@@ -70,6 +72,7 @@ public class Pawn extends Piece {
                 }
             }
         }
+        log.debug("Forward moves: {}", forwardMoves);
         return forwardMoves;
     }
 
@@ -87,29 +90,42 @@ public class Pawn extends Piece {
                     getPawnCapturePseudoLegalPositions(from, PlayerColor.WHITE);
             lastRowNumber = 0;
         }
-        log.debug("Entering pseudoLegalPawnCapturePositions loop.");
+        log.debug("pseudoLegalPawnCapturePositions for {}: {}",
+                chessboard.getCurrentPlayerColor(), pseudoLegalPawnCapturePositions);
         for (Position capturePosition : pseudoLegalPawnCapturePositions) {
             if (chessboard.isEmpty(capturePosition)) {
-                log.debug("Cannot perform a standard capture on {} because it is empty.", capturePosition);
-                if (capturePosition.equals(chessboard.getPawnSkippedPosition(PlayerColor.getOpponentColor(getColor())))) {
-                    if (chessboard.canCaptureEnPassant(chessboard.getCurrentPlayerColor())) {
-                        log.debug("Adding an en passant capture from {} to {}.", from, capturePosition);
-                        captureMoves.add(new EnPassantCapture(from, capturePosition, chessboard));
+                log.debug("{} cannot perform a standard capture on {} because {} is empty.",
+                        chessboard.getCurrentPlayerColor(), capturePosition, capturePosition);
+                if ((from.getRow() == 3 && getColor().equals(PlayerColor.WHITE)) ||
+                        (from.getRow() == 4 && getColor().equals(PlayerColor.BLACK))){
+                    if (capturePosition.equals(chessboard.getPawnSkippedPosition(
+                        PlayerColor.getOpponentColor(getColor())))) {
+                        if (chessboard.canCaptureEnPassant(chessboard.getCurrentPlayerColor())) {
+                            log.debug("Adding an en passant capture from {} to {}.", from, capturePosition);
+          //              if (!((chessboard.getPiece(capturePosition)).getColor().equals(
+            //                    (chessboard.getPiece(from).getColor())))) {
+                            captureMoves.add(new EnPassantCapture(from, capturePosition, chessboard));
+                //        } else {
+                  //          log.debug("Cannot capture {} (a friendly piece).", chessboard.getPiece(capturePosition));
+                    //    }
+                        } else {
+                            log.debug("Cannot capture en passant on {}. Possible reasons: last executed move is not " +
+                                    "the correct double move, or the attacking pawn is not in the right position.", capturePosition);
+                        }
                     } else {
-                        log.debug("Cannot capture en passant on {} .", capturePosition);
+                        log.debug("{} cannot capture en passant on {} because {} does not match pawn skipped position: {}.",
+                                getColor(), capturePosition, capturePosition,
+                                chessboard.getPawnSkippedPosition(PlayerColor.getOpponentColor(getColor())));
                     }
                 } else {
-                    log.debug("Cannot capture en passant because capture position: {} is different from pawn skipped " +
-                            " position: {}.", capturePosition, chessboard.getPawnSkippedPosition(getColor()));
+                    log.debug("{} cannot capture en passant on {} because the attacking pawn is not on the correct row.",
+                            getColor(), capturePosition);
                 }
-            } else {//there is a piece on capturePosition
-                if (chessboard.getPiece(capturePosition).getColor().equals(chessboard.getPiece(from).getColor())) {
-                    log.debug("Cannot capture {} because it is a friendly piece.", chessboard.getPiece(capturePosition));
-                    continue;
-                }
-                if (capturePosition.getRow() == lastRowNumber) {
-                    log.debug("Capturing with promotion.");
-                    if (!(chessboard.isEmpty(capturePosition))) {
+            } else {
+                if (!((chessboard.getPiece(capturePosition).getColor()).equals(
+                        (chessboard.getPiece(from).getColor())))) {
+                    if (capturePosition.getRow() == lastRowNumber) {
+                        log.debug("Capturing with promotion.");
                         PawnPromotionMove pawnPromotionToQueenMove = new PawnPromotionMove(from, capturePosition,
                                 new Queen(getColor()), chessboard.getPiece(capturePosition));
                         captureMoves.add(pawnPromotionToQueenMove);
@@ -122,14 +138,20 @@ public class Pawn extends Piece {
                         PawnPromotionMove pawnPromotionToKnightMove = new PawnPromotionMove(from, capturePosition,
                                 new Knight(getColor()), chessboard.getPiece(capturePosition));
                         captureMoves.add(pawnPromotionToKnightMove);
+                    } else {
+                        StandardMove standardMove = new StandardMove(from, capturePosition);
+                        log.debug("Regular pawn capture: {}. A {} {} captures a {} {}.", standardMove,
+                                chessboard.getPiece(from).getColor(), chessboard.getPiece(from).getName(),
+                                chessboard.getPiece(capturePosition).getColor(),
+                                chessboard.getPiece(capturePosition).getName());
+                        captureMoves.add(standardMove);
                     }
                 } else {
-                    log.debug("Regular pawn capturing.");
-                    captureMoves.add(new StandardMove(from, capturePosition));
+                    log.debug("Cannot capture friendly piece.");
                 }
             }
         }
-        log.debug("Capture moves at getCaptureMovesAndPromotions exit: {}.", captureMoves);
+        log.info("Capture moves at getCaptureMovesAndPromotions exit: {}.", captureMoves);
         return captureMoves;
     }
 
@@ -159,7 +181,7 @@ public class Pawn extends Piece {
             log.debug("There are no pseudolegal capture pawn moves inclusive of en passant and promotions to add for {}", this);
         }
         moves.addAll(captureMovesWithPromotions);
-        log.debug("Moves returned by getPseudolegalMoves({}): {}", from, moves);
+        log.info("Moves returned by getPseudolegalMoves({}) in class Pawn: {}", from, moves);
         return moves;
     }
 

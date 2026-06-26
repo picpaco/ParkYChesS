@@ -1,6 +1,7 @@
 package com.marcopiccionitraining.parkychess.model.moves;
 
 import com.marcopiccionitraining.parkychess.model.Board;
+import com.marcopiccionitraining.parkychess.model.LocalGameState;
 import com.marcopiccionitraining.parkychess.model.Position;
 import lombok.NonNull;
 
@@ -13,12 +14,12 @@ extends Move {
         setName(MoveNames.EMPTY);
     }
     @Override
-    public boolean execute(Board chessboard) {
+    public boolean execute(Board chessboard){//}, LocalGameState localGameState) {
         return false;
     }
 
     @Override
-    public void undo(@NonNull Board chessboard) {
+    public void undo(@NonNull Board chessboard, LocalGameState localGameState) {
     }
 
     @Override

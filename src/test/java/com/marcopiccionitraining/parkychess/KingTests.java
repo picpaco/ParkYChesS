@@ -542,12 +542,15 @@ public class KingTests {
     }
 
     @Test
-    void whitePawnPinnedNoEnPassantCapture() {
+    void whitePawnPartiallyPinnedNoEnPassantCapture() {
         ChessGame gameState = new ChessGame(FEN_WHITE_PAWN_PINNED_NO_EN_PASSANT);
-        log.debug("Initial position: {}", gameState.getChessboard());
+        log.debug("No en-passant capture because white pawn is pinned: {}", gameState.getChessboard().toString());
         List<Move> whitePawnLegalMoves = new ArrayList<>();
-        whitePawnLegalMoves.add(new StandardMove(new Position(3, 3), new Position(2, 3)));
-        List<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 3));
+        Position whitePawnPosition = new Position(3, 3);
+        whitePawnLegalMoves.add(new StandardMove(whitePawnPosition, new Position(2, 3)));
+        //Issue 1: it does not count d5c6ep as pseudolegal move.
+        //Issue 2: it does not count d5d6 as legal move.
+        List<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(whitePawnPosition);
         assertTrue(whitePawnLegalMoves.size() == computedPawnMoves.size() &&
                 whitePawnLegalMoves.containsAll(computedPawnMoves) &&
                 computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " +
@@ -557,7 +560,7 @@ public class KingTests {
     @Test
     void whitePawnsNotPinnedByBlackQueen() {
         ChessGame gameState = new ChessGame(FEN_WHITE_PAWNS_NOT_PINNED_BY_BLACK_QUEEN);
-        log.error("Initial position: {}", gameState.getChessboard());
+        log.debug("Initial position: {}", gameState.getChessboard());
         List<Move> whitePawnC3LegalMoves = new ArrayList<>();
         whitePawnC3LegalMoves.add(new StandardMove(new Position(5, 2), new Position(4, 2)));
         List<Move> computedPawnC3Moves = gameState.getLegalMovesForPieceAtPosition(new Position(5, 2));
@@ -585,9 +588,9 @@ public class KingTests {
         assertTrue(computedKingMoves.isEmpty(), "King should have no moves.");
         List<Move> legalMovesforColor = gameState.getLegalMovesForColor(gameState.getChessboard().getCurrentPlayerColor());
         assertTrue(legalMovesforColor.isEmpty(), "Black should have no moves.");
-        assertTrue(gameState.getChessboard().isPlayerInCheck(PlayerColor.BLACK), "Black should be in check.");
-        assertTrue(gameState.getChessboard().isPlayerInDoubleCheck(PlayerColor.BLACK), "Black should be in double check.");
-        gameState.checkGameEnd(legalMovesforColor);
+        Board chessboardCopy = gameState.getChessboard().copy();
+        assertTrue(chessboardCopy.isPlayerInCheck(PlayerColor.BLACK), "Black should be in check.");
+        assertTrue(chessboardCopy.isPlayerInDoubleCheck(PlayerColor.BLACK), "Black should be in double check.");
         assertTrue(gameState.isGameOver(), "Game should be over.");
         assertEquals(GameEndReason.CHECKMATE, gameState.getGameResult().gameEndReason(), "A checkmate should be on the board.");
         assertEquals(PlayerColor.WHITE, gameState.getGameResult().winner(), "Winner should be white.");
@@ -620,38 +623,38 @@ public class KingTests {
         StandardMove move_1 = new StandardMove(new Position(0, 4), new Position(0, 5));
         if (move_1.isLegal(gameState.getChessboard().copy())) {
             move_1.execute(gameState.getChessboard());
-            log.error("I have just executed move 1: {}.", move_1);
-            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.error(gameState.getChessboard().toString());
+            log.debug("I have just executed move 1: {}.", move_1);
+            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
         } else {
-            log.error("Move 1 {} is not legal.", move_1);
+            log.debug("Move 1 {} is not legal.", move_1);
         }
         //c2c3
         StandardMove move_2 = new StandardMove(new Position(6, 2), new Position(5, 2));
         if (move_2.isLegal(gameState.getChessboard().copy())) {
             move_2.execute(gameState.getChessboard());
-            log.error("I have just executed move 2: {}.", move_2);
-            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.error(gameState.getChessboard().toString());
+            log.debug("I have just executed move 2: {}.", move_2);
+            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
         } else {
-            log.error("Move 2 {} is not legal.", move_2);
+            log.debug("Move 2 {} is not legal.", move_2);
         }
         //kf8e8
         StandardMove move_3 = new StandardMove(new Position(0, 5), new Position(0, 4));
         if (move_3.isLegal(gameState.getChessboard().copy())) {
             move_3.execute(gameState.getChessboard());
-            log.error("I have just executed move 3: {}.", move_3);
-            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.error(gameState.getChessboard().toString());
+            log.debug("I have just executed move 3: {}.", move_3);
+            assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
         } else {
-            log.error("Move 3: {} is not legal.", move_3);
+            log.debug("Move 3: {} is not legal.", move_3);
         }
         //c3c4
         StandardMove move_4 = new StandardMove(new Position(5, 2), new Position(4, 2));
         if (move_4.isLegal(gameState.getChessboard().copy())) {
             move_4.execute(gameState.getChessboard());
-            log.error("I have just executed move 4: {}.", move_4);
+            log.debug("I have just executed move 4: {}.", move_4);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");
-            log.error(gameState.getChessboard().toString());
+            log.debug(gameState.getChessboard().toString());
         } else {
-            log.error("Move 4: {} is not legal.", move_4);
+            log.debug("Move 4: {} is not legal.", move_4);
         }
         //ke8g8 (kingside castle) is not even a pseudolegal move because the black king has moved already.
         CastlingMove move_5 = new CastlingMove(MoveNames.KINGSIDE_CASTLE, new Position(0, 4));
@@ -669,15 +672,15 @@ public class KingTests {
         StandardMove move_1 = new StandardMove(new Position(0, 4), new Position(0, 5));
         if (move_1.isLegal(gameState.getChessboard().copy())) {
             move_1.execute(gameState.getChessboard());
-            log.error("After executing {}:", move_1);
+            log.debug("After executing {}:", move_1);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved.");
-            log.error(gameState.getChessboard().toString());
-            move_1.undo(gameState.getChessboard());
-            log.error("After undoing {}:", move_1);
+            log.debug(gameState.getChessboard().toString());
+            move_1.undo(gameState.getChessboard(), gameState.getLocalGameState());
+            log.debug("After undoing {}:", move_1);
             assertFalse(king.isFlaggedAsHavingAlreadyMoved(), "Black king should not be flagged as already moved.");
-            log.error(gameState.getChessboard().toString());
+            log.debug(gameState.getChessboard().toString());
         } else {
-            log.error("Move 1 {} is not legal.", move_1);
+            log.debug("Move 1 {} is not legal.", move_1);
         }
     }
 }

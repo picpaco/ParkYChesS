@@ -30,7 +30,7 @@ public abstract class Piece {
 
     public abstract Piece copy();
 
-    //TODO: Is it better to add the argument 'from' everywhere or to have pieces store their own position?
+    //TODO: decide if it is better to add the argument 'from' everywhere or to have pieces store their own position.
     public abstract List<Move> getPseudoLegalMoves(Position from, Board chessboard);
 
     public boolean canCaptureOpponentKing(@NonNull Position from, @NonNull Board chessboard){
@@ -42,7 +42,8 @@ public abstract class Piece {
                 "If there is a piece on " + from + ", it must be a slider (bishop, rook, or queen) or a knight.";
         log.trace("There is a piece on {}: {}", from,chessboard.getPiece(from));
         List<Move> piecePseudolegalMoves = getPseudoLegalMoves(from, chessboard);
-        log.trace("piecePseudolegalMoves: {}", piecePseudolegalMoves);
+        log.debug("{} {} pseudolegal moves (used to check if can capture opponent's king): {}",
+                getColor(), getName(), piecePseudolegalMoves);
         for (Move move : piecePseudolegalMoves) {
             if (chessboard.isEmpty(move.getTo())) {
                 continue;

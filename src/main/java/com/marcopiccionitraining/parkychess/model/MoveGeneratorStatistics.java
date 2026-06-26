@@ -1,89 +1,139 @@
 package com.marcopiccionitraining.parkychess.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Collection;
 import java.util.HashMap;
+
 public class MoveGeneratorStatistics {
 
+    @Getter @Setter
     private long numberOfLeaves;
-    public HashMap<String, Long> getMovesMap() {
-        return movesMap;
-    }
-    private final HashMap<String, Long> movesMap;
+  //  private final HashMap<PlayerColor, HashMap<String, Long>> movesMap;
+    private final HashMap<String, Long> blackMovesMap;
+    private final HashMap<String, Long> whiteMovesMap;
     private final HashMap<Integer, Long> numberOfCapturesPerDepth;
+    @Getter @Setter
     private long numberOfCaptures;
+    @Getter @Setter
     private long numberOfEnPassantCaptures;
+    @Getter @Setter
     private long numberOfChecks;
+    @Getter @Setter
     private long numberOfDiscoveryChecks;
+    @Getter @Setter
     private long numberOfDoubleChecks;
+    @Getter @Setter
     private long numberOfCheckmates;
+    @Getter @Setter
     private long numberOfStalemates;
+    @Getter @Setter
     private long numberOfCastles;
+    @Getter @Setter
     private long numberOfPromotions;
 
     public MoveGeneratorStatistics(){
         numberOfCapturesPerDepth = new HashMap<>();
-        movesMap = new HashMap<>();
+        blackMovesMap = new HashMap<>();
+        whiteMovesMap = new HashMap<>();
+  //    HashMap<String, Long> whiteMovesMap = new HashMap<>();
+    //    movesMap.put(PlayerColor.WHITE, whiteMovesMap);
+    //    HashMap<String, Long> blackMovesMap = new HashMap<>();
+    //    movesMap.put(PlayerColor.BLACK, blackMovesMap);
     }
-    public void addMoveNodes(String key, Long numNodes){
-        if (movesMap.containsKey(key)) {
-            Long currentValue = movesMap.get(key);
+  /*  public void addMoveNodes(PlayerColor superKey, String key, Long numNodes){
+        HashMap<String, Long> coloredMovesMap = movesMap.get(superKey);
+        if (coloredMovesMap.containsKey(key)) {
+            Long currentValue = coloredMovesMap.get(key);
             currentValue = currentValue + numNodes;
-            movesMap.put(key, currentValue);
+            coloredMovesMap.put(key, currentValue);
         } else {
-            movesMap.put(key, numNodes);
+            coloredMovesMap.put(key, numNodes);
+        }
+        movesMap.put(superKey, coloredMovesMap);
+    } */
+
+  //  private HashMap<String, Long> getMovesMap() {
+  //      return movesMap;
+  //  }
+
+    public void addMoveNodes(PlayerColor mapColor, String key, Long numNodes){
+        if (mapColor.equals(PlayerColor.BLACK)) {
+            if (blackMovesMap.containsKey(key)) {
+                Long currentValue = blackMovesMap.get(key);
+                currentValue = currentValue + numNodes;
+                blackMovesMap.put(key, currentValue);
+            } else {
+                blackMovesMap.put(key, numNodes);
+            }
+        }  else {
+            if (whiteMovesMap.containsKey(key)) {
+                Long currentValue = whiteMovesMap.get(key);
+                currentValue = currentValue + numNodes;
+                whiteMovesMap.put(key, currentValue);
+            }  else {
+                whiteMovesMap.put(key, numNodes);
+            }
         }
     }
+
+    public String getMovesMapAsString(PlayerColor mapColor){
+        if (PlayerColor.BLACK.equals(mapColor)) {
+            return blackMovesMap.toString();
+        } else{
+            return whiteMovesMap.toString();
+        }
+    }
+
     public void incrementNumberOfEnPassantCaptures(){
         numberOfEnPassantCaptures++;
     }
-    public void setNumberOfLeaves(long numberOfLeaves) {
-        this.numberOfLeaves = numberOfLeaves;
-    }
-    public long getNumberOfCaptures() {
-        return numberOfCaptures;
-    }
-    public long getNumberOfEnPassantCaptures() {
-        return  numberOfEnPassantCaptures;
-    }
-    public long getNumberOfChecks() {
-        return numberOfChecks;
-    }
+
     public void incrementNumberOfChecks() {
         numberOfChecks++;
-     //   LOGGER.debug("Just incremented numberOfChecks to {}", numberOfChecks);
     }
+
     public void incrementNumberOfStalemates() {
         numberOfStalemates++;
-  //      LOGGER.debug("Just incremented numberOfStalemates to {}", numberOfStalemates);
     }
-    public long getNumberOfDiscoveryChecks() {
-        return numberOfDiscoveryChecks;
-    }
-    public long getNumberOfDoubleChecks() {
-        return numberOfDoubleChecks;
-    }
+
     public void incrementNumberOfDoubleChecks() {
         numberOfDoubleChecks++;
-    //    LOGGER.debug("Just incremented numberOfDoubleChecks to {}", numberOfDoubleChecks);
     }
+
     public void incrementNumberOfDiscoveryChecks() {
         numberOfDiscoveryChecks++;
-      //  LOGGER.debug("Just incremented numberOfDiscoveryChecks to {}", numberOfDiscoveryChecks);
     }
-    public long getNumberOfCheckmates() {
-        return numberOfCheckmates;
+
+  //  public Set<Map.Entry<String, Long>> getEntrySet(PlayerColor color) {
+   //         return ((movesMap.get(color)).entrySet());
+   // }
+
+    public Collection<Long> getMapValues(PlayerColor color) {
+        if (color.equals(PlayerColor.WHITE)) {
+            return whiteMovesMap.values();
+        } else {
+            return blackMovesMap.values();
+        }
     }
-    public long getNumberOfStalemates() { return numberOfStalemates;}
-    public long getNumberOfCastles() {
-        return numberOfCastles;
-    }
-    public long getNumberOfPromotions() {
-        return numberOfPromotions;
-    }
+      /*  if (color.equals(PlayerColor.WHITE)) {
+            HashMap<String, Long> whiteMovesMap = movesMap.get(PlayerColor.WHITE);
+            return whiteMovesMap.values();
+        }  else {
+            HashMap<String, Long> blackMovesMap = movesMap.get(PlayerColor.BLACK);
+            return blackMovesMap.values();
+        }
+    }*/
+
     @Override
     public String toString() {
-        return "MoveGeneratorStatistics: " +
+        return "Move Generator Statistics: " +
                 "\nnumberOfLeafNodes="  + numberOfLeaves +
-                "\nmoves map: " + movesMap +
+            //    "\nBlack moves map: " + getMapValues(PlayerColor.BLACK).toString() +
+            //    "\nWhite moves map: " + getMapValues(PlayerColor.WHITE).toString() +
+                "\nblackMovesMap=" + blackMovesMap +
+                "\nwhiteMovesMap=" + whiteMovesMap +
                 "\nnumberOfCaptures=" + numberOfCaptures +
                 ", numberOfEnPassantCaptures=" + numberOfEnPassantCaptures +
                 ",\nnumberOfChecks=" + numberOfChecks +
@@ -99,24 +149,20 @@ public class MoveGeneratorStatistics {
         numberOfCapturesPerDepth.put(depth, numberOfCaptures);
     }
 
-//    public HashMap<Integer, Long> getNumberOfCapturesPerDepth() {
-    //       return numberOfCapturesPerDepth;
-    //   }
-
-    public long getNumberOfDepthRelatedLeaves(int currentDepth) {
-        if (movesMap.get(currentDepth) == null) {
+ /*   public long getNumberOfDepthRelatedLeaves(int currentDepth) {
+        if (whiteMovesMap.get(currentDepth) == null) {
             return 0;
         }
-        return movesMap.get((long)currentDepth);
+        return whiteMovesMap.get((long)currentDepth);
     }
+
+  */
     public void incrementNumberOfCheckmates() {
         numberOfCheckmates++;
-      //  LOGGER.trace("Just incremented numberOfCheckmates to {}", numberOfCheckmates);
-
     }
+
     public void incrementNumberOfCaptures() {
         numberOfCaptures++;
-     //   LOGGER.trace("Just incremented numberOfCaptures to {}", numberOfCaptures);
     }
 
     public void resetNumberOfCaptures() {
@@ -128,7 +174,6 @@ public class MoveGeneratorStatistics {
     }
 
     public void decrementNumberOfChecks() {
-    //    LOGGER.trace("Just decremented number of checks to {}", numberOfChecks);
         numberOfChecks--;
     }
 }

@@ -35,13 +35,11 @@ class RookTests {
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
 		ptu = new PerftUtils(gameState);
 		log.debug("Current color after initialization: {}", gameState.getChessboard().getCurrentPlayerColor());
-		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
 		King blackKing = (King) gameState.getChessboard().getPiece(0,4);
 		long result = ptu.perft(1, 1, stats);
-		gameState.getChessboard().switchCurrentPlayerColor();
 		Collection<Move> blackKingPseudolegalMoves = blackKing.getPseudoLegalMoves(
 				gameState.getChessboard().getKingPosition(PlayerColor.BLACK), gameState.getChessboard());
-		log.debug("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
+		log.error("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
 		assertEquals(6, blackKingPseudolegalMoves.size(),"There should be 6 black king pseudolegal moves.");
 		assertEquals(15, gameState.getLegalMovesForColor(PlayerColor.BLACK).size(), "There should be 15 legal moves for Black.");
 		assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");

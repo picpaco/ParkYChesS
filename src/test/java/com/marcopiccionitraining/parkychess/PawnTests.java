@@ -23,6 +23,18 @@ public class PawnTests {
     void setup(){}
 
     @Test
+    void pawnEqualityCheck(){
+        ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
+        Pawn whitePawnColumn0 = (Pawn) gameState.getChessboard().getPiece (6,0);
+        Pawn whitePawnColumn7 = (Pawn) gameState.getChessboard().getPiece (6,7);
+        assertEquals(whitePawnColumn0, whitePawnColumn7, "Pawns at columns a and h should be semantically equal.");
+        assertNotSame(whitePawnColumn0, whitePawnColumn7, "Pawns at columns a and h should be different objects.");
+     // It's OK for two not semantically equal to have the same has hcodes.
+        //   System.err.println("whitePawnColumn0's hashCode: " + whitePawnColumn0.hashCode());
+     //   System.err.println("whitePawnColumn7's hashCode: " + whitePawnColumn7.hashCode());
+    }
+
+    @Test
     void whitePawnNameCheck(){
         ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
         Pawn whitePawn = (Pawn) gameState.getChessboard().getPiece (6,7);
@@ -105,15 +117,18 @@ public class PawnTests {
     void blackPawns_E5_G5_WhitePawnF5_Ep_Right() {
         ChessGame gameState = new ChessGame(FEN_THREE_PAWNS_ONE_EN_PASSANT_POSITION_BASIC);
         Board chessboard = gameState.getChessboard();
-        assertEquals(2, gameState.getLegalMovesForPieceAtPosition(new Position(3, 5)).size());
+        Position whitePawnF5 = new Position(3, 5);
+        Position whitePawnF6 = new Position(2, 5);
+        Position whitePawnG6 = new Position(2, 6);
+        assertEquals(2, gameState.getLegalMovesForPieceAtPosition(whitePawnF5).size());
         Collection<Move> whitePawnLegalMoves = new ArrayList<>();
-        whitePawnLegalMoves.add(new StandardMove(new Position(3, 5), new Position(2, 5)));
-        whitePawnLegalMoves.add(new EnPassantCapture(new Position(3, 5), new Position(2, 6), chessboard));
-        Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(new Position(3, 5));
+        whitePawnLegalMoves.add(new StandardMove(whitePawnF5, whitePawnF6));
+        whitePawnLegalMoves.add(new EnPassantCapture(whitePawnF5, whitePawnG6, chessboard));
+        Collection<Move> computedPawnMoves = gameState.getLegalMovesForPieceAtPosition(whitePawnF5);
         assertTrue(whitePawnLegalMoves.size() == computedPawnMoves.size() &&
                 whitePawnLegalMoves.containsAll(computedPawnMoves) &&
-                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: " + whitePawnLegalMoves +
-                " is not the same as the produced one: " + computedPawnMoves);
+                computedPawnMoves.containsAll(whitePawnLegalMoves), "The expected list of moves: "
+                + whitePawnLegalMoves + " does not match the produced one: " + computedPawnMoves);
     }
 
     @Test

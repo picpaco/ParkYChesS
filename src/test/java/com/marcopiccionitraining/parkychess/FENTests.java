@@ -113,9 +113,8 @@ public class FENTests {
 
     @Test
     void enPassantEnabledFENvsDirectPiecePlacement(){
-        String expectedComputedFEN = "7k/8/8/pP6/8/8/8/7K w - a6 0 0";
-        ChessGame gameState = new ChessGame(expectedComputedFEN);
-        log.debug("{}", gameState.getChessboard().toString());
+        ChessGame gameState = new ChessGame(FEN_TWO_PAWNS_EN_PASSANT_POSITION_STANDARD);
+        log.debug("{}", gameState.getChessboard());
         Board chessboard2 = new Board(PlayerColor.WHITE);
         chessboard2.setPiece(new King(PlayerColor.BLACK), 0, 7);
         chessboard2.setPiece(new King(PlayerColor.WHITE), 7, 7);
