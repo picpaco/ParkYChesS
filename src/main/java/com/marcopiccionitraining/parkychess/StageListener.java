@@ -173,7 +173,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         }
     }
 
-    private void handleMove (GUIController guiController) {
+    private void handleMove (Move aMove, GUIController guiController) {
         displayChessboard (gameState.getChessboard(), guiController);
         gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
         if (gameState.isGameOver()) {
