@@ -2599,7 +2599,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection2);
         rookPseudoLegalPositions.put(new Position(0,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,21,31,41,51,61,71
@@ -2615,7 +2616,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//12,22,32,42,52,62,72
@@ -2632,7 +2634,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//13,23,33,43,53,63,73
@@ -2649,7 +2652,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//14,24,34,44,54,64,74
@@ -2666,7 +2670,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//15,25,35,45,55,65,75
@@ -2683,7 +2688,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//16,26,36,46,56,66,76
@@ -2698,7 +2704,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
             positionsInDirection3.add(new Position(0, i));
         }positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(0,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//17,27,37,47,57,67,77
@@ -2711,7 +2718,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection2);
         rookPseudoLegalPositions.put(new Position(0,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//11,12,13,14,15,16,17
@@ -2727,7 +2735,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(1,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//12,13,14,15,16,17
@@ -2746,7 +2755,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//13,14,15,16,17
@@ -2766,7 +2776,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(1, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//14,15,16,17
@@ -2787,7 +2798,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//15,16,17
@@ -2808,7 +2820,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,4), positionsGroupedByDirection);
-//validated
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//16,17
@@ -2829,7 +2840,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
@@ -2848,7 +2860,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(1,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(0, 7));
@@ -2864,7 +2877,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(1,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//21,22,23,24,25,26,27
@@ -2881,7 +2895,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(2,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//22,23,24,25,26,27
@@ -2901,7 +2916,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//23,24,25,26,27
@@ -2922,7 +2938,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//24,25,26,27
@@ -2944,7 +2961,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(2, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//25,26,27
@@ -2966,7 +2984,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//26,27
@@ -2988,7 +3007,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(2, 7));
@@ -3008,7 +3028,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(2,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(1, 7));
@@ -3025,7 +3046,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(2,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//31,32,33,34,35,36,37
@@ -3043,7 +3065,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(0, 0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(3,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//32,33,34,35,36,37
@@ -3064,7 +3087,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//33,34,35,36,37
@@ -3086,7 +3110,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//34,35,36,37
@@ -3109,7 +3134,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(3, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//35,36,37
@@ -3132,7 +3158,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//36,37
@@ -3155,7 +3182,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(3, 7));
@@ -3176,7 +3204,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(3,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//47,57,67,77
@@ -3194,7 +3223,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(3,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//41,42,43,44,45,46,47
@@ -3212,7 +3242,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(4,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//42,43,44,45,46,47
@@ -3233,7 +3264,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//43,44,45,46,47
@@ -3255,7 +3287,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//44,45,46,47
@@ -3278,7 +3311,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(4, 0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//45,46,47
@@ -3301,7 +3335,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//46,47
@@ -3324,7 +3359,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(4, 7));
@@ -3345,7 +3381,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(4,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//57,67,77
@@ -3363,7 +3400,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(4,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//51,52,53,54,55,56,57
@@ -3381,7 +3419,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(5,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//52,53,54,55,56,57
@@ -3402,7 +3441,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//53,54,55,56,57
@@ -3424,7 +3464,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//54,55,56,57
@@ -3447,7 +3488,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(5,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//55,56,57
@@ -3470,7 +3512,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//56,57
@@ -3493,7 +3536,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(5, 7));
@@ -3514,7 +3558,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(5,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//67,77
@@ -3532,7 +3577,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(5,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//61,62,63,64,65,66,67
@@ -3548,7 +3594,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(6,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//62,63,64,65,66,67
@@ -3567,7 +3614,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//63,64,65,66,67
@@ -3587,7 +3635,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//64,65,66,67
@@ -3608,7 +3657,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection4.add(new Position(6,0));
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//65,66,67
@@ -3629,7 +3679,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,4), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//66,67
@@ -3650,7 +3701,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,5), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(6, 7));
@@ -3669,7 +3721,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection4);
         rookPseudoLegalPositions.put(new Position(6,6), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7,7));
@@ -3685,7 +3738,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(6,7), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 1; i < 8; i++) {//71,72,73,74,75,76,77
@@ -3698,7 +3752,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection2);
         rookPseudoLegalPositions.put(new Position(7,0), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 2; i < 8; i++) {//72,73,74,75,76,77
@@ -3714,7 +3769,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,1), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 3; i < 8; i++) {//73,74,75,76,77
@@ -3731,7 +3787,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,2), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 4; i < 8; i++) {//74,75,76,77
@@ -3749,7 +3806,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         positionsInDirection3.add(new Position(7,0));
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,3), positionsGroupedByDirection);
-//validated
+ 
+
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 5; i < 8; i++) {//75,76,77
@@ -3767,7 +3825,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,4), positionsGroupedByDirection);
-//validated
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i < 8; i++) {//76,77
@@ -3785,7 +3842,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,5), positionsGroupedByDirection);
-//validated
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         positionsInDirection1.add(new Position(7, 7));
@@ -3801,7 +3857,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection3);
         rookPseudoLegalPositions.put(new Position(7,6), positionsGroupedByDirection);
-//validated
         positionsGroupedByDirection = new ArrayList<>();
         positionsInDirection1 = new ArrayList<>();
         for (int i = 6; i >= 0; i--) {//67,57,47,37,27,17,07
@@ -3814,7 +3869,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
         }
         positionsGroupedByDirection.add(positionsInDirection2);
         rookPseudoLegalPositions.put(new Position(7,7), positionsGroupedByDirection);
-        //validated
+         
+
     }
 
     private static void initializeQueenPseudoLegalPositions(){
@@ -3828,9 +3884,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
             }
         }
     }
-
-    // Public getters------------------------------------------------------------
-
+    
     public static List<Position> getKingPseudoLegalPositions(Position from){
         return kingPseudoLegalPositions.get(from);
     }

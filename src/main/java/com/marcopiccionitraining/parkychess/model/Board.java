@@ -144,13 +144,11 @@ public class Board {
     public void setPiece(@NonNull Piece piece, @NonNull Position position) {
         assert (0 <= position.getRow()) && (position.getRow() < 8) && (0 <= position.getColumn()) && position.getColumn() < 8 :
                 "Position should be within chessboard bounds.";
-     //   piece.setPosition(position);
         pieces[position.getRow()][position.getColumn()] = piece;
     }
 
     public void setPiece (@NonNull Piece piece, int row, int column) {
         assert 0 <= row && row < 8 && 0 <= column && column < 8 : "Row and column should be within chessboard bounds.";
-   //     piece.setPosition(new Position(row, column));
         pieces[row][column] = piece;
     }
 
@@ -217,22 +215,6 @@ public class Board {
         }
         assert allPiecesPositions.size() <= 32 : "There cannot be more than 32 pieces on the board." + this;
         return allPiecesPositions;
-        /// ////////////////////
-     /*   List<Position> filteredPiecesPositions = new ArrayList<>();
-        for (int row = 0; row < 8; row++) {
-            for (int column = 0; column < 8; column++) {
-                if (!isEmpty(row, column)) {
-                    Position position = new Position(row, column);
-                    Piece piece = getPiece(position);
-                    if ((piece.getColor()).equals(playerColor)) {
-                        filteredPiecesPositions.add(position);
-                    }
-                }
-            }
-        }
-        return filteredPiecesPositions;
-        */
-        /// /////////////////////
     }
 
     public boolean isPlayerInDoubleCheck(PlayerColor playerColor) {
@@ -425,9 +407,6 @@ public class Board {
                     playerColor, lastExecutedMove);
             return false;
         }
-    //    if (!(lastExecutedMove.getTo().equals(skippedPosition))) {
-    //        return false;
-    //    }
         log.error("Analyzing {}'s possible attacking positions...", playerColor);
         List<Position> attackingPawnsFromPositions = PseudoLegalPiecesPositionsInitializer.
                 getAttackingPawnsAssociatedWithSkippedPositions(skippedPosition, PlayerColor.getOpponentColor(playerColor));

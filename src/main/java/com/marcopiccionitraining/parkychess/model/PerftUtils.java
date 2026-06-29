@@ -52,14 +52,7 @@ public class PerftUtils {
             numberOfNodesFromPosition = perft(startingDepth, currentDepth - 1, stats);
             totalNumberOfNodes = totalNumberOfNodes + numberOfNodesFromPosition;
             stats.addNumberOfCapturesPerDepth(currentDepth, stats.getNumberOfCaptures());
-            //PlayerColor currentColor = gameState.getChessboard().getCurrentPlayerColor();
-           // if (gameState.getChessboard().getPiece(legalMove.getTo()).getColor().equals(PlayerColor.WHITE)) {
-        //    stats.addMoveNodes(currentColor, legalMove.toString(), numberOfNodesFromPosition);
             stats.addMoveNodes(gameState.getChessboard().getCurrentPlayerColor(), legalMove.toString(), numberOfNodesFromPosition);
-            //   stats.getNumberOfDepthRelatedLeaves(currentDepth);
-            //} else {
-              //  stats.addBlackMoveNodes(legalMove.toString(), numberOfNodesFromPosition);
-            //}
             gameState.undo(legalMove, localGameStateBeforeMakeMove);
             LocalGameState localGameStateAfterUndo = new LocalGameState();
             saveLocalState (localGameStateAfterUndo, legalMove);

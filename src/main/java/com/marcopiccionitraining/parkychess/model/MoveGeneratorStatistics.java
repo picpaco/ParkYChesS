@@ -106,10 +106,6 @@ public class MoveGeneratorStatistics {
         numberOfDiscoveryChecks++;
     }
 
-  //  public Set<Map.Entry<String, Long>> getEntrySet(PlayerColor color) {
-   //         return ((movesMap.get(color)).entrySet());
-   // }
-
     public Collection<Long> getMapValues(PlayerColor color) {
         if (color.equals(PlayerColor.WHITE)) {
             return whiteMovesMap.values();
@@ -117,14 +113,6 @@ public class MoveGeneratorStatistics {
             return blackMovesMap.values();
         }
     }
-      /*  if (color.equals(PlayerColor.WHITE)) {
-            HashMap<String, Long> whiteMovesMap = movesMap.get(PlayerColor.WHITE);
-            return whiteMovesMap.values();
-        }  else {
-            HashMap<String, Long> blackMovesMap = movesMap.get(PlayerColor.BLACK);
-            return blackMovesMap.values();
-        }
-    }*/
 
     @Override
     public String toString() {

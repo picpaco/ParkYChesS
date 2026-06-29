@@ -22,12 +22,11 @@ public abstract class Move implements Command {
     private Piece capturedPiece;
 
 
-    public boolean isLegal (@NonNull Board chessboard){//, LocalGameState localGameState) {
+    public boolean isLegal (@NonNull Board chessboard){
         assert chessboard.getPiece(from) != null : "There must be a piece on the from square.";
         PlayerColor playerColorOfPieceToMove = chessboard.getPiece(from).getColor();
         Board chessboardCopy = chessboard.copy();
-        LocalGameState dummyLocalGameState = new LocalGameState();
-        execute(chessboardCopy);//, dummyLocalGameState);
+        execute(chessboardCopy);
         log.debug("Chessboard copy: {} Captured piece: {}", chessboardCopy, capturedPiece);
         boolean wasEnemyKingCaptured = (capturedPiece != null) &&
                 (capturedPiece.getName().equals(PieceNames.KING)) &&
@@ -53,7 +52,7 @@ public abstract class Move implements Command {
         return "" + from + to;
     }
 
-    public abstract boolean execute (Board chessboard);//, LocalGameState localGameState);
+    public abstract boolean execute (Board chessboard);
 
     public abstract void undo (Board chessboard, LocalGameState localGameState);
 }

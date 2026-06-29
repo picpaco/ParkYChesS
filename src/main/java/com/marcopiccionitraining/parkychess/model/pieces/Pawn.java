@@ -102,12 +102,7 @@ public class Pawn extends Piece {
                         PlayerColor.getOpponentColor(getColor())))) {
                         if (chessboard.canCaptureEnPassant(chessboard.getCurrentPlayerColor())) {
                             log.debug("Adding an en passant capture from {} to {}.", from, capturePosition);
-          //              if (!((chessboard.getPiece(capturePosition)).getColor().equals(
-            //                    (chessboard.getPiece(from).getColor())))) {
                             captureMoves.add(new EnPassantCapture(from, capturePosition, chessboard));
-                //        } else {
-                  //          log.debug("Cannot capture {} (a friendly piece).", chessboard.getPiece(capturePosition));
-                    //    }
                         } else {
                             log.debug("Cannot capture en passant on {}. Possible reasons: last executed move is not " +
                                     "the correct double move, or the attacking pawn is not in the right position.", capturePosition);

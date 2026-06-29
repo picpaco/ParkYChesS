@@ -30,7 +30,7 @@ public class PawnPromotionMove extends Move {
     }
 
     @Override
-    public boolean execute (Board chessboard){//, LocalGameState localGameState) {
+    public boolean execute (Board chessboard){
         assert chessboard.getPiece(getFrom()).getName().equals(PieceNames.PAWN);
         pawnToPromote = chessboard.getPiece(getFrom());
         if (!chessboard.isEmpty(getTo())) {

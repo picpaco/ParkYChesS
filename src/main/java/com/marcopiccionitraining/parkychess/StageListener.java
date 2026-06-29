@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.FEN_INITIAL_POSITION;
@@ -85,7 +84,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             GUIController controller = (GUIController) applicationContext.getBean("controller",
                     "com.marcopiccioni.parkychess.controller.GUIController");
             BorderPane root = fxmlLoader.load();
-         //   log.debug("List of centerpane children: {}", controller.centerPane.getChildren().stream().toList());
+            log.debug("List of centerpane children: {}", controller.centerPane.getChildren().stream().toList());
             controller.centerPane.setPrefSize (CHESSBORD_SIDE_SIZE * CHESSBOARD_NUMBER_OF_ROWS,
                     CHESSBORD_SIDE_SIZE * CHESSBOARD_NUMBER_OF_COLUMNS);
             controller.centerPane.setMaxSize(controller.centerPane.getPrefWidth(), controller.centerPane.getPrefHeight());
@@ -99,10 +98,10 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             controller.chessboardGrid.prefWidthProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.chessboardGrid.prefHeightProperty().bind(Bindings.min(controller.centerPane.widthProperty(), controller.centerPane.heightProperty()));
             controller.piecesGrid.setOnMouseClicked ((mouseEvent -> {
-           //     log.trace ("mouse button clicked");
+                log.trace ("mouse button clicked");
                 Point2D point = new Point2D (mouseEvent.getX(), mouseEvent.getY());
-            //    log.debug("mouseEvent.getX(): {}", mouseEvent.getX());
-            //    log.debug("mouseEvent.getY(): {}", mouseEvent.getY());
+                log.debug("mouseEvent.getX(): {}", mouseEvent.getX());
+                log.debug("mouseEvent.getY(): {}", mouseEvent.getY());
                 Position pos = getPositionFromPoint(point, controller);
                 if (selectedPos == null) {
                     controller.piecesGrid.setCursor(Cursor.CLOSED_HAND);
@@ -121,26 +120,26 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             stage.minHeightProperty().bind(scene.widthProperty());
             stage.setTitle(applicationTitle);
             stage.show();
-       //     log.debug("Scene width: {}", scene.getWidth());
-       //     log.debug("Scene height: {}", scene.getHeight());
-       //     log.debug("Stage width: {}", stage.getWidth());
-       //     log.debug("Stage height: {}", stage.getHeight());
-       //     log.trace("Exiting onApplicationEvent.");
+            log.debug("Scene width: {}", scene.getWidth());
+            log.debug("Scene height: {}", scene.getHeight());
+            log.debug("Stage width: {}", stage.getWidth());
+            log.debug("Stage height: {}", stage.getHeight());
+            log.trace("Exiting onApplicationEvent.");
         } catch (IOException e) {
-        //    log.debug("An IOException was thrown while building the GUI. Message: {}", e.getMessage());
+            log.debug("An IOException was thrown while building the GUI. Message: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     private Position getPositionFromPoint(Point2D point, GUIController guiController) {
-       // log.trace("In getPositionFromPoint: {}", point);
+        log.trace("In getPositionFromPoint: {}", point);
         double squareSize = CHESSBORD_SIDE_SIZE / 8;
-      //  log.debug("piecesGrid.getWidth() = {}", guiController.piecesGrid.getWidth());
-     //   log.debug("piecesGrid.getHeight() = {}", guiController.piecesGrid.getHeight());
-     //   log.debug("Expected squareSize in pixels: {}", squareSize);
+        log.debug("piecesGrid.getWidth() = {}", guiController.piecesGrid.getWidth());
+        log.debug("piecesGrid.getHeight() = {}", guiController.piecesGrid.getHeight());
+        log.debug("Expected squareSize in pixels: {}", squareSize);
         int row = (int)((point.getY()) / squareSize);
         int col = (int)((point.getX()) / squareSize);
-     //   log.trace("In getPositionFromPoint(point); computed position: ({}, {})", row, col);
+        log.trace("In getPositionFromPoint(point); computed position: ({}, {})", row, col);
         return new Position(row, col);
     }
 
@@ -166,7 +165,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         removeHighlights();
         Move cachedMove = movesCache.get(pos);
         if (cachedMove != null) {
-           // chessboard.switchCurrentPlayerColor();
             if (cachedMove.getName().equals(MoveNames.PAWN_PROMOTION)){
                 handlePromotion(cachedMove.getFrom(), cachedMove.getTo(), guiController);
             } else {
@@ -175,10 +173,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         }
     }
 
-    private void handleMove (Move aMove, GUIController guiController) {
-        //List<Move> generatedMoves = gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor());
-        //FIXME the following invocation to makeMove looks fishy to me
-        //gameState.makeMove (aMove, generatedMoves);
+    private void handleMove (GUIController guiController) {
         displayChessboard (gameState.getChessboard(), guiController);
         gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
         if (gameState.isGameOver()) {
@@ -291,9 +286,9 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
 
     private void showHighlights() {
         for (Position to : movesCache.keySet()) {
-      //      log.debug("About to highlight square ({}, {}) from movecache: {}", to.row(), to.column(), movesCache);
+            log.debug("About to highlight square ({}, {}) from movecache: {}", to.getRow(), to.getColumn(), movesCache);
             (highlights [to.getRow()][to.getColumn()]).setFill(HIGHLIGHT_COLOR);
-     //       log.debug("Just highlighted square {} from movecache: {}", to, movesCache);
+            log.debug("Just highlighted square {} from movecache: {}", to, movesCache);
         }
     }
 
@@ -304,10 +299,8 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
     }
 
     private void initializeBoard(GUIController guiController){
-     //   log.trace("In initializeBoard()");
         for (int row = 0; row < CHESSBOARD_NUMBER_OF_ROWS; row++){
             for (int column = 0; column < CHESSBOARD_NUMBER_OF_COLUMNS; column++) {
-                //First lay down an image of a square of the appropriate color
                 ImageView squareImageView;
                 if (((row + column) % 2) == 0) {
                     squareImageView = new ImageView(objectFactory.getSquareImage(PlayerColor.WHITE));
@@ -318,15 +311,13 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 squareImageView.setCache(true);
                 squareImageView.setFitHeight(DIM_SQUARE_SIDE);
                 squareImageView.setFitWidth(DIM_SQUARE_SIDE);
-               // chessboardSquaresImages[row][column] = squareImageView;
                 guiController.chessboardGrid.add(squareImageView, column, row);
-                // Then initialize the highlightsgrid with transparent rectangles
                 Rectangle transparentSquare = new Rectangle(DIM_SQUARE_SIDE,
                         DIM_SQUARE_SIDE, Color.TRANSPARENT);
                 highlights[row][column] = transparentSquare;
                 guiController.highlightsGrid.add(highlights[row][column], column, row);
-       //         log.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
-                   //     row, column, guiController.highlightsGrid.getChildren().size());
+                log.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
+                        row, column, guiController.highlightsGrid.getChildren().size());
                 //Then initialize the pieces layer square with an empty image.
                 ImageView imageView = new ImageView (objectFactory.getPieceImage(PlayerColor.WHITE, PieceNames.NONE));
                 imageView.setSmooth(true);
@@ -334,7 +325,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 imageView.setFitHeight(DIM_SQUARE_SIDE);
                 imageView.setFitWidth(DIM_SQUARE_SIDE);
                 guiController.piecesGrid.add(imageView, column, row);
-        //        log.debug("Number of piecesgrid cells after adding an empty square image: {}", guiController.piecesGrid.getChildren().size());
+                log.debug("Number of piecesgrid cells after adding an empty square image: {}", guiController.piecesGrid.getChildren().size());
             }
             guiController.piecesGrid.setCursor(Cursor.OPEN_HAND);
             if (chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK)){
@@ -345,16 +336,14 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 guiController.moveToWhite.setVisible(true);
             }
         }
-  //      log.trace("Exiting initializeBoard()");
     }
 
     private void displayChessboard(Board chessBoard, GUIController guiController) {
- //       log.trace("In displayChessboard()");
         guiController.piecesGrid.getChildren().clear();
         for (int row = 0; row < CHESSBOARD_NUMBER_OF_ROWS; row++) {
             for (int column = 0; column < CHESSBOARD_NUMBER_OF_COLUMNS; column++) {
                 Piece piece = chessBoard.getPiece(row, column);
-          //      log.debug("piece ({},{}): {}", row, column, piece);
+                log.debug("piece ({},{}): {}", row, column, piece);
                 ImageView imageToDisplay = new ImageView(objectFactory.getPieceImage(piece));
                 imageToDisplay.setPreserveRatio(true);
                 imageToDisplay.setSmooth(true);
@@ -362,7 +351,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 imageToDisplay.setFitHeight (DIM_SQUARE_SIDE);
                 imageToDisplay.setFitWidth (DIM_SQUARE_SIDE);
                 guiController.piecesGrid.add(imageToDisplay, column, row);
-          //      log.debug("Number of piecesgrid cells after adding: {}", guiController.piecesGrid.getChildren().size());
+                log.debug("Number of piecesgrid cells after adding: {}", guiController.piecesGrid.getChildren().size());
             }
         }
     }

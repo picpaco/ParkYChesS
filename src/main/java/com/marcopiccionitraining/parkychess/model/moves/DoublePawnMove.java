@@ -42,7 +42,7 @@ public class DoublePawnMove extends Move {
     }
 
     @Override
-    public boolean execute (@NonNull Board chessboard){// LocalGameState localGameState) {
+    public boolean execute (@NonNull Board chessboard){
         assert (chessboard.getPiece(getFrom())).getName().equals(PieceNames.PAWN) :
                 "There must be a pawn on " + getFrom();
         Pawn pawn = (Pawn) chessboard.getPiece(getFrom());

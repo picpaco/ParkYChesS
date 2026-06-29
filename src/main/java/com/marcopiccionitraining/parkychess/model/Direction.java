@@ -20,26 +20,26 @@ public record Direction (int rowDelta, int columnDelta) {
 
 @Override @NonNull
     public String toString(){
-    @NonNull String result;
-    if (this.equals(Direction.SOUTH)) {
-        result = "SOUTH";
-    } else if (this.equals(Direction.SOUTH_EAST)) {
-        result = "SOUTH_EAST";
-    } else if (this.equals(Direction.SOUTH_WEST)) {
-        result = "SOUTH_WEST";
-    } else if (this.equals(Direction.NORTH)) {
-        result = "NORTH";
-    } else if (this.equals(Direction.NORTH_EAST)) {
-        result = "NORTH_EAST";
-    } else if (this.equals(Direction.NORTH_WEST)) {
-        result = "NORTH_WEST";
-    } else if (this.equals(Direction.EAST)) {
-        result = "EAST";
-    } else if (this.equals(Direction.WEST)) {
-        result = "WEST";
-    } else {
-        throw new RuntimeException("Invalid direction was used for toString().");
+        @NonNull String result;
+        if (this.equals(Direction.SOUTH)) {
+            result = "SOUTH";
+        } else if (this.equals(Direction.SOUTH_EAST)) {
+            result = "SOUTH_EAST";
+        } else if (this.equals(Direction.SOUTH_WEST)) {
+            result = "SOUTH_WEST";
+        } else if (this.equals(Direction.NORTH)) {
+            result = "NORTH";
+        } else if (this.equals(Direction.NORTH_EAST)) {
+            result = "NORTH_EAST";
+        } else if (this.equals(Direction.NORTH_WEST)) {
+            result = "NORTH_WEST";
+        } else if (this.equals(Direction.EAST)) {
+            result = "EAST";
+        } else if (this.equals(Direction.WEST)) {
+            result = "WEST";
+        } else {
+            throw new RuntimeException("Invalid direction was used for toString().");
+        }
+        return result;
     }
-    return result;
-}
 }

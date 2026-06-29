@@ -40,9 +40,6 @@ public class ChessGame {
     @Getter @Setter
     private LocalGameState localGameState = new LocalGameState();
 
-    //@Getter
-    //private LocalGameStateContainer essentialGameStateContainer = new LocalGameStateContainer();
-
     /**
      * Game history where keys are unique strings identifying a position and values
      * counting how many times that position has been reached.
@@ -102,14 +99,6 @@ public class ChessGame {
         log.debug("Color moving first: {}", chessboard.getCurrentPlayerColor());
         stateString = new FENStateString(chessboard.getCurrentPlayerColor(),chessboard).toString();
         log.debug("Just created the first state string: {}", stateString);
-     /*   LocalGameState localGameState = new LocalGameState();
-        localGameState.setBlackKingsideCastlingAllowed(chessboard.isBlackKingsideCastlingPossibleFromFEN());
-        localGameState.setBlackQueensideCastlingAllowed(chessboard.isBlackQueensideCastlingPossibleFromFEN());
-        localGameState.setWhiteKingsideCastlingAllowed(chessboard.isWhiteKingsideCastlingPossibleFromFEN());
-        localGameState.setWhiteQueensideCastlingAllowed(chessboard.isWhiteQueensideCastlingPossibleFromFEN());
-        localGameState.setSkippedPawnPosition(chessboard.getPawnSkippedPosition(chessboard.getCurrentPlayerColor()));
-        */
-        //essentialGameStateContainer.push(localGameState);
         King king = chessboard.getKing(chessboard.getCurrentPlayerColor());
         Position kingPosition = chessboard.getKingPosition(chessboard.getCurrentPlayerColor());
         List<Move> kingPseudoLegalMoves = king.getPseudoLegalMoves(kingPosition, chessboard);
@@ -750,6 +739,7 @@ public class ChessGame {
             } else {
                 if (isFiftyMovesRuleDraw()){
                     log.info("There is a draw due to the fifty moves rule.");
+
                     gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.FIFTY_MOVES_RULE_DRAW);
                 } else {
                     if (isThreefoldRepetitionHappening()){
@@ -759,7 +749,7 @@ public class ChessGame {
                 }
             }
         }
-        //TODO add win because of resignation and agreed draw.
+        //TODO add two kinds of win: resignation and agreed draw.
     }
 
 

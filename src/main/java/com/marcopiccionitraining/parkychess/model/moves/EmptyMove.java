@@ -14,7 +14,7 @@ extends Move {
         setName(MoveNames.EMPTY);
     }
     @Override
-    public boolean execute(Board chessboard){//}, LocalGameState localGameState) {
+    public boolean execute(Board chessboard){
         return false;
     }
 

@@ -29,8 +29,6 @@ public class EnPassantCapture extends Move{
                 "Last executed move before an en passant capture should be a Double Pawn move.";
         log.error("Last executed move's 'to' position: {}; En passant move's 'to''s: {}",
                 chessboard.getLastExecutedMove().getTo(), to);
-//        assert (chessboard.getLastExecutedMove().getTo().equals(to)) :
-  //              "Last executed move's 'to' position should match this en passant move 'to' position.";
         PlayerColor opponentColor = PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor());
         assert (chessboard.getPawnSkippedPosition(opponentColor).getColumn()) == to.getColumn() :
         "The column of the skipped position should be the same as the en passant capture position column";
@@ -58,7 +56,7 @@ public class EnPassantCapture extends Move{
     }
 
     @Override
-    public boolean execute (@NonNull Board chessboard){//, LocalGameState localGameState) {
+    public boolean execute (@NonNull Board chessboard){
         log.debug("About to execute an en passant capture from {} to {}...", getFrom(), getTo());
         assert !(chessboard.isEmpty(getFrom())) : "The piece on 'from' position must exist.";
         assert chessboard.getPiece(getFrom()).getName().equals(PieceNames.PAWN) :
@@ -67,8 +65,6 @@ public class EnPassantCapture extends Move{
         assert !chessboard.isEmpty(capturedPawnGhostPosition) : "capturedPawnGhostSquare cannot be empty.";
         assert chessboard.getPiece(capturedPawnGhostPosition).getName().equals(PieceNames.PAWN) :
                 "The piece on capturedPawnGhostPosition must be a pawn.";
-        //FIXME The container shouldn't be empty now
-//        chessboard.getGameStateContainer().peek().setCapturedGhostPawnSquare(capturedPawnGhostPosition);
         log.debug("About to capture a pawn on ghost square: {}", capturedPawnGhostPosition);
         log.debug("{} Current position:  {}", chessboard.getCurrentPlayerColor(), chessboard);
         capturedPawn = (Pawn) chessboard.getPiece(capturedPawnGhostPosition);

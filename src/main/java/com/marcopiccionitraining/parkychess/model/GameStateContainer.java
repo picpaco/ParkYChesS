@@ -1,12 +1,8 @@
 package com.marcopiccionitraining.parkychess.model;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.function.IntFunction;
 
 /**
  * Incremental game state implemented as a Stack with a fixed array of known size, with O(1) operations.
