@@ -43,16 +43,6 @@ public class Board {
     private final ArrayList<Piece> checkingPieces = new ArrayList<>();
 
     /**
-     * Custom stack data structure used to save game state and restore it when needed.
-     */
-    @Getter @Setter
-    private GameStateContainer gameStateContainer;
-
-    /**
-     * Default size for saved game state.
-     */
-    public static final int MAX_CONTAINER_SIZE = 50;
-    /**
      * Given a valid game position, if the player who has the move makes a double pawn move, then the first position
      * associated to the double move is defined as pawnSkippedPosition.
      * The following HashMap has as key the color (White or Black), and as value the associated pawnSkippedPosition.
@@ -106,6 +96,8 @@ public class Board {
      */
     @Getter @Setter
     private boolean isWhiteQueensideCastlingPossibleFromFEN;
+    @Getter@Setter
+    private int halfMoveCounter;
     /**
      * Current player color
      */
@@ -121,8 +113,8 @@ public class Board {
         log.debug("Empty board: {}", this);
         this.currentPlayerColor = currentColor;
         lastExecutedMove = new EmptyMove();
-        gameStateContainer = new GameStateContainer(MAX_CONTAINER_SIZE);
-        assert gameStateContainer.isEmpty() : "A game state object must be empty at game start.";
+     //   gameStateContainer = new GameStateContainer(MAX_CONTAINER_SIZE);
+      //  assert gameStateContainer.isEmpty() : "A game state object must be empty at game start.";
     }
 
     /**
@@ -175,6 +167,10 @@ public class Board {
         assert 0 <= row && row <= 7 && 0 <= column && column <= 7 :
                 "Row and column should be within chessboard bounds.";
         return (pieces[row][column] == null);
+    }
+    public boolean isEmpty(int square){
+        assert 0 <= square && square < 64 : "Square index should be within chessboard bounds.";
+        return isEmpty(square % 8, square / 8);
     }
     /**
      * @param playerColor is the color we are interested in.
@@ -258,7 +254,7 @@ public class Board {
         for (Position pos : positions) {
             boardCopy.setPiece((getPiece(pos).copy()), pos);
         }
-        boardCopy.gameStateContainer = gameStateContainer.copy();
+      //  boardCopy.gameStateContainer = gameStateContainer.copy();
         log.debug("Board copy: {}", boardCopy);
         boardCopy.setLastExecutedMove(lastExecutedMove);
         log.debug("Last executed move which was copied: {}", boardCopy.lastExecutedMove);
@@ -283,7 +279,7 @@ public class Board {
         return boardCopy;
     }
 
-  /*  public void flip() {//TODO implement me}*/
+  /*  public void flip() {//TODO implement!}*/
 
     private PieceCounter getPiecesCounter() {
         PieceCounter counter = new PieceCounter();

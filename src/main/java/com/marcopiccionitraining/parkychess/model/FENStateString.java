@@ -1,3 +1,4 @@
+/*
 package com.marcopiccionitraining.parkychess.model;
 
 import com.marcopiccionitraining.parkychess.model.moves.MoveNames;
@@ -149,3 +150,4 @@ public final class FENStateString {
         return Objects.hashCode(customFENStringImpl);
     }
 }
+ */

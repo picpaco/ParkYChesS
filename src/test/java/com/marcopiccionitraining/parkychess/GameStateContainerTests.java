@@ -1,17 +1,11 @@
+/*
 package com.marcopiccionitraining.parkychess;
 
 import com.marcopiccionitraining.parkychess.model.*;
-import com.marcopiccionitraining.parkychess.model.moves.Move;
-import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
-import com.marcopiccionitraining.parkychess.model.pieces.Bishop;
-import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,9 +68,7 @@ public class GameStateContainerTests {
     @Test
     void poppingAnEmptyStackUnderflows(){
         assertThrowsExactly(AssertionError.class,
-                () -> {
-                    gameStateContainer.pop();
-                },
+                () -> gameStateContainer.pop(),
                 "Stack underflow! Can't pop elements from an empty stack.");
     }
 
@@ -121,4 +113,4 @@ public class GameStateContainerTests {
         assertNull(peekedElement, "peeked element should be null.");
         assertTrue(gameStateContainer.isEmpty(), "Stack should be empty now.");
     }
-}
+}*/

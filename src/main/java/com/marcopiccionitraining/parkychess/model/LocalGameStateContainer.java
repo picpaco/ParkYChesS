@@ -1,3 +1,4 @@
+/*
 package com.marcopiccionitraining.parkychess.model;
 
 import java.util.LinkedList;
@@ -21,3 +22,5 @@ public class LocalGameStateContainer implements EssentialStack<LocalGameState>{
         stack.push(item);
     }
 }
+
+ */

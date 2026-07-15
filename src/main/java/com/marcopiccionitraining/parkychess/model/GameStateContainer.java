@@ -1,3 +1,4 @@
+/*
 package com.marcopiccionitraining.parkychess.model;
 
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Objects of this class are used by test and search functions to store game state incrementally before
  * making a move and to restore game state before undoing the same move.
  */
-@Slf4j
+/*@Slf4j
 public class GameStateContainer implements EssentialStack<FENStateString>{
     private int topIndex;
     private int maxSize;
@@ -24,6 +25,7 @@ public class GameStateContainer implements EssentialStack<FENStateString>{
     /**
      * @param moveStateItem element to push on top.
      */
+/*
     @Override
     public void push (FENStateString moveStateItem) {
         if (topIndex + 1 == maxSize) {
@@ -40,6 +42,7 @@ public class GameStateContainer implements EssentialStack<FENStateString>{
      * @return top element, or null if stack underflowed.
      * Top element is removed from the stack.
      */
+/*
     @Override
     public FENStateString pop() {
         if (topIndex < 0) {
@@ -57,6 +60,7 @@ public class GameStateContainer implements EssentialStack<FENStateString>{
      * @return top element, or null if stack is empty.
      * Top element is not removed from the stack.
      */
+  /*
     @Override
     public FENStateString peek() {
         if (topIndex < 0) {
@@ -77,6 +81,7 @@ public class GameStateContainer implements EssentialStack<FENStateString>{
     /**
      * @return a deep copy of this GameStateContainer
      */
+ /*
     public GameStateContainer copy() {
         GameStateContainer gameStateContainerCopy = new GameStateContainer(maxSize);
         gameStateContainerCopy.topIndex = topIndex;
@@ -86,3 +91,4 @@ public class GameStateContainer implements EssentialStack<FENStateString>{
         return gameStateContainerCopy;
     }
 }
+*/

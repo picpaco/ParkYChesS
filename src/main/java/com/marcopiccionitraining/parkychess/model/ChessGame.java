@@ -34,11 +34,11 @@ public class ChessGame {
      */
     private int numberOfMovesWhichAreNeitherCaptureNorPawnMoves;
 
-    @Getter @Setter
-    private String stateString;
+ //   @Getter @Setter
+ //   private String stateString;
 
     @Getter @Setter
-    private LocalGameState localGameState = new LocalGameState();
+    private LocalGameState localGameState;
 
     /**
      * Game history where keys are unique strings identifying a position and values
@@ -89,7 +89,7 @@ public class ChessGame {
         if (!(isValidAsFEN(externalFEN))) {
             throw new IllegalArgumentException("The input FEN string is not valid.");
         }
-        gameStateHistory.put(stateString, 1);
+      //  gameStateHistory.put(stateString, 1);
         chessboard = new Board(PlayerColor.UNDETERMINED);
         setPositionFromFEN(externalFEN);
         log.debug("Chessboard just after setting position from FEN: {}", chessboard);
@@ -97,8 +97,8 @@ public class ChessGame {
         assert chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE) || chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK) :
                 "Player color must be either white or black.";
         log.debug("Color moving first: {}", chessboard.getCurrentPlayerColor());
-        stateString = new FENStateString(chessboard.getCurrentPlayerColor(),chessboard).toString();
-        log.debug("Just created the first state string: {}", stateString);
+    //    stateString = new FENStateString(chessboard.getCurrentPlayerColor(),chessboard).toString();
+     //   log.debug("Just created the first state string: {}", stateString);
         King king = chessboard.getKing(chessboard.getCurrentPlayerColor());
         Position kingPosition = chessboard.getKingPosition(chessboard.getCurrentPlayerColor());
         List<Move> kingPseudoLegalMoves = king.getPseudoLegalMoves(kingPosition, chessboard);
@@ -131,8 +131,9 @@ public class ChessGame {
                 case 2: log.debug("Player {} is in double check. Checkers list: {}", chessboard.getCurrentPlayerColor(), checkingPieces);
                 default: log.debug("There cannot be {} checking pieces.", checkingPieces.size());
             }
+            localGameState = new LocalGameState(chessboard);
         }
-        FENStateString historyItem = chessboard.getGameStateContainer().peek();
+    /*    FENStateString historyItem = chessboard.getGameStateContainer().peek();
         log.debug("After a peek at the game state stack its size is {} and the last executed move is {}",
                 chessboard.getGameStateContainer().size(), chessboard.getLastExecutedMove());
         String previousHistoryItem = String.valueOf(gameStateHistory.put(
@@ -143,6 +144,7 @@ public class ChessGame {
             log.debug("First history item: {} was recorded.", previousHistoryItem);
         }
         log.debug("\"Finished creating chess game. Chessboard after creating it: {}", chessboard);
+    */
     }
 
     private boolean isValidAsFEN(String s) {
@@ -338,8 +340,8 @@ public class ChessGame {
         DoublePawnMove doublePawnMove = new DoublePawnMove(lastMoveFromPosition, lastMoveToPosition, chessboard);
         Board chessboardCopy = chessboard.copy();
         //FIXME localGameStateCopy = localGameState.copy()?
-        if (doublePawnMove.isLegal(chessboardCopy)){//, localGameState)) {
-            doublePawnMove.execute(chessboard);//, localGameState);
+        if (doublePawnMove.isLegal(chessboardCopy)){
+            doublePawnMove.execute(chessboard);
             chessboard.setLastExecutedMove(doublePawnMove);
         }
     }
@@ -620,8 +622,8 @@ public class ChessGame {
         for (Move pseudoLegalMove : pseudoLegalMoves) {
             log.debug("Analyzing pseudoLegalMove: {} to see if it is legal:", pseudoLegalMove);
             chessboardCopy = chessboard.copy();
-            //FIXME: localGameStateCopy = localGameState.copy?
-            if (pseudoLegalMove.isLegal(chessboardCopy)){//, localGameState)) {
+            //FIXME? localGameStateCopy = localGameState.copy?
+            if (pseudoLegalMove.isLegal(chessboardCopy)){
                 log.debug("PseudoLegalMove: {} is legal.", pseudoLegalMove);
                 legalMovesForPiece.add(pseudoLegalMove);
             }
@@ -648,8 +650,7 @@ public class ChessGame {
             Board chessboardCopy = chessboard.copy();
             log.debug("Chessboard copy before checking legality: {}", chessboardCopy);
             for (Move pseudoLegalMove : pseudoLegalMovesForColor) {
-                //LocalGameState dummyLocalGameState = new LocalGameState();
-                if (pseudoLegalMove.isLegal(chessboardCopy)){//, dummyLocalGameState)) {
+                if (pseudoLegalMove.isLegal(chessboardCopy)){
                     log.trace("Adding pseudoLegalMove: {} {} to legal moves for {}.",
                             pseudoLegalMove.getName(), pseudoLegalMove, playerColor);
                     legalMovesForColor.add(pseudoLegalMove);
@@ -662,9 +663,9 @@ public class ChessGame {
         return legalMovesForColor;
     }
 
-    public void makeMove(@NonNull Move move, @NonNull List<Move> legalMovesforColor){//, LocalGameState localGameState) {
-        new FENStateString(getChessboard().getCurrentPlayerColor(),getChessboard());
-        boolean isCaptureOrPawnMove = move.execute(chessboard);//, localGameState);
+    public void makeMove(@NonNull Move move, @NonNull List<Move> legalMovesforColor){
+      //  new FENStateString(getChessboard().getCurrentPlayerColor(),getChessboard());
+        boolean isCaptureOrPawnMove = move.execute(chessboard);
         if (isCaptureOrPawnMove) {
             numberOfMovesWhichAreNeitherCaptureNorPawnMoves = 0;
             gameStateHistory.clear();
@@ -679,16 +680,17 @@ public class ChessGame {
         log.debug("Total list of re-executable moves: {}", listOfReExecutableMoves);
         log.debug("About to set last executed move to {} for {}", move, chessboard.getCurrentPlayerColor());
         chessboard.setLastExecutedMove(move);
-        if (!(chessboard.getGameStateContainer().isEmpty())) {
+        //FIXME replace the following line as appropriate
+        //if (!(chessboard.getGameStateContainer().isEmpty())) {
             listOfReExecutableMoves.clear();
             log.trace("Command history: {}", commandHistory);
-            updateStateAfterMoveToEnforceDrawByRepetition();
+      //      updateStateAfterMoveToEnforceDrawByRepetition();
             checkGameEnd(legalMovesforColor, chessboard);
-        } else {
-            chessboard.getGameStateContainer().push(new FENStateString(chessboard.getCurrentPlayerColor(), chessboard));
-            log.debug("Container was empty. Created a new FENStateString: {}", stateString);
-        }
-        commandHistory.add (move.toString());
+      //  } else {
+      //      chessboard.getGameStateContainer().push(new FENStateString(chessboard.getCurrentPlayerColor(), chessboard));
+      //      log.debug("Container was empty. Created a new FENStateString: {}", stateString);
+      //  }
+        //commandHistory.add (move.toString());
         if (isGameOver()) {
             log.debug("Game over. {} {}", gameResult, chessboard);
             commandHistory.add("Game over");
@@ -697,7 +699,7 @@ public class ChessGame {
     }
 
     public void undo (@NonNull Move move, LocalGameState localGameState) {
-        assert !(chessboard.getGameStateContainer().isEmpty()) : "Game state container cannot be empty here";
+        //assert !(chessboard.getGameStateContainer().isEmpty()) : "Game state container cannot be empty here";
         assert chessboard.isEmpty(move.getFrom()) : "To be able to undo move " + move +
                 " the original 'from' square " + move.getFrom() + " should be empty." +
                 " There is instead a " + chessboard.getPiece(move.getFrom());
@@ -749,9 +751,8 @@ public class ChessGame {
                 }
             }
         }
-        //TODO add two kinds of win: resignation and agreed draw.
+        //TODO add two more outcomes: resignation and agreed draw.
     }
-
 
     private Command pop (List<Command> commandList) {
         if(!commandList.isEmpty()) {
@@ -770,10 +771,10 @@ public class ChessGame {
         return fullMoves == 50;
     }
 
-    private void updateStateAfterMoveToEnforceDrawByRepetition(){
-        stateString = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard).toString();
-        log.debug("Created state string: {} to check if a draw by repetition is happening.", stateString);
-        if (gameStateHistory.containsKey(stateString)){
+ //   private void updateStateAfterMoveToEnforceDrawByRepetition(){
+        //stateString = new FENStateString(chessboard.getCurrentPlayerColor(), chessboard).toString();
+  //      log.debug("Created state string: {} to check if a draw by repetition is happening.", stateString);
+    /*    if (gameStateHistory.containsKey(stateString)){
             log.debug("The current position {} was already reached {} times.", chessboard, gameStateHistory.get(stateString));
             int numberOfOccurrences = gameStateHistory.get(stateString);
             numberOfOccurrences++;
@@ -782,9 +783,12 @@ public class ChessGame {
             log.trace("The current position was never encountered before.");
             gameStateHistory.put(stateString, 1);
         }
-    }
+        */
+ //   }
 
     private boolean isThreefoldRepetitionHappening(){
-                return gameStateHistory.get(stateString) == 3;
+       //FIXME
+        //         return gameStateHistory.get(stateString) == 3;
+        return false;
     }
 }

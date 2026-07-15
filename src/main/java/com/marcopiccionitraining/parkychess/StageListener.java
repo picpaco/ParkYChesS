@@ -168,12 +168,12 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             if (cachedMove.getName().equals(MoveNames.PAWN_PROMOTION)){
                 handlePromotion(cachedMove.getFrom(), cachedMove.getTo(), guiController);
             } else {
-                handleMove(cachedMove, guiController);
+                handleMove(guiController);
             }
         }
     }
 
-    private void handleMove (Move aMove, GUIController guiController) {
+    private void handleMove (GUIController guiController) {
         displayChessboard (gameState.getChessboard(), guiController);
         gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
         if (gameState.isGameOver()) {
@@ -198,7 +198,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         ButtonType newGameType = new ButtonType("New Game", ButtonBar.ButtonData.CANCEL_CLOSE);
         gameOverAlert.getButtonTypes().setAll (okType, newGameType);
         Optional<ButtonType> buttonPressed = gameOverAlert.showAndWait();
-      //  log.debug("button pressed: {}", buttonPressed);
         if (buttonPressed.isPresent() && buttonPressed.get() == okType){
             System.exit(0);
         } else {
@@ -221,7 +220,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
             guiController.moveToWhite.setVisible(true);
         }
         displayChessboard(chessboard, guiController);
-   //     setCursor(gameState.getCurrentPlayerColor());
     }
     private void handlePromotion(Position from, Position to, GUIController guiController) {
         Dialog<String> promotionAlert = new Dialog<>();
@@ -237,9 +235,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Button queenButton = new Button("", queenImageView);
         promotionPiecesImagesGrid.add(queenButton, 1, 1);
         queenButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Queen(chessboard.getCurrentPlayerColor()),
-                    chessboard.getPiece(to));
-            handleMove(promotionMove, guiController);
+            handleMove(guiController);
             window.hide();
         });
         ImageView rookImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(),
@@ -250,9 +246,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Button rookButton = new Button("", rookImageView);
         promotionPiecesImagesGrid.add(rookButton, 2, 1);
         rookButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Rook(chessboard.getCurrentPlayerColor()),
-                    chessboard.getPiece(to));
-            handleMove(promotionMove, guiController);
+            handleMove(guiController);
             window.hide();
         });
         ImageView knightImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(),
@@ -263,9 +257,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Button knightButton = new Button("", knightImageView);
         promotionPiecesImagesGrid.add(knightButton, 3,1);
         knightButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Knight(chessboard.getCurrentPlayerColor()),
-                    chessboard.getPiece(to));
-            handleMove(promotionMove, guiController);
+            handleMove(guiController);
             window.hide();
         });
         ImageView bishopImageView = new ImageView (objectFactory.getPieceImage(chessboard.getCurrentPlayerColor(), PieceNames.BISHOP));
@@ -275,9 +267,7 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
         Button bishopButton = new Button("", bishopImageView);
         promotionPiecesImagesGrid.add(bishopButton, 4, 1);
         bishopButton.setOnAction(e -> {
-            Move promotionMove = new PawnPromotionMove(from, to, new Bishop(chessboard.getCurrentPlayerColor()),
-                    chessboard.getPiece(to));
-            handleMove(promotionMove, guiController);
+            handleMove(guiController);
             window.hide();
         });
         promotionAlert.getDialogPane().setContent(promotionPiecesImagesGrid);
@@ -318,7 +308,6 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
                 guiController.highlightsGrid.add(highlights[row][column], column, row);
                 log.debug("After adding highlight at {},{} number of cells in highlightsgrid = {}",
                         row, column, guiController.highlightsGrid.getChildren().size());
-                //Then initialize the pieces layer square with an empty image.
                 ImageView imageView = new ImageView (objectFactory.getPieceImage(PlayerColor.WHITE, PieceNames.NONE));
                 imageView.setSmooth(true);
                 imageView.setCache(true);

@@ -10,6 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static com.marcopiccionitraining.parkychess.model.FENPositions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests intended to measure the efficiency of the move generator when generates leaves positions only.
+ */
 @SpringBootTest @Slf4j
 public class BulkPerftTests {
     private ChessGame gameState;
@@ -22,6 +25,7 @@ public class BulkPerftTests {
         assertThrowsExactly(AssertionError.class, () -> ptu.bulkPerft(0),
                 "Passing depth 0 should cause an AssertionError.");
     }
+
     @Test
     void bulkPerf_id_0020_tNumberOfPositionsSimplestPlayablePositionDepth1() {
         gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
@@ -29,6 +33,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(4L, result, "There are 4 possible positions at depth 1");
     }
+
     @Test
     void bulkPerft_id_0030_NumberOfPositionsSimplestPlayablePositionDepth2() {
         gameState = new ChessGame (FEN_SIMPLEST_PLAYABLE);
@@ -36,6 +41,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(2);
         assertEquals(12L, result, "There are 12 possible positions at depth 2");
     }
+
     @Test
     void bulkPerft_id_0040_oneBlackOneWhitePawnAtHomeDepth1() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE);
@@ -43,6 +49,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(5L, result, "There are 5 possible positions at depth 1");
     }
+
     @Test
     void bulkPerft_id_0050_oneBlackOneWhitePawnAtHomeDepth2() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE);
@@ -50,6 +57,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(2);
         assertEquals(25L, result, "There are 25 possible positions at depth 2");
     }
+
     @Test
     void bulkPerft_id_0060_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth1() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE_ON_ADJACENT_COLUMNS);
@@ -57,6 +65,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(5L, result, "There are 5 possible positions at depth 1");
     }
+
     @Test
     void bulkPerft_id_0070_oneBlackOneWhitePawnAtHomeOnAdjacentColumnsDepth2() {
         gameState = new ChessGame(FEN_ONE_BLACK_ONE_WHITE_PAWN_AT_STARTING_SQUARE_ON_ADJACENT_COLUMNS);
@@ -64,6 +73,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(2);
         assertEquals(25L, result, "There are 25 possible positions at depth 2");
     }
+
     @Test
     void bulkPerft_id_0080_twoBlackTwoWhitePawnsAllAtHomeDepth1() {
         gameState = new ChessGame(FEN_TWO_BLACK_TWO_WHITE_PAWNS_AT_STARTING_SQUARE);
@@ -71,6 +81,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(7L, result, "There are 7 possible positions at depth 1");
     }
+
     @Test
     void bulkPerft_id_0090_twoBlackTwoWhitePawnsAllAtHomeDepth2() {
         gameState = new ChessGame(FEN_TWO_BLACK_TWO_WHITE_PAWNS_AT_STARTING_SQUARE);
@@ -85,6 +96,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(1);
         assertEquals(20L, result, "From the initial position there are 20 possible legal moves at depth 1");
     }
+
     @Test
     void bulkPerft_id_0110_NumberOfPositionsAtInitialPositionDepth2() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
@@ -92,6 +104,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(2);
         assertEquals(400L, result, "From the initial position there are 400 possible legal moves at depth 2");
     }
+
     @Test
     void bulkPerft_id_0120_NumberOfPositionsAtInitialPositionDepth3() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
@@ -99,6 +112,7 @@ public class BulkPerftTests {
         long result = ptu.bulkPerft(3);
         assertEquals(8902L, result, "From the initial position there are 8902 possible legal moves at depth 3");
     }
+
     @Test
     void bulkPerft_id_0130_NumberOfPositionsAtInitialPositionDepth4() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
@@ -107,13 +121,14 @@ public class BulkPerftTests {
         assertEquals(197_281L, result, "From the initial position there are 197_281 possible legal moves at depth 3");
         //takes <1s
     }
+
     @Test
     void bulkPerft_id_0140_NumberOfPositionsAtInitialPositionDepth5() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(5);
         assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible legal moves at depth 5");
-        //takes 11s
+        //takes 11s - 19s
     }
     @Test
     void bulkPerft_id_0150_NumberOfPositionsAtInitialPositionDepth6() {
@@ -121,7 +136,7 @@ public class BulkPerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(6);
         assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
-        //takes 4m 21s - 8m21s;
+        //takes 4m 21s - 7m51s;
     }
     /*@Test
     void bulkPerft_id_016_NumberOfPositionsAtInitialPositionDepth7() {

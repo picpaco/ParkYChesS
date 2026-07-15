@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * For Rooks, Knights, Bishops, Kings, and Queens maps a piece's position
  * to the associated reachable positions (within the board) according to the chess rules.
- * For pawns, this record contains 3 maps for black and 3 maps for white:
+ * For Pawns, contains 3 maps for black and 3 maps for white:
  * 1. Maps a pawn's position to the possible (1 or 2) capture positions (no en passant).
  * 2. Maps a pawn's skipped position to the possible (1 or 2) enemy en passant attacking pawn(s).
  * 3. Maps a pawn's skipped position to the possible (1 or 2) friendly ghost pawn(s) positions
@@ -98,6 +98,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
         initializeWhitePawnPseudoLegalCapturePositions();
         initializeBlackPawnPseudoLegalEnPassantCapturePositions();
         initializeWhitePawnPseudoLegalEnPassantCapturePositions();
+        new ZobristChessboardState();
     }
 
     private static void initializeBlackPawnPseudoLegalEnPassantCapturePositions() {

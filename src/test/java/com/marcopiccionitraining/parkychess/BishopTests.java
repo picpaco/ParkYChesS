@@ -6,7 +6,6 @@ import com.marcopiccionitraining.parkychess.model.moves.StandardMove;
 import com.marcopiccionitraining.parkychess.model.pieces.Bishop;
 import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,9 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j @SpringBootTest
 public class BishopTests {
-
-    @BeforeEach
-    void setUp() {}
 
     @Test
     void whiteBishopNameCheck(){
@@ -38,28 +34,37 @@ public class BishopTests {
         assertEquals(PieceNames.BISHOP, blackBishop.getName(), "Bishop at square c8's name should be 'BISHOP'");
         assertEquals("b", blackBishop.toString(), "Bishop at square c8's string representation should be 'b");
     }
+
     @Test
     void blackBishopAtC8CannotMoveAtStartingPosition() {
         ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
-        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 2)).isEmpty());
+        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 2)).isEmpty(),
+                "The bishop should not have legal moves in its position.");
     }
+
     @Test
     void blackBishopAtF8CannotMoveAtStartingPosition() {
         ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
         gameState.getChessboard().setCurrentPlayerColor(PlayerColor.BLACK);
-        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 5)).isEmpty());
+        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(0, 5)).isEmpty(),
+                "The bishop should not have legal moves in its position.");
     }
+
     @Test
     void whiteBishopAtC1CannotMoveAtStartingPosition() {
         ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
-        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 2)).isEmpty());
+        assertTrue(gameState.getLegalMovesForPieceAtPosition(new Position(7, 2)).isEmpty(),
+                "The bishop should not have legal moves in its position.");
     }
+
     @Test
     void whiteBishopAtF1CannotMoveAtStartingPosition() {
         ChessGame gameState = new ChessGame(FEN_INITIAL_POSITION);
-        assertEquals(0, gameState.getLegalMovesForPieceAtPosition(new Position(7, 5)).size());
+        assertEquals(0, gameState.getLegalMovesForPieceAtPosition(new Position(7, 5)).size(),
+                "The bishop should not have legal moves in its position.");
     }
+
     @Test
     void blackBishopAtC8LegalMovesNoCheck() {
         ChessGame gameState = new ChessGame(FEN_BLACK_BISHOP_C8_NO_CHECK_POSITION);
@@ -77,6 +82,7 @@ public class BishopTests {
                 computedBishopMoves.containsAll(bishopLegalMoves), "The expected list of moves: " + bishopLegalMoves +
                 " is not the same as the produced one: " + computedBishopMoves);
     }
+
     @Test
     void blackBishopAtF8LegalMovesNoCheck() {
         ChessGame gameState = new ChessGame(FEN_BLACK_BISHOP_F8_NO_CHECK_POSITION);
@@ -91,9 +97,10 @@ public class BishopTests {
         List<Move> computedBishopMoves = gameState.getLegalMovesForPieceAtPosition(new Position(0, 5));
         assertTrue(bishopLegalMoves.size() == computedBishopMoves.size() &&
                 bishopLegalMoves.containsAll(computedBishopMoves) &&
-                computedBishopMoves.containsAll(bishopLegalMoves), "The expected list of moves: " + bishopLegalMoves +
-                " is not the same as the produced one: " + computedBishopMoves);
+                computedBishopMoves.containsAll(bishopLegalMoves),
+                "The expected list of moves is not equal to the produced one.");
     }
+
     @Test
     void whiteBishopAtC1LegalMovesNoCheck() {
         ChessGame gameState = new ChessGame(FEN_WHITE_BISHOP_C1_NO_CHECK_POSITION);
@@ -106,11 +113,12 @@ public class BishopTests {
         bishopLegalMoves.add(new StandardMove(new Position(7,2), new Position(3,6)));
         bishopLegalMoves.add(new StandardMove(new Position(7,2), new Position(2,7)));
         List<Move> computedBishopMoves = gameState.getLegalMovesForPieceAtPosition(new Position(7, 2));
-        assertEquals(bishopLegalMoves.size(), computedBishopMoves.size(), "The expected number of moves (" +
-                bishopLegalMoves.size() + ") does not coincide with the computed one: " + computedBishopMoves.size());
+        assertEquals(bishopLegalMoves.size(), computedBishopMoves.size(),
+                "The expected list of moves is not equal to the produced one.");
         assertTrue(bishopLegalMoves.containsAll(computedBishopMoves) && computedBishopMoves.containsAll(bishopLegalMoves),
-                "The expected list of moves: " + bishopLegalMoves + " is not the same as the produced one: " + computedBishopMoves);
+                "The expected list of moves is not equal to the produced one.");
     }
+
     @Test
     void whiteBishopAtF1LegalMovesNoCheck() {
         ChessGame gameState = new ChessGame(FEN_WHITE_BISHOP_F1_NO_CHECK_POSITION);
@@ -125,8 +133,8 @@ public class BishopTests {
         List<Move> computedBishopMoves = gameState.getLegalMovesForPieceAtPosition(new Position(7, 5));
         assertTrue(bishopLegalMoves.size() == computedBishopMoves.size() &&
                 bishopLegalMoves.containsAll(computedBishopMoves) &&
-                computedBishopMoves.containsAll(bishopLegalMoves), "The expected list of moves: " + bishopLegalMoves +
-                " is not the same as the produced one: " + computedBishopMoves);
+                computedBishopMoves.containsAll(bishopLegalMoves),
+                "The expected list of moves is not equal to the produced one.");
     }
 
     @Test
@@ -142,10 +150,7 @@ public class BishopTests {
         List<Move> computedBishopMoves = gameState.getLegalMovesForPieceAtPosition(new Position(6, 5));
         assertTrue(bishopLegalMoves.size() == computedBishopMoves.size() &&
                 bishopLegalMoves.containsAll(computedBishopMoves) &&
-                computedBishopMoves.containsAll(bishopLegalMoves), "The expected list of moves: " + bishopLegalMoves +
-                " is not the same as the produced one: " + computedBishopMoves);
+                computedBishopMoves.containsAll(bishopLegalMoves),
+                "The expected list of moves is not equal to the produced one.");
     }
-
-
-
 }

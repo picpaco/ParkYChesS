@@ -6,6 +6,7 @@ import com.marcopiccionitraining.parkychess.model.moves.MoveNames;
 import com.marcopiccionitraining.parkychess.model.pieces.Piece;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class PerftUtils {
         for (Move legalMove : legalMovesForColor) {
             log.debug("{} moves {} at depth {}", gameState.getChessboard().getCurrentPlayerColor(),
                     legalMove, currentDepth);
-            LocalGameState localGameStateBeforeMakeMove = new LocalGameState();
+            LocalGameState localGameStateBeforeMakeMove = new LocalGameState(gameState.getChessboard());
             saveLocalState (localGameStateBeforeMakeMove, legalMove);
             log.info("Local state before move {}: {}", legalMove, localGameStateBeforeMakeMove);
             gameState.makeMove(legalMove, legalMovesForColor);
@@ -54,7 +55,7 @@ public class PerftUtils {
             stats.addNumberOfCapturesPerDepth(currentDepth, stats.getNumberOfCaptures());
             stats.addMoveNodes(gameState.getChessboard().getCurrentPlayerColor(), legalMove.toString(), numberOfNodesFromPosition);
             gameState.undo(legalMove, localGameStateBeforeMakeMove);
-            LocalGameState localGameStateAfterUndo = new LocalGameState();
+            LocalGameState localGameStateAfterUndo = new LocalGameState(gameState.getChessboard());
             saveLocalState (localGameStateAfterUndo, legalMove);
             log.info("Local state after undoing move {}: {}", legalMove, localGameStateAfterUndo);
             assert localGameStateBeforeMakeMove.equals(localGameStateAfterUndo) :
@@ -74,14 +75,7 @@ public class PerftUtils {
     }
 
     private void saveLocalState (LocalGameState localGameState, Move move) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Piece piece = gameState.getChessboard().getPiece(i, j);
-                if (piece != null) {
-                    localGameState.getPiecesPositionOnChessboard()[i][j] = piece.toOneChar();
-                }
-            }
-        }
+        localGameState.setPiecesPositions (localGameState.getChessboard().getPiecesPositions());
         localGameState.setPlayerColor(gameState.getChessboard().getCurrentPlayerColor());
         localGameState.setCapturedPiece(move.getCapturedPiece());
         localGameState.setBlackKingsideCastlingAllowed(gameState.getChessboard().isKingsideCastlingPossible(PlayerColor.BLACK));
@@ -119,13 +113,13 @@ public class PerftUtils {
             log.trace("Move {} executed by {} at depth {}", legalMove,
                     gameState.getChessboard().getCurrentPlayerColor(), depth);
             log.trace("About to invoke ChessGame.makeMove");
-            LocalGameState localGameStateBeforeMakeMove = new LocalGameState();
+            LocalGameState localGameStateBeforeMakeMove = new LocalGameState(gameState.getChessboard());
             saveLocalState (localGameStateBeforeMakeMove, legalMove);
             gameState.makeMove(legalMove, movesList);//, localGameStateBeforeMakeMove);
             numberOfNodesFromPosition = bulkPerft(depth - 1);
             totalNumberOfNodes = totalNumberOfNodes + numberOfNodesFromPosition;
             gameState.undo(legalMove, localGameStateBeforeMakeMove);
-            LocalGameState localGameStateAfterUndo = new LocalGameState();
+            LocalGameState localGameStateAfterUndo = new LocalGameState(gameState.getChessboard());
             saveLocalState (localGameStateAfterUndo, legalMove);
             log.debug("Local state after undoing move {}: {}", legalMove, localGameStateAfterUndo);
             assert localGameStateBeforeMakeMove.equals(localGameStateAfterUndo) :

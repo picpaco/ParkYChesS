@@ -1,3 +1,4 @@
+/*
 package com.marcopiccionitraining.parkychess.model;
 
 public interface EssentialStack <E> {
@@ -5,3 +6,4 @@ public interface EssentialStack <E> {
     E pop();
     void push(E item);
 }
+*/
