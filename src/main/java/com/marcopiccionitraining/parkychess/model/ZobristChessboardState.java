@@ -11,7 +11,7 @@ public class ZobristChessboardState {
     The first array component is for color: 0 for white and 1 for black.
     The second array component is for the piece kind: 0 is for pawn, 1 for knight, 2 for bishop,
     3 is for rook, 4 is for queen, and 5 is for king.
-    The third array component is for the position (square) the piece is on the cheesboard.
+    The third array component is to indicate the position the piece is on the cheesboard.
      */
     private static final long[][][] zobristArray = new long[2][6][64];
 

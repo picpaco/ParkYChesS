@@ -88,6 +88,8 @@ public record PseudoLegalPiecesPositionsInitializer() {
      */
     private static final HashMap<Position, List<Position>> attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions = new HashMap<>();
 
+    public static ZobristChessboardState zobristChessboardState;
+
     static {
         initializeKingPseudoLegalPositions();
         initializeKnightPseudoLegalPositions();
@@ -98,7 +100,6 @@ public record PseudoLegalPiecesPositionsInitializer() {
         initializeWhitePawnPseudoLegalCapturePositions();
         initializeBlackPawnPseudoLegalEnPassantCapturePositions();
         initializeWhitePawnPseudoLegalEnPassantCapturePositions();
-        new ZobristChessboardState();
     }
 
     private static void initializeBlackPawnPseudoLegalEnPassantCapturePositions() {

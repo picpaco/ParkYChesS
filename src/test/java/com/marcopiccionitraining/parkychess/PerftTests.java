@@ -164,8 +164,8 @@ public class PerftTests {
         //takes 23-40s
     }
 
-    //FIXME-test below runs for too long: goes in OutOfMemoryError after 41m 25s
-    //@Test
+    //FIXME-test below runs for too long: goes in OutOfMemoryError after 59m 50s
+ //   @Test
     void perft_id_0150_NumberOfPositionsAtInitialPositionDepth6() {
         gameState = new ChessGame(FEN_INITIAL_POSITION);
         ptu = new PerftUtils(gameState);
@@ -174,7 +174,7 @@ public class PerftTests {
         log.info("{} moves map: {}", gameState.getChessboard().getCurrentPlayerColor(),
                 stats.getMovesMapAsString(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(119_060_324L, result, "The number of expected legsl moves does not match the produced one.");
-        //takes 4m 49s -
+        //takes 4m 49s
     }
 
     /*@Test

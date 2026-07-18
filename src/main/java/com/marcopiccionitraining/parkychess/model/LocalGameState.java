@@ -12,8 +12,7 @@ public class LocalGameState {
     @Getter @Setter
     private PlayerColor playerColor;
     @Getter
-    private Board chessboard;
-
+    private final Board chessboard;
     @Getter @Setter
     private Piece capturedPiece;
     @Getter @Setter

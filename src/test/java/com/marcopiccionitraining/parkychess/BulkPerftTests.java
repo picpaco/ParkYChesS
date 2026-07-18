@@ -128,7 +128,7 @@ public class BulkPerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(5);
         assertEquals(4_865_609L, result, "From the initial position there are 4_865_609 possible legal moves at depth 5");
-        //takes 11s - 19s
+        //takes 11s - 20s
     }
     @Test
     void bulkPerft_id_0150_NumberOfPositionsAtInitialPositionDepth6() {
@@ -136,7 +136,7 @@ public class BulkPerftTests {
         ptu = new PerftUtils(gameState);
         long result = ptu.bulkPerft(6);
         assertEquals(119_060_324L, result, "From the initial position there are 119_060_324 possible legal moves at depth 6");
-        //takes 4m 21s - 7m51s;
+        //takes 4m 21s - 7m 51s - 8m 10s - 8m 35s;
     }
     /*@Test
     void bulkPerft_id_016_NumberOfPositionsAtInitialPositionDepth7() {

@@ -92,9 +92,9 @@ public class CastlingMove extends Move {
         }
         assert !(chessboard.isEmpty(getFrom())) : "There must be a piece in " + getFrom();
         log.debug("kingCastlingSide: {}", kingCastlingSide);
-        Board chessboardCopy = chessboard.copy();
         Position firstCastlingKingStep = getFrom().stepTowardsDirection(kingCastlingSide);
         log.debug("Performing castling king step on a separate board making sure the king is not in check.");
+        Board chessboardCopy = chessboard.copy();
         new StandardMove(getFrom(), firstCastlingKingStep).execute(chessboardCopy);
         if (chessboardCopy.isPlayerInCheck(kingColor)) {
             log.trace("{} is illegal because {} would be in check while passing on the first square of the castling path.",

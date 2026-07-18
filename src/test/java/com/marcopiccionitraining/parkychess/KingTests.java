@@ -621,7 +621,8 @@ public class KingTests {
         assertFalse(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");
         //ke8f8
         StandardMove move_1 = new StandardMove(new Position(0, 4), new Position(0, 5));
-        if (move_1.isLegal(gameState.getChessboard().copy())) {
+        Board chessboardCopy = gameState.getChessboard().copy();
+        if (move_1.isLegal(chessboardCopy)) {
             move_1.execute(gameState.getChessboard());
             log.debug("I have just executed move 1: {}.", move_1);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
@@ -630,7 +631,8 @@ public class KingTests {
         }
         //c2c3
         StandardMove move_2 = new StandardMove(new Position(6, 2), new Position(5, 2));
-        if (move_2.isLegal(gameState.getChessboard().copy())) {
+        Board chessboardCopy2 = gameState.getChessboard().copy();
+        if (move_2.isLegal(chessboardCopy2)) {
             move_2.execute(gameState.getChessboard());
             log.debug("I have just executed move 2: {}.", move_2);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
@@ -639,7 +641,8 @@ public class KingTests {
         }
         //kf8e8
         StandardMove move_3 = new StandardMove(new Position(0, 5), new Position(0, 4));
-        if (move_3.isLegal(gameState.getChessboard().copy())) {
+        Board chessboardCopy3 = gameState.getChessboard().copy();
+        if (move_3.isLegal(chessboardCopy3)) {
             move_3.execute(gameState.getChessboard());
             log.debug("I have just executed move 3: {}.", move_3);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");            log.debug(gameState.getChessboard().toString());
@@ -648,7 +651,8 @@ public class KingTests {
         }
         //c3c4
         StandardMove move_4 = new StandardMove(new Position(5, 2), new Position(4, 2));
-        if (move_4.isLegal(gameState.getChessboard().copy())) {
+        Board chessboardCopy4 = gameState.getChessboard().copy();
+        if (move_4.isLegal(chessboardCopy4)) {
             move_4.execute(gameState.getChessboard());
             log.debug("I have just executed move 4: {}.", move_4);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved");
@@ -670,7 +674,8 @@ public class KingTests {
         King king = (King) gameState.getChessboard().getPiece(new Position(0, 4));
         assertFalse(king.isFlaggedAsHavingAlreadyMoved(), "Black king should not be flagged as already moved.");
         StandardMove move_1 = new StandardMove(new Position(0, 4), new Position(0, 5));
-        if (move_1.isLegal(gameState.getChessboard().copy())) {
+        Board chessboardCopy1 = gameState.getChessboard().copy();
+        if (move_1.isLegal(chessboardCopy1)) {
             move_1.execute(gameState.getChessboard());
             log.debug("After executing {}:", move_1);
             assertTrue(king.isFlaggedAsHavingAlreadyMoved(), "Black king should be flagged as already moved.");
