@@ -4,10 +4,11 @@ import com.marcopiccionitraining.parkychess.model.pieces.PieceNames;
 
 import java.security.SecureRandom;
 
-public class ZobristChessboardState {
+public class ZobristKeyProvider {
 
     private static final SecureRandom pseudorandomSequence = new SecureRandom();
-    /*
+
+    /**
     The first array component is for color: 0 for white and 1 for black.
     The second array component is for the piece kind: 0 is for pawn, 1 for knight, 2 for bishop,
     3 is for rook, 4 is for queen, and 5 is for king.
@@ -15,7 +16,12 @@ public class ZobristChessboardState {
      */
     private static final long[][][] zobristArray = new long[2][6][64];
 
+    /** Each of the 8 array components represents the column corresponding
+     * to 2 possible en passant positions (one for white and one for black).
+     *
+     */
     private static final long[] zobristEnPassant = new long[8];
+
     /** The 4 array components represent k, q, K, Q
      */
     private static final long[] zobristCastleRights = new long[4];
@@ -48,7 +54,7 @@ public class ZobristChessboardState {
         The 2nd array component [][x][] is for piece kind: 0: pawn, 1: knight, 2: bishop, 3: rook, 4: queen, 5: king.
         The 3rd array component [][][x] is for piece position on the chessboard.
          */
-    public static long getZobristHash(LocalGameState localState) {
+    static long getZobristHash (LocalGameState localState) {
         long zobristHash = 0L;
         for (int row = 0; row < 8; row++) {
             for (int column = 0; column < 8; column++) {
@@ -86,22 +92,21 @@ public class ZobristChessboardState {
             }
         }
         for (int enPassantColumn = 0; enPassantColumn < 8; enPassantColumn++) {
-
-            zobristHash ^= zobristEnPassant[enPassantColumn]; // epColumns in which the en passant location is.
+            zobristHash ^= zobristEnPassant[enPassantColumn];
         }
-        if (localState.isBlackKingsideCastlingAllowed()) {
+        if (localState.isBlackKingsideCastlingPossible()) {
             zobristHash ^= zobristCastleRights[0];
         }
-        if (localState.isBlackQueensideCastlingAllowed()) {
+        if (localState.isBlackQueensideCastlingPossible()) {
             zobristHash ^= zobristCastleRights[1];
         }
-        if (localState.isWhiteKingsideCastlingAllowed()) {
+        if (localState.isWhiteKingsideCastlingPossible()) {
             zobristHash ^= zobristCastleRights[2];
         }
-        if (localState.isWhiteQueensideCastlingAllowed()) {
+        if (localState.isWhiteQueensideCastlingPossible()) {
             zobristHash ^= zobristCastleRights[3];
         }
-        if (localState.isBlacktoMove()){
+        if (localState.isBlackToMove()){
             zobristHash ^= zobristBlackToMove;
         }
         return zobristHash;

@@ -138,7 +138,7 @@ public class FENTests {
         chessboard2.setPiece(new Pawn(PlayerColor.BLACK), 3, 0);
         chessboard2.setPiece(new Pawn(PlayerColor.WHITE), 3, 1);
         Collection<Position> piecePositions = new ArrayList<>();
-        chessboard2.setSkippedPawnPosition(PlayerColor.BLACK, new Position(2, 0));
+        chessboard2.setPawnSkippedPosition(PlayerColor.BLACK, new Position(2, 0));
         piecePositions.add(new Position(3, 0));
         piecePositions.add(new Position(3, 1));
         piecePositions.add(new Position(0, 7));

@@ -16,31 +16,39 @@ import java.util.Objects;
  */
 @Slf4j
 public abstract class Piece {
+
     @Getter
     private final PlayerColor color;
-    @Getter @Setter
+
+    @Getter
+    @Setter
     private PieceNames name;
-    @Getter @Setter
+
+    @Getter
+    @Setter
     private boolean isFlaggedAsHavingAlreadyMoved;
 
-    public Piece (PlayerColor color) {
-        assert color != null : "Player color cannot be null";
+    @Getter
+    private final int pieceId;
+
+    public Piece(@NonNull PlayerColor color) {
         this.color = color;
+        pieceId = SequentialIdGenerator.getNextPieceId();
     }
 
     public abstract Piece copy();
 
     //TODO: decide if it is better to add the argument 'from' everywhere or to have pieces store their own position.
-    public abstract List<Move> getPseudoLegalMoves(Position from, Board chessboard);
+    public abstract List<Move> getPseudoLegalMoves(@NonNull Position from, @NonNull Board chessboard);
 
-    public boolean canCaptureOpponentKing(@NonNull Position from, @NonNull Board chessboard){
+    public boolean canCaptureOpponentKing(@NonNull Position from, @NonNull Board chessboard) {
         assert chessboard.getPiece(from) == null ||
                 chessboard.getPiece(from).getName().equals(PieceNames.BISHOP) ||
                 chessboard.getPiece(from).getName().equals(PieceNames.ROOK) ||
                 chessboard.getPiece(from).getName().equals(PieceNames.QUEEN) ||
                 chessboard.getPiece(from).getName().equals(PieceNames.KNIGHT) :
                 "If there is a piece on " + from + ", it must be a slider (bishop, rook, or queen) or a knight.";
-        log.trace("There is a piece on {}: {}", from,chessboard.getPiece(from));
+        log.trace("There is a piece on {}: {}", from, chessboard.getPiece(from));
         List<Move> piecePseudolegalMoves = getPseudoLegalMoves(from, chessboard);
         log.debug("{} {} pseudolegal moves (used to check if can capture opponent's king): {}",
                 getColor(), getName(), piecePseudolegalMoves);
@@ -62,12 +70,13 @@ public abstract class Piece {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Piece piece)) return false;
-        return hashCode() == piece.hashCode();
+        return piece.pieceId == pieceId;
+        //   return hashCode() == piece.hashCode();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(color, name);
+        return Objects.hash(color, name, pieceId);
     }
 
     @Override

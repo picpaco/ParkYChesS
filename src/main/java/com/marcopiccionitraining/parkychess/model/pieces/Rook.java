@@ -3,6 +3,7 @@ package com.marcopiccionitraining.parkychess.model.pieces;
 import com.marcopiccionitraining.parkychess.model.*;
 import com.marcopiccionitraining.parkychess.model.moves.Move;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Rook extends SliderPiece {
     }
 
     @Override
-    public List<Move> getPseudoLegalMoves (Position from, Board chessboard){
+    public List<Move> getPseudoLegalMoves (@NotNull Position from, @NotNull Board chessboard){
         List<Move> rookPseudoLegalMoves = new ArrayList<>();
         List<List<Position>> allRookFilesAndRanks =
                 PseudoLegalPiecesPositionsInitializer.getRookPseudoLegalPositions(from);

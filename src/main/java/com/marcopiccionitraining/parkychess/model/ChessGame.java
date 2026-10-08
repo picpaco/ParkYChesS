@@ -35,19 +35,8 @@ public class ChessGame {
     @Getter
     private int numberOfNonCaptureNonPawnMoves;
 
- //   @Getter @Setter
- //   private String stateString;
-
     @Getter @Setter
     private LocalGameState localGameState;
-
-    /**
-     * Game history where keys are unique strings identifying a position and values
-     * counting how many times that position has been reached.
-     * It is used to check the 3-times game state repetition draw rule.
-     */
-    //private final HashMap<String, Integer> gameStateHistory = new HashMap<>();
-    private HashMap<Long, Integer> zobristChessboardStates;
 
     /**
      * Counts all consecutive non-capture, non-pawn half-moves.
@@ -66,6 +55,7 @@ public class ChessGame {
      * Contains non-capture, non-pawn consecutive moves.
      * When a non-capture, non-pawn move is executed, this list is reset to be empty.
      * It is used to check the 50 moves draw rule.
+     * Check if it is a stack: if so, change the name accordingly.
      */
     private final LinkedList<Command> partialListOfExecutedMoves = new LinkedList<>();
     /**
@@ -81,59 +71,53 @@ public class ChessGame {
      */
     private final LinkedList<String> commandHistory = new LinkedList<>();
 
-         //TODO: Implement redo
+    //TODO: Implement redo
 
     /**
      * Initializes an instance of a chess game.
      * @param externalFEN provides the initial position in FEN format.
      */
     public ChessGame(@NonNull String externalFEN) {
-        log.trace("External FEN: {}", externalFEN);
+        //FIXME: pass externalFEN arg to class Board constructor and
+        // move isValidAsFEN check to the Board class.
+        log.debug("External FEN: {}", externalFEN);
         if (!(isValidAsFEN(externalFEN))) {
             throw new IllegalArgumentException("The input FEN string is not valid.");
         }
+        //FIXME: Update the following LOCs so that Board takes over responsibility for handling
+        // FEN and zobristKey
         chessboard = new Board(PlayerColor.UNDETERMINED);
         setPositionFromFEN(externalFEN);
-        assert !(chessboard.getPiecesPositions().isEmpty()) : "The chessboard should contain at least tWo pieces.";
-        assert chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE) || chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK) :
+        Long zobristKey = chessboard.getNewZobristKey(new LocalGameState(chessboard));
+        chessboard.saveZobristEntry(zobristKey, 1);
+        log.error("Initial position set and saved in memory with key {}.", zobristKey);
+        //FIXME up to here.
+        assert !(chessboard.getPiecesPositions().isEmpty()) : "The chessboard should contain at least two pieces.";
+        assert !(chessboard.isEmpty(chessboard.getKingPosition(PlayerColor.BLACK))) :
+                "The black king should be on the chessboard.";
+        assert !(chessboard.isEmpty(chessboard.getKingPosition(PlayerColor.WHITE))) :
+                "The white king should be on the chessboard.";
+        assert chessboard.getCurrentPlayerColor().equals(PlayerColor.WHITE) ||
+                chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK) :
                 "Player color must be either white or black.";
         log.debug("Color moving first: {}", chessboard.getCurrentPlayerColor());
-        zobristChessboardStates = new HashMap<>();
-        Long zobristState = ZobristChessboardState.getZobristHash(new LocalGameState(chessboard));
-        zobristChessboardStates.put(zobristState, 1);
-        localGameState = new LocalGameState(chessboard);
-        Board chessboardCopy =  chessboard.copy();
-        checkGameEnd(getKingLegalMoves(chessboardCopy), localGameState.getZobristHash(), chessboardCopy);
-    }
-
-    private List<Move> getKingLegalMoves (Board chessboard) {
-        King king = chessboard.getKing(chessboard.getCurrentPlayerColor());
-        Position kingPosition = chessboard.getKingPosition(chessboard.getCurrentPlayerColor());
-        List<Move> kingPseudoLegalMoves = king.getPseudoLegalMoves(kingPosition, chessboard);
-        List<Move> kingLegalMoves = new ArrayList<>();
-        for (Move kingPseudoLegalMove : kingPseudoLegalMoves){
-            if (kingPseudoLegalMove.isLegal(chessboard)){
-                kingLegalMoves.add(kingPseudoLegalMove);
-            }
+        checkGameOver(chessboard, zobristKey);
+        if (isGameOver()){
+            log.error ("Game over. Send event to GUI/Console.");
         }
-        log.debug("King legal moves: {}", kingLegalMoves);
-        return kingLegalMoves;
+        log.error("Finished constructing ChessGame instance.");
     }
 
     public List<Move> getLegalMovesForPieceAtPosition(@NonNull Position position){
         assert !(chessboard.isEmpty(position)) : "There must be a piece at position " + position;
-        log.trace("In getLegalMovesForPieceAtPosition(position  = {})", position);
+        log.debug("In getLegalMovesForPieceAtPosition(position  = {})", position);
         List<Move> legalMovesForPiece = new ArrayList<>();
-        if (chessboard.isEmpty(position)){
-            return legalMovesForPiece;
-        }
         Piece piece = chessboard.getPiece(position);
         List<Move> pseudoLegalMoves = piece.getPseudoLegalMoves(position, chessboard);
-        log.info("PseudoLegalMoves for {}: {}", position, pseudoLegalMoves);
-        Board chessboardCopy = chessboard.copy();;
+        log.debug("PseudoLegalMoves for {}: {}", position, pseudoLegalMoves);
         for (Move pseudoLegalMove : pseudoLegalMoves) {
             log.debug("Analyzing pseudoLegalMove: {} to see if it is legal:", pseudoLegalMove);
-            if (pseudoLegalMove.isLegal(chessboardCopy)){
+            if (pseudoLegalMove.isLegal(chessboard)){
                 log.debug("PseudoLegalMove: {} is legal.", pseudoLegalMove);
                 legalMovesForPiece.add(pseudoLegalMove);
             }
@@ -144,35 +128,41 @@ public class ChessGame {
     }
 
     /**
-     * @param playerColor the color of the player who must make the next move.
+     * @param playerColor the color of the player for whom we compute the legal moves.
      * @return all the legal moves available to playerColor.
      */
     public List<Move> getLegalMovesForColor (PlayerColor playerColor) {
+        log.error("Finding legal moves for {}...", playerColor);
         List<Move> legalMovesForColor = new ArrayList<>();
-        List<Position> piecesPositionsForCurrentColor = chessboard.getPiecesPositionsForColor(playerColor);
-        log.debug("Pieces positions for {}: {}", playerColor, piecesPositionsForCurrentColor);
-        for (Position piecePositionForCurrentColor : piecesPositionsForCurrentColor) {
-            Piece piece = chessboard.getPiece(piecePositionForCurrentColor);
-            List<Move> pseudoLegalMovesForColor = piece.getPseudoLegalMoves (piecePositionForCurrentColor, chessboard);
-            log.debug("Pseudolegal moves for {} and position {}: {}", playerColor, piecePositionForCurrentColor,
+        List<Position> piecesPositionsForColor = chessboard.getPiecesPositionsForColor(playerColor);
+        log.debug("1. Pieces positions for {}: {}. Loop across them.", playerColor, piecesPositionsForColor);
+        //TODO: check if in the following loop I can first check for a move legality and then
+        // execute it and then undo it. This way I could avoid one loop execution cost. In fact, now
+        // I execute 3 loops, one for checking legality only, which I use in the ChessGame constructor;
+        // the second loop is for checking legality (the same as the first loop) in the main loop;
+        // the third loop is to execute a move and then undo it, also in the msin loop.
+        // The idea is to have a check-legality-only loop to use in the constructor and a
+        // "check legality + execute + undo" loop to use in the main loop.
+        for (Position piecePositionForColor : piecesPositionsForColor) {
+            Piece piece = chessboard.getPiece(piecePositionForColor);
+            log.debug("2. Piece at current position is {}{}", piece, piecePositionForColor);
+            List<Move> pseudoLegalMovesForColor = piece.getPseudoLegalMoves (piecePositionForColor, chessboard);
+            log.debug("3. Pseudolegal moves for {} at position {}: {}", playerColor, piecePositionForColor,
                     pseudoLegalMovesForColor);
-            Board chessboardCopy = chessboard.copy();
-            log.debug("Chessboard copy before checking legality: {}", chessboardCopy);
+            log.debug("4. Loop across pseudolegal moves to select the legal moves:");
             for (Move pseudoLegalMove : pseudoLegalMovesForColor) {
-                if (pseudoLegalMove.isLegal(chessboardCopy)){
-                    log.trace("Adding pseudoLegalMove: {} {} to legal moves for {}.",
-                            pseudoLegalMove.getName(), pseudoLegalMove, playerColor);
+                if (pseudoLegalMove.isLegal(chessboard)){
                     legalMovesForColor.add(pseudoLegalMove);
+                    log.debug("5a. PseudoLegalMove {} {} is legal.",
+                            pseudoLegalMove.getName(), pseudoLegalMove);
                 } else {
-                    log.trace("PseudoLegalMove: {} {} is illegal. Position before the illegal move: {}",
-                            pseudoLegalMove.getName(), pseudoLegalMove, chessboardCopy);
+                    log.debug("5b. PseudoLegalMove {} {} is illegal.", pseudoLegalMove.getName(), pseudoLegalMove);
                 }
             }
         }
+        log.error("Found the following legal moves for {}: {}", playerColor, legalMovesForColor);
         return legalMovesForColor;
     }
-
-
 
     private boolean isValidAsFEN(String s) {
         if (!(FEN_VALIDATOR_REGEX.matcher(s).matches())) {
@@ -267,7 +257,6 @@ public class ChessGame {
         String[] fenSections = externalFEN.split(" ");
         log.trace("Placing pieces on chessboard...");
         fromFENToChessboard(fenSections[0]);
-        log.debug("Immediately after fromFENToChessboard: {}", chessboard.toString());
         log.trace("Setting current player color; color read on FEN: {}", fenSections[1]);
         if (fenSections[1].equals("w")) {
             chessboard.setCurrentPlayerColor(PlayerColor.WHITE);
@@ -318,7 +307,7 @@ public class ChessGame {
                     fenSections[3].equals("d6") || fenSections[3].equals("e6") || fenSections[3].equals("f6") ||
                     fenSections[3].equals("g6") || fenSections[3].equals("h6")) {
                 log.trace("About to set the pawn skipped position for Black to {}", fenSections[3]);
-                chessboard.setSkippedPawnPosition(PlayerColor.BLACK, fromAlgebraicToPosition(fenSections[3]));
+                chessboard.setPawnSkippedPosition(PlayerColor.BLACK, fromAlgebraicToPosition(fenSections[3]));
                 lastMoveBlackFromPosition = (new Position(chessboard.
                         getPawnSkippedPosition(PlayerColor.BLACK).getRow() - 1,
                         chessboard.getPawnSkippedPosition(PlayerColor.BLACK).getColumn()));
@@ -332,7 +321,7 @@ public class ChessGame {
                         fenSections[3].equals("d3") || fenSections[3].equals("e3") || fenSections[3].equals("f3") ||
                         fenSections[3].equals("g3") || fenSections[3].equals("h3")) {
                     log.trace("About to set the pawn skipped position for White to {}", fenSections[3]);
-                    chessboard.setSkippedPawnPosition(PlayerColor.WHITE, fromAlgebraicToPosition(fenSections[3]));
+                    chessboard.setPawnSkippedPosition(PlayerColor.WHITE, fromAlgebraicToPosition(fenSections[3]));
                     lastMoveWhiteFromPosition = (new Position(chessboard.
                             getPawnSkippedPosition(PlayerColor.WHITE).getRow() + 1,
                             chessboard.getPawnSkippedPosition(PlayerColor.WHITE).getColumn()));
@@ -362,11 +351,10 @@ public class ChessGame {
         log.debug("{} has to move. Position: {}", chessboard.getCurrentPlayerColor(), chessboard);
         chessboard.setPiece(chessboard.getPiece(lastMoveToPosition), lastMoveFromPosition);
         log.debug("Position after setting piece: {}", chessboard);
-        chessboard.setEmpty(lastMoveToPosition.getRow(), lastMoveToPosition.getColumn());
+        chessboard.setEmpty(lastMoveToPosition);
         log.debug("Position after setting empty: {}", chessboard);
         DoublePawnMove doublePawnMove = new DoublePawnMove(lastMoveFromPosition, lastMoveToPosition, chessboard);
-        Board chessboardCopy = chessboard.copy();
-        if (doublePawnMove.isLegal(chessboardCopy)){
+        if (doublePawnMove.isLegal(chessboard)){
             doublePawnMove.execute(chessboard);
             chessboard.setLastExecutedMove(doublePawnMove);
         }
@@ -582,10 +570,10 @@ public class ChessGame {
         int col = 0;
         int row = 0;
         for (char symbol : fenPosition.toCharArray()) {
-            log.trace("Symbol just read: {}", symbol);
+            log.debug("Symbol just read: {}", symbol);
             if (symbol == '/') {
                 col = 0;
-                log.trace("Switching from row {} to row {}", row, row + 1);
+                log.debug("Switching from row {} to row {}", row, row + 1);
                 row++;
             } else {
                 if (Character.isDigit(symbol)) {
@@ -601,21 +589,23 @@ public class ChessGame {
                     if (piece.getName().equals(PieceNames.KING)) {
                         King king = (King) piece;
                         if (king.getColor().equals(PlayerColor.BLACK)) {
-                            if (row != 0 || col != 4) {
+                            chessboard.setBlackKingPosition(new Position(row, col));
+                            if (!(row == 0 && col == 4)) {
                                 king.setFlaggedAsHavingAlreadyMoved(true);
-                                log.debug("Black King is flaggedAsHavingAlreadyMoved because it is not on its initial position.");
+                                log.error("Black King is flaggedAsHavingAlreadyMoved because it is not on its initial position.");
                             }
                         } else {
-                            if (row != 7 || col != 4) {
+                            chessboard.setWhiteKingPosition(new Position(row, col));
+                            if (!(row == 7 && col == 4)) {
                                 king.setFlaggedAsHavingAlreadyMoved(true);
-                                log.debug("White King is flaggedAsHavingAlreadyMoved because it is not on its initial position.");
+                                log.error("White King is flaggedAsHavingAlreadyMoved because it is not on its initial position.");
                             }
                         }
                     }
                     if (piece.getName().equals(PieceNames.ROOK)) {
                         Rook rook = (Rook) piece;
                         if (rook.getColor().equals(PlayerColor.BLACK)) {
-                            if (row != 0 || (col != 0 && col != 7)) {
+                            if (row != 0 || (col != 0 && col != 7)){
                                 rook.setFlaggedAsHavingAlreadyMoved(true);
                                 log.debug("Black Rook {} is flaggedAsHavingAlreadyMoved because it is not on any of its initial positions.", rook);
                             }
@@ -634,16 +624,17 @@ public class ChessGame {
         }
     }
 
-
-    public void makeMove (@NonNull Move move, @NonNull List<Move> legalMovesforColor){
-      //  new FENStateString(getChessboard().getCurrentPlayerColor(),getChessboard());
+    public void makeMove (@NonNull Move move) {
+        log.debug("About to execute {} move {}", move.getName(), move);
         boolean isCaptureOrPawnMove = move.execute(chessboard);
         if (isCaptureOrPawnMove) {
-            numberOfNonCaptureNonPawnMoves = 0;
+            log.debug("Reinitializing counter of non-capture and non-pawn moves to 1.");
+            numberOfNonCaptureNonPawnMoves = 1;
             //TODO: re-introduce gameStateHistory for the 50 moves draw
             //gameStateHistory.clear();
         } else {
             numberOfNonCaptureNonPawnMoves++;
+            log.debug("Incrementing numberOfNonCaptureNonPawnMoves counter to {}.", numberOfNonCaptureNonPawnMoves);
         }
         partialListOfExecutedMoves.add(move);
         totalListOfExecutedMoves.add(move);
@@ -653,41 +644,62 @@ public class ChessGame {
         log.debug("Total list of re-executable moves: {}", listOfReExecutableMoves);
         log.debug("About to set last executed move to {} for {}", move, chessboard.getCurrentPlayerColor());
         chessboard.setLastExecutedMove(move);
-        //FIXME replace the following line as appropriate
-        //if (!(chessboard.getGameStateContainer().isEmpty())) {
-            listOfReExecutableMoves.clear();
-            log.trace("Command history: {}", commandHistory);
-            LocalGameState localGameState = new LocalGameState(chessboard);
-            Long zobristHash = localGameState.getZobristHash();
-            updateStateAfterMoveToEnforceDrawByRepetition(zobristHash);
-            checkGameEnd(getKingLegalMoves (chessboard), zobristHash, chessboard);
-      //  } else {
-      //      chessboard.getGameStateContainer().push(new FENStateString(chessboard.getCurrentPlayerColor(), chessboard));
-      //      log.debug("Container was empty. Created a new FENStateString: {}", stateString);
-      //  }
+        listOfReExecutableMoves.clear();
+        log.trace("Command history: {}", commandHistory);
         commandHistory.add (move.toString());
-        if (isGameOver()) {
-            log.debug("Game over. {} {}", gameResult, chessboard);
-            commandHistory.add("Game over");
+        LocalGameState localGameStateAfterMakeMove = new LocalGameState(chessboard);
+        Long zobristKeyAfterMakeMove = chessboard.getNewZobristKey(localGameStateAfterMakeMove);
+        log.error("Local state after make move {}: {}", move, localGameStateAfterMakeMove);
+        if (chessboard.containsZobristKey(zobristKeyAfterMakeMove)) {
+            int numberOfOccurrences = chessboard.getZobristValue(zobristKeyAfterMakeMove);
+            numberOfOccurrences++;
+            log.error("The current position has been reached {} times.", numberOfOccurrences);
+            chessboard.saveZobristEntry(zobristKeyAfterMakeMove, numberOfOccurrences);
+        } else {
+            chessboard.saveZobristEntry(zobristKeyAfterMakeMove, 1);
         }
+        checkGameOver(chessboard, zobristKeyAfterMakeMove);
+        if (isGameOver()) {
+            commandHistory.add("Game over");
+            log.error("Game Over. Game result: {}. Analysis continues...", getGameResult());
+        }  else {
+            log.error("No game ending condition found.");
+        }
+        log.error("Switching color from {} to {}", chessboard.getCurrentPlayerColor(),
+                PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor()));
         chessboard.switchCurrentPlayerColor();
     }
 
-    public void undo (@NonNull Move move, LocalGameState localGameState) {
-        //assert !(chessboard.getGameStateContainer().isEmpty()) : "Game state container cannot be empty here";
+    public void undo (@NonNull Move move, LocalGameState localGameStateBeforeMakeMove) {
         assert chessboard.isEmpty(move.getFrom()) : "To be able to undo move " + move +
-                " the original 'from' square " + move.getFrom() + " should be empty." +
+                " the original 'from' position " + move.getFrom() + " should be empty." +
                 " There is instead a " + chessboard.getPiece(move.getFrom());
         assert !(chessboard.isEmpty(move.getTo())): "To be able to undo move " + move +
-                " the destination square " + move.getTo() + " should contain a piece." + chessboard;
+                " the destination position " + move.getTo() + " should contain a piece." + chessboard;
         log.trace("chessboard before undo of move {}: {}", move, chessboard);
+        log.error("Move to undo: {}", move);
+        log.error("Key associated to local state before execute: {}.", localGameStateBeforeMakeMove.getZobristKey());
+        log.error("List of keys saved in memory: {}", chessboard.getZobristListOfKeys());
+        assert chessboard.containsZobristKey(localGameStateBeforeMakeMove.getZobristKey()) : "Zobrist key "
+                 + localGameStateBeforeMakeMove.getZobristKey() + " must exist in memory before move " + move +
+                " can be undone.";
+        assert chessboard.getZobristValue(localGameStateBeforeMakeMove.getZobristKey()) >= 1 :
+                "Value associated to key from localGameStateBeforeExecute must be at least 1.";
+      //  log.error("Switching color from {} to {}", chessboard.getCurrentPlayerColor(),
+       //         PlayerColor.getOpponentColor (chessboard.getCurrentPlayerColor()));
+        //TODO: check hereabove and hereafter if color switching is really needed here.
+     //   getChessboard().switchCurrentPlayerColor();
         Command poppedNonCaptureNonPawnCommand = pop (partialListOfExecutedMoves);
         if(poppedNonCaptureNonPawnCommand != null){
             Move moveToUndoFromListOfExecuted = (Move) poppedNonCaptureNonPawnCommand;
             assert moveToUndoFromListOfExecuted.equals(move) :
-                    "Move to undo should be the same as move on top of list of executed moves." ;
-            log.debug("About to undo: {}", move);
-            move.undo (chessboard, localGameState);
+                    "Move to undo should be the same as move on top of stack of executed moves." ;
+            if (isGameOver()) {
+                log.error("Send 'game over' event to GUI, console, and/or evaluation engine.");
+            }
+            move.undo (chessboard, localGameStateBeforeMakeMove);
+            numberOfNonCaptureNonPawnMoves--;
+            log.error("Decrementing numberOfNonCaptureNonPawnMoves counter to {}.", numberOfNonCaptureNonPawnMoves);
             chessboard.setLastExecutedMove((Move) totalListOfExecutedMoves.peek());
             log.info("After undoing move: {} last executed move is now {}", move, partialListOfExecutedMoves.peek());
             commandHistory.add (move + " undone");
@@ -695,37 +707,42 @@ public class ChessGame {
             commandHistory.add ("Undo not possible.");
             log.debug("There is no move to undo.");
         }
-        chessboard.switchCurrentPlayerColor();
     }
-  //  public void checkGameEnd (@NonNull List<Move> legalMovesforColor, Board chessboard){
-    public void checkGameEnd (@NonNull List<Move> legalMovesForKing, Long zobristKey, Board chessboard){
-        if (legalMovesForKing.isEmpty()) {
-            log.trace("Checking for a checkmate and stalemate on the board...");
+
+    public void checkGameOver(Board chessboard, Long zobristKey) {
+        log.error("Looking for checkmates, stalemates, and different kinds of draws...");
+        List<Move> legalMovesForColor = getLegalMovesForColor(chessboard.getCurrentPlayerColor());
+        if (legalMovesForColor.isEmpty()) {
             if (chessboard.isPlayerInCheck(chessboard.getCurrentPlayerColor())) {
-                log.info("There is a checkmate on the board.");
                 gameResult = new GameResult(PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor()),
                         GameEndReason.CHECKMATE);
             } else {
-                log.info("There is a stalemate on the board.");
                 gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.STALEMATE_DRAW);
             }
         } else {
-            if (chessboard.isInsufficientMaterialDraw()){
-                log.info("There is a draw due to insufficient material.");
-                gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.INSUFFICIENT_MATERIAL_DRAW);
+            if (chessboard.isPlayerInCheck(chessboard.getCurrentPlayerColor())) {
+                log.debug("{} is in check.", chessboard.getCurrentPlayerColor());
             } else {
-                if (isFiftyMovesRuleDraw()){
-                    log.info("There is a draw due to the fifty moves rule.");
-                    gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.FIFTY_MOVES_RULE_DRAW);
-                } else {
-                    if (isThreefoldRepetitionHappening(zobristKey)){
-                        log.info("There is a draw due to the threefold repetition rule.");
-                        gameResult  = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.THREEFOLD_REPETITION_DRAW);
-                    }
-                }
+                log.debug("{} is not in check.", chessboard.getCurrentPlayerColor());
             }
+            if (chessboard.isInsufficientMaterialDraw()) {
+                gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.INSUFFICIENT_MATERIAL_DRAW);
+            }
+            if (isThreefoldRepetitionDraw(zobristKey)) {
+                gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.THREEFOLD_REPETITION_DRAW);
+            }
+            if (isFiftyMovesRuleDraw()) {
+                gameResult = new GameResult(PlayerColor.UNDETERMINED, GameEndReason.FIFTY_MOVES_RULE_DRAW);
+            }
+            //TODO add two more outcomes: resignation and agreed draw.
         }
-        //TODO add two more outcomes: resignation and agreed draw.
+        if (isGameOver()){
+            log.error("GAME OVER. Game result: {}", getGameResult());
+        } else {
+            log.error("There are no checkmates, stalemates, or insufficient material on the board.");
+        }
+        log.error("Checkers pieces: {}", ((chessboard.getCheckerPieces().isEmpty()) ?
+                "None" : chessboard.getCheckerPieces().toString()));
     }
 
     private Command pop (List<Command> commandList) {
@@ -742,23 +759,15 @@ public class ChessGame {
 
     private boolean isFiftyMovesRuleDraw (){
         int fullMoves = numberOfNonCaptureNonPawnMoves / 2;
-        return fullMoves == 50;
+        return (fullMoves == 50);
     }
 
-    private void updateStateAfterMoveToEnforceDrawByRepetition(Long zobristKey){
-        if (zobristChessboardStates.containsKey(zobristKey)) {
-            log.debug("The current position {} was already reached {} times.", chessboard,
-                    zobristChessboardStates.get(zobristKey));
-            int numberOfOccurrences = zobristChessboardStates.get(zobristKey);
-            numberOfOccurrences++;
-            zobristChessboardStates.put(zobristKey, numberOfOccurrences);
-        } else {
-            log.trace("The current position was never encountered before.");
-            zobristChessboardStates.put(zobristKey, 1);
+    private boolean isThreefoldRepetitionDraw(Long zobristKey){
+        if (chessboard.containsZobristKey(zobristKey)) {
+            int value = chessboard.getZobristValue(zobristKey);
+            log.error("zobristKey: {} encountered {} times.", zobristKey, value);
+            return (value >= 3);
         }
-    }
-
-    private boolean isThreefoldRepetitionHappening(Long zobristKey){
-       return zobristChessboardStates.get(zobristKey) == 3;
+        return  false;
     }
 }

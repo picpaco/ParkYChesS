@@ -27,12 +27,12 @@ public class EnPassantCapture extends Move{
         assert chessboard.getPiece(from).getName().equals(PieceNames.PAWN) : "The capturing piece should be a pawn.";
         assert chessboard.getLastExecutedMove().getName().equals(MoveNames.DOUBLE_PAWN) :
                 "Last executed move before an en passant capture should be a Double Pawn move.";
-        log.error("Last executed move's 'to' position: {}; En passant move's 'to''s: {}",
+        log.debug("Last executed move's 'to' position: {}; En passant move's 'to''s: {}",
                 chessboard.getLastExecutedMove().getTo(), to);
         PlayerColor opponentColor = PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor());
         assert (chessboard.getPawnSkippedPosition(opponentColor).getColumn()) == to.getColumn() :
         "The column of the skipped position should be the same as the en passant capture position column";
-        log.error("Last executed move: {}", chessboard.getLastExecutedMove());
+        log.debug("Last executed move: {}", chessboard.getLastExecutedMove());
         setFrom (from);
         setTo (to);
         setName(MoveNames.EN_PASSANT_CAPTURE);
@@ -44,13 +44,12 @@ public class EnPassantCapture extends Move{
             capturedPawnGhostPosition = new Position(chessboard.getPawnSkippedPosition(opponentColor).getRow() - 1,
                     chessboard.getPawnSkippedPosition(opponentColor).getColumn());
         }
-        log.error("Captured Pawn Ghost Position: {}", capturedPawnGhostPosition);
+        log.debug("Captured Pawn Ghost Position: {}", capturedPawnGhostPosition);
         Pawn capturedPawn = (Pawn) chessboard.getPiece(capturedPawnGhostPosition);
         assert !chessboard.isEmpty(capturedPawnGhostPosition) : "There should be a pawn on " + capturedPawnGhostPosition + ".";
-        log.error("{} has the move; captured pawn is {} and its color is {}; captured pawn ghost position is: {}",
+        log.debug("{} has the move; captured pawn is {} and its color is {}; captured pawn ghost position is: {}",
                     chessboard.getCurrentPlayerColor(), capturedPawn, capturedPawn.getColor(), capturedPawnGhostPosition);
         log.debug("PawnSkippedPosition for {}: {}", opponentColor, to);
-        log.debug("chessboard ready for executing en passant capture: {}", chessboard);
         assert !(capturedPawn.getColor().equals(chessboard.getCurrentPlayerColor())) :
         "The captured pawn's color should not match the current color.";
     }
@@ -71,8 +70,8 @@ public class EnPassantCapture extends Move{
         assert capturedPawn != null : "The pawn to capture must exist on " + capturedPawnGhostPosition;
         chessboard.setPiece(chessboard.getPiece(getFrom()), getTo());
         assert (!(chessboard.isEmpty(getTo()))) : "The piece just set must exist.";
-        chessboard.setEmpty(getFrom().getRow(), getFrom().getColumn());
-        chessboard.setEmpty(capturedPawnGhostPosition.getRow(), capturedPawnGhostPosition.getColumn());
+        chessboard.setEmpty(getFrom());
+        chessboard.setEmpty(capturedPawnGhostPosition);
         log.debug("Position after executing en passant capture move {}: {}", this, chessboard);
         assert chessboard.isEmpty(getFrom()) : "The from position should be empty.";
         lastExecutedMove = chessboard.getLastExecutedMove();
@@ -80,14 +79,17 @@ public class EnPassantCapture extends Move{
     }
 
     @Override
-    public void undo (@NonNull Board chessboard, LocalGameState localGameState) {
+    public void undo (@NonNull Board chessboard, @NonNull LocalGameState localGameState) {
         assert chessboard.isEmpty(getFrom()) : "The from position must be empty,";
         assert !(chessboard.isEmpty(getTo())) : "The to position must contain a piece.";
         assert chessboard.getPiece(getTo()).getName().equals(PieceNames.PAWN) : "There must be a pawn on the to position";
-
+        chessboard.setCurrentPlayerColor(localGameState.getCurrentPlayerColor());
+        if (localGameState.getPawnSkippedPosition() != null) {
+            chessboard.setPawnSkippedPosition(localGameState.getCurrentPlayerColor(), localGameState.getPawnSkippedPosition());
+        }
         chessboard.setPiece(capturedPawn, capturedPawnGhostPosition);
         chessboard.setPiece(chessboard.getPiece(getTo()), getFrom());
-        chessboard.setEmpty(getTo().getRow(), getTo().getColumn());
+        chessboard.setEmpty(getTo());
     }
 
     @Override

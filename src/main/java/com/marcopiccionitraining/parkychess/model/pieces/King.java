@@ -53,8 +53,9 @@ public class King extends Piece {
     @Override
     public List<Move> getPseudoLegalMoves (@NonNull Position kingFromPos, @NonNull Board chessboard) {
         List<Move> pseudoLegalMoves = new ArrayList<>();
-        List<Position> kingPseudoLegalPositionsTo = PseudoLegalPiecesPositionsInitializer.getKingPseudoLegalPositions(kingFromPos);
-        log.debug("King pseudolegal positions from {}: {}", kingFromPos, kingPseudoLegalPositionsTo);
+        List<Position> kingPseudoLegalPositionsTo = PseudoLegalPiecesPositionsInitializer.
+                getKingPseudoLegalPositions(kingFromPos);
+        log.error("{} King pseudolegal positions from {}: {}", this.getColor(), kingFromPos, kingPseudoLegalPositionsTo);
         for (Position kingToPosition : kingPseudoLegalPositionsTo) {
             if (chessboard.isEmpty(kingToPosition) ||
                     !(chessboard.getPiece(kingToPosition).getColor()).equals(getColor())) {
@@ -65,14 +66,19 @@ public class King extends Piece {
         if (chessboard.getPiece(kingFromPos).getName().equals(PieceNames.KING)) {
             log.debug("There is a king on {}", kingFromPos);
             if (canCastleKingside(kingFromPos, chessboard)) {
-                log.debug("I can castle kingside.");
                 pseudoLegalMoves.add(new CastlingMove(MoveNames.KINGSIDE_CASTLE, kingFromPos));
-            }  
+                log.debug("Added kingside castle for {} king in {}.", getColor(), kingFromPos);
+            } else {
+                log.debug("No kingside castle possible for {} king in {}.", getColor(), kingFromPos);
+            }
             if (canCastleQueenside(kingFromPos, chessboard)) {
-                log.debug("I can castle queenside.");
                 pseudoLegalMoves.add(new CastlingMove(MoveNames.QUEENSIDE_CASTLE, kingFromPos));
+                log.debug("Added queenside castle for {} king in {}.", getColor(), kingFromPos);
+            } else {
+                log.debug("No queenside castle possible for {} king in {}.", getColor(), kingFromPos);
             }
         }
+        log.debug("{} king pseudolegal moves: {}.", this.getColor(), pseudoLegalMoves);
         return pseudoLegalMoves;
     }
 
@@ -158,8 +164,8 @@ public class King extends Piece {
         assert chessboard.getPiece(from) == null || chessboard.getPiece(from).getName().equals(PieceNames.KING) :
                 "If there is a piece on " + from + ", it must be a King.";
         log.trace("King on {}: {}", from,chessboard.getPiece(from));
-        List<Position> pseudoLegalPositions = PseudoLegalPiecesPositionsInitializer.getKingPseudoLegalPositions(from);
-        for (Position pseudoLegalPosition : pseudoLegalPositions){
+        List<Position> capturePositions = PseudoLegalPiecesPositionsInitializer.getKingPseudoLegalPositions(from);
+        for (Position pseudoLegalPosition : capturePositions){
             if (chessboard.isEmpty(pseudoLegalPosition)) {
                continue;
             }

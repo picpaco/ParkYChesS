@@ -1355,7 +1355,7 @@ Nodes searched: 3687809
         ptu = new PerftUtils(gameState);
         long result = ptu.perft(2, 2, stats);
         stats.setNumberOfLeaves(result);
-        log.info("Moves map for {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
+        log.info("{}'s player moves map: {}", gameState.getChessboard().getCurrentPlayerColor(),
                 stats.getMapValues(gameState.getChessboard().getCurrentPlayerColor()));
         assertEquals(179L, result, "There should be 179 legal moves (leaf nodes).");
     }

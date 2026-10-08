@@ -175,10 +175,10 @@ public class StageListener implements ApplicationListener<ParkychessApplication.
 
     private void handleMove (GUIController guiController) {
         displayChessboard (gameState.getChessboard(), guiController);
-     //   gameState.checkGameEnd(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
+     //   gameState.checkGameOver(gameState.getLegalMovesForColor(chessboard.getCurrentPlayerColor()), chessboard);
       //  LocalGameState localGameState = new LocalGameState(chessboard);
-      //  checkGameEnd(gameState.getKingLegalMovesForKing(, localGameState.getZobristHash(), chessboard);
-      //  gameState.checkGameEnd(getLegalMovesForKing(chessboard), zobristKey, chessboard);
+      //  checkGameOver(gameState.getKingLegalMovesForKing(, localGameState.getZobristHash(), chessboard);
+      //  gameState.checkGameOver(getLegalMovesForKing(chessboard), zobristKey, chessboard);
         if (gameState.isGameOver()) {
             log.debug("Game over!");
             showGameOver(guiController);

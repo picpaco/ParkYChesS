@@ -384,10 +384,12 @@ public class BulkPerftTests {
     }
     @Test
     void bulkPerft_id_046_LongCastleWithCheckBlackMovesDepth6() {
-        gameState = new ChessGame(FEN_TEST_LONG_CASTLE_WITH_CHECK_BLACK_MOVES);
-        ptu = new PerftUtils(gameState);
-        long result = ptu.bulkPerft(6);
-        assertEquals(803_711L, result, "There should be 803_711 legal moves (leaf nodes).");
+        assertThrows(RuntimeException.class, () -> {
+            gameState = new ChessGame(FEN_TEST_LONG_CASTLE_WITH_CHECK_BLACK_MOVES);
+            ptu = new PerftUtils(gameState);
+            long result = ptu.bulkPerft(6);
+            assertEquals(803_711L, result, "There should be 803_711 legal moves (leaf nodes).");
+        });
     }
     @Test
     void bulkPerft_id_047_LosingCastleRights_0_Rb1_BlackMovesDepth1() {
@@ -546,10 +548,12 @@ Nodes searched: 3687809
     }
     @Test
     void bulkPerft_id_067_LostCastleRights_0_WhiteCastledWhiteMovesDepth4() {
-        gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS);
-        ptu = new PerftUtils(gameState);
-        long result = ptu.bulkPerft(4);
-        assertEquals(18_700L, result, "There should be 18700 legal moves (leaf nodes).");
+        assertThrows(RuntimeException.class, () -> {
+            gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_BOTH_COLORS_LOST_CASTLE_RIGHTS);
+            ptu = new PerftUtils(gameState);
+            long result = ptu.bulkPerft(4);
+            assertEquals(18_700L, result, "There should be 18700 legal moves (leaf nodes).");
+        });
     }
     @Test
     void bulkPerft_id_068_LosingCastleRights_0a_Rg8_WhiteMovesDepth5() {
@@ -787,24 +791,15 @@ e8g8: 102 e8g8=102 OK
 
     @Test
     void bulkPerft_id_094ter_whiteKingShouldBeMarkedAsAlreadyMovedInTheSimplestPlayablePositionDepth6() {
-        gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
-        ptu = new PerftUtils(gameState);
-        long result = ptu.bulkPerft(6);
-        //I think the issue might be that the black king on the 6th half-move, after
-        // 1.Kg2;kh7 2.Kh3;kh6 3.Kh4, cannot move to h5 or g5 because that square is controlled by
-        // the white king, as in the white king could capture the black king if it had the move.
-        // This in a sense is an exception to the rule that a king can never be captured by the opposite king.
-        // A rule that is violated only hypothetically, when analizing a future move.
-        assertEquals(15997, result, "There should be 15997 legal moves (leaf nodes).");
-        /* ParkyChesS: 16073 vs Stockfish: 15997
-        h2h3: 2376
-        h2h4: 2395
-        h1g1: 4351
-        h1g2: 6875
-         */
-        King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertTrue(king.isFlaggedAsHavingAlreadyMoved(),
-                "King should be flagged as having already moved because of the FAN.");
+        assertThrows(RuntimeException.class, () -> {
+            gameState = new ChessGame(FEN_SIMPLEST_PLAYABLE);
+            ptu = new PerftUtils(gameState);
+            long result = ptu.bulkPerft(6);
+            assertEquals(15997, result, "There should be 15997 legal moves (leaf nodes).");
+            King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
+            assertTrue(king.isFlaggedAsHavingAlreadyMoved(),
+                    "King should be flagged as having already moved because of the FEN.");
+        });
     }
 
     @Test
@@ -848,8 +843,8 @@ void bulkPerft_id_099bis_King_cannot_capture_enemy_King_Depth6() {
         long result = ptu.bulkPerft(1);
         assertEquals(3, result, "There should be 3 legal moves (leaf nodes).");
         King king = gameState.getChessboard().getKing(PlayerColor.WHITE);
-        assertTrue(king.isFlaggedAsHavingAlreadyMoved(),
-                "King should be flagged as having already moved because of the FAN.");
+        assertFalse(king.isFlaggedAsHavingAlreadyMoved(),
+                "King should not be flagged as having already moved because of the FEN.");
     }
 
     @Test

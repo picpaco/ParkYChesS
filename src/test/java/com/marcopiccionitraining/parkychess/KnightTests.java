@@ -130,17 +130,18 @@ public class KnightTests {
     }
     @Test
     void whiteKnightOnTheCornerTwoPossibleJumps() {
-        ChessGame gameState = new ChessGame(FEN_WHITE_KNIGHT_CORNER_2_JUMPS_POSITION);
-        log.debug("Current position: {}", gameState.getChessboard());
-        Collection<Move> knightLegalMoves = new ArrayList<>();
-        knightLegalMoves.add(new StandardMove(new Position(7, 0), new Position(5, 1)));
-        knightLegalMoves.add(new StandardMove(new Position(7, 0), new Position(6, 2)));
-        Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(7, 0));
-        assertTrue(knightLegalMoves.size() == computedKnightMoves.size() &&
-                knightLegalMoves.containsAll(computedKnightMoves) &&
-                computedKnightMoves.containsAll(knightLegalMoves), "The expected list of moves: " + knightLegalMoves +
-                " is not the same as the produced one: " + computedKnightMoves);
+            ChessGame gameState = new ChessGame(FEN_WHITE_KNIGHT_CORNER_2_JUMPS_POSITION);
+            log.debug("Current position: {}", gameState.getChessboard());
+            Collection<Move> knightLegalMoves = new ArrayList<>();
+            knightLegalMoves.add(new StandardMove(new Position(7, 0), new Position(5, 1)));
+            knightLegalMoves.add(new StandardMove(new Position(7, 0), new Position(6, 2)));
+            Collection<Move> computedKnightMoves = gameState.getLegalMovesForPieceAtPosition(new Position(7, 0));
+            assertTrue(knightLegalMoves.size() == computedKnightMoves.size() &&
+                    knightLegalMoves.containsAll(computedKnightMoves) &&
+                    computedKnightMoves.containsAll(knightLegalMoves), "The expected list of moves: " + knightLegalMoves +
+                    " is not the same as the produced one: " + computedKnightMoves);
     }
+
     @Test
     void whiteKnightOnTheRimOnePossibleJump() {
         ChessGame gameState = new ChessGame(FEN_WHITE_KNIGHT_RIM_1_JUMP_POSITION);

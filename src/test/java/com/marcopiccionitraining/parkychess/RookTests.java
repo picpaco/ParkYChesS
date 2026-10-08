@@ -31,37 +31,41 @@ class RookTests {
     }
 
 	@Test
-	void shortCastlingFromFEN_isIncludedInPseudolegalMoves(){
-		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
-		ptu = new PerftUtils(gameState);
-		log.debug("Current color after initialization: {}", gameState.getChessboard().getCurrentPlayerColor());
-		King blackKing = (King) gameState.getChessboard().getPiece(0,4);
-		long result = ptu.perft(1, 1, stats);
-		Collection<Move> blackKingPseudolegalMoves = blackKing.getPseudoLegalMoves(
-				gameState.getChessboard().getKingPosition(PlayerColor.BLACK), gameState.getChessboard());
-		log.error("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
-		assertEquals(6, blackKingPseudolegalMoves.size(),"There should be 6 black king pseudolegal moves.");
-		assertEquals(15, gameState.getLegalMovesForColor(PlayerColor.BLACK).size(), "There should be 15 legal moves for Black.");
-		assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
+	void shortCastlingFromFEN_isIncludedInPseudolegalAndThenLegalMoves(){
+			ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+			King blackKing = (King) gameState.getChessboard().getPiece(0,4);
+			assert blackKing != null : "Black King should be at its starting position.";
+			log.debug("Chessboard after initializing gameState: {}", gameState.getChessboard());
+			ptu = new PerftUtils(gameState);
+			log.debug("Current color after initialization: {}", gameState.getChessboard().getCurrentPlayerColor());
+			long result = ptu.perft(1, 1, stats);
+			Collection<Move> blackKingPseudolegalMoves = blackKing.getPseudoLegalMoves(
+					gameState.getChessboard().getKingPosition(PlayerColor.BLACK), gameState.getChessboard());
+			log.error("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
+			assertEquals(6, blackKingPseudolegalMoves.size(),"There should be 6 black king pseudolegal moves.");
+			assertEquals(15, gameState.getLegalMovesForColor(PlayerColor.BLACK).size(), "There should be 15 legal moves for Black.");
+			assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
 	}
+
 	@Test
 	void blackRookHasNotMovedAfterAnyMoveWithUndo(){
-		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
-		ptu = new PerftUtils(gameState);
-        Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
-        log.debug("Current color before invoking perft: {}", gameState.getChessboard().getCurrentPlayerColor());
-        assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Before the first move is made, " +
+			ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
+			ptu = new PerftUtils(gameState);
+        	Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
+        	log.debug("Current color before invoking perft: {}", gameState.getChessboard().getCurrentPlayerColor());
+        	assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Before the first move is made, " +
                 "the rook should not be flagged as having already moved.");
-        long result = ptu.perft(1, 1, stats);
-		assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
-		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"After the first move is undone, " +
-				"the rook should not be flagged as having already moved.");
+        	long result = ptu.perft(1, 1, stats);
+			log.error("Situation: {}", gameState.getChessboard());
+			assertEquals(15, result, "There should be 15 legal moves (leaf nodes).");
+			assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"After all the legal moves " +
+					"are undone, the rook should not be flagged as having already moved.");
 	}
 
 	@Test
 	void blackRookHasNotMovedAfterThreeMovesWithUndoDepth_3(){
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
-        ptu = new PerftUtils(gameState);
+		ptu = new PerftUtils(gameState);
 		Rook blackRook = (Rook) gameState.getChessboard().getPiece (0,7);
 		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"Initially, the rook should not be flagged as having already moved.");
 		long result = ptu.perft(3, 3, stats);
@@ -69,6 +73,7 @@ class RookTests {
 		assertFalse(blackRook.isFlaggedAsHavingAlreadyMoved(),"After all the move have been undone, " +
 				"the rook should not be flagged as having already moved.");
 	}
+
 	@Test
 	void blackRookHasMovedForGoodDepth5(){
 		ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
@@ -81,7 +86,7 @@ class RookTests {
 		standardRookMove3.execute(gameState.getChessboard());
 		StandardMove standardRookMove4 = new StandardMove(new Position(1, 7), new Position(0, 7));
 		standardRookMove4.execute(gameState.getChessboard());
-	//	assertTrue(blackRook.isFlaggedAsHavingAlreadyMoved(), "The rook should be flagged as having already moved.");
+		assertTrue(blackRook.isFlaggedAsHavingAlreadyMoved(), "The rook should be flagged as having already moved.");
 	}
 
 	@Test

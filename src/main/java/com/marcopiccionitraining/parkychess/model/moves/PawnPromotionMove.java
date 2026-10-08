@@ -35,12 +35,13 @@ public class PawnPromotionMove extends Move {
         pawnToPromote = chessboard.getPiece(getFrom());
         if (!chessboard.isEmpty(getTo())) {
             capturedPiece = chessboard.getPiece(getTo());
+            chessboard.setLastCapturedPiece(capturedPiece);
             log.info("I have just saved the captured piece {}.", capturedPiece);
         }
         promotionPiece.setFlaggedAsHavingAlreadyMoved(true);
         chessboard.setPiece(promotionPiece, getTo());
-        chessboard.setEmpty(getFrom().getRow(), getFrom().getColumn());
-        log.error("Chessboard after executing {}: {}.", this, chessboard);
+        chessboard.setEmpty(getFrom());
+        log.debug("Chessboard after executing {}: {}.", this, chessboard);
         return true;
     }
 
@@ -51,12 +52,17 @@ public class PawnPromotionMove extends Move {
             chessboard.setPiece(pawnToPromote, getFrom());
             log.info("I have put back the promoting pawn on {}", getFrom());
             if (capturedPiece != null) {
-                chessboard.setPiece(capturedPiece, getTo());
+                chessboard.setPiece(localGameState.getPieceCapturedLast(), getTo());
                 log.info("Previously captured pawn {} put on {}", capturedPiece, getTo());
             } else {
-                chessboard.setEmpty(getTo().getRow(), getTo().getColumn());
+                chessboard.setEmpty(getTo());
                 log.info("There is no piece now on {}", getTo());
             }
             log.info("I have just undone move {}. Board situation is {}", this, chessboard);
-            }
+    }
+
+    @Override
+    public String toString() {
+        return "" + getFrom() + getTo() + promotionPiece;
+    }
 }

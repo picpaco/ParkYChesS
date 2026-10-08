@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+
 @Slf4j
 public class Bishop extends SliderPiece {
 
@@ -16,7 +18,7 @@ public class Bishop extends SliderPiece {
     }
 
     @Override
-    public List<Move> getPseudoLegalMoves(Position from, Board chessboard){
+    public List<Move> getPseudoLegalMoves(@NotNull Position from, @NotNull Board chessboard){
         List<Move> bishopPseudoLegalMoves = new ArrayList<>();
         List<List<Position>> allBishopDiagonals =
                 PseudoLegalPiecesPositionsInitializer.getBishopPseudoLegalPositions(from);

@@ -7,12 +7,12 @@ public enum GameEndReason {
     @Override
     public String toString() {
         switch (this){
-            case CHECKMATE -> { return "Checkmate!"; }
-            case STALEMATE_DRAW -> {return "Draw because a stalemate occurred."; }
-            case FIFTY_MOVES_RULE_DRAW -> {return "Draw because of the fifty moves rule";}
-            case INSUFFICIENT_MATERIAL_DRAW -> {return "Draw because there are not enough pieces left for a checkmate to happen.";}
-            case THREEFOLD_REPETITION_DRAW -> {return "Draw because the current position was reached three times.";}
-            case AGREED_DRAW -> {return "A draw was agreed.";}
+            case CHECKMATE -> { return "Checkmate."; }
+            case STALEMATE_DRAW -> {return "Draw (stalemate)."; }
+            case FIFTY_MOVES_RULE_DRAW -> {return "Draw (50 moves rule).";}
+            case INSUFFICIENT_MATERIAL_DRAW -> {return "Draw (not enough pieces for a decisive result).";}
+            case THREEFOLD_REPETITION_DRAW -> {return "Draw (the current position was reached 3 times).";}
+            case AGREED_DRAW -> {return "Draw (by agreement).";}
             case RESIGNATION -> {return "Resignation.";}
         }
         return "GameEndReason{}";

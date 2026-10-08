@@ -88,7 +88,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
      */
     private static final HashMap<Position, List<Position>> attackingBlackPawnsPositionsAssociatedToWhiteSkippedPositions = new HashMap<>();
 
-    public static ZobristChessboardState zobristChessboardState;
+    public static ZobristKeyProvider zobristChessboardState;
 
     static {
         initializeKingPseudoLegalPositions();
@@ -534,7 +534,7 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations.add(new Position(0, 6));
         whitePawnPseudoLegalCapturePositions.put(new Position(1,7), destinations);
     }
-
+    //TODO: validate the 'to' squares for (black || white) (kingside || queenside) castle
     private static void initializeKingPseudoLegalPositions(){
         //row 0
         ArrayList<Position> destinations = new ArrayList<>();
@@ -565,7 +565,9 @@ public record PseudoLegalPiecesPositionsInitializer() {
         kingPseudoLegalPositions.put(new Position(0,3), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(0, 3));
+        destinations.add(new Position(0, 2));
         destinations.add(new Position(0, 5));
+        destinations.add(new Position(0, 6));
         destinations.add(new Position(1, 3));
         destinations.add(new Position(1, 4));
         destinations.add(new Position(1, 5));
@@ -1070,8 +1072,10 @@ public record PseudoLegalPiecesPositionsInitializer() {
         destinations.add(new Position(6, 3));
         destinations.add(new Position(6, 4));
         destinations.add(new Position(6, 5));
+        destinations.add(new Position(7, 2));
         destinations.add(new Position(7, 3));
         destinations.add(new Position(7, 5));
+        destinations.add(new Position(7, 6));
         kingPseudoLegalPositions.put(new Position(7,4), destinations);
         destinations = new ArrayList<>();
         destinations.add(new Position(6, 4));

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CastlingMove extends Move {
+
     private final Direction kingCastlingSide;
     @Getter
     private final Position rookFromPosition;
@@ -21,6 +22,7 @@ public class CastlingMove extends Move {
     private StandardMove rookStandardMove;
 
     public CastlingMove(@NonNull MoveNames moveName, @NonNull Position kingFromPosition) {
+        log.debug("Castling Move {} created.", moveName);
         assert moveName.equals(MoveNames.KINGSIDE_CASTLE) || moveName.equals(MoveNames.QUEENSIDE_CASTLE) :
                 "The allowed names for this move are: KINGSIDE_CASTLE and QUEENSIDE_CASTLE";
         assert (kingFromPosition.getRow() == 0 || kingFromPosition.getRow() == 7) &&
@@ -43,34 +45,59 @@ public class CastlingMove extends Move {
     }
 
     @Override
-    public boolean execute(@NonNull Board chessboard) {//}, LocalGameState localGameState) {
+    public boolean execute(@NonNull Board chessboard) {
         assert (chessboard.getPiece(getFrom()).getName()).equals(PieceNames.KING) :
                 "There should be a king in the from position";
         assert (chessboard.getPiece(rookFromPosition).getName()).equals(PieceNames.ROOK) :
                 "There should be a rook in the rookFrom position";
+        log.error("Executing castling move {}.", getName());
         kingStandardMove = new StandardMove(getFrom(), getTo());
-        log.info("Executing castling part 1: moving king from {} to {}...", getFrom(), getTo());
+        log.error("Executing castling part 1: moving king from {} to {}...", getFrom(), getTo());
         kingStandardMove.execute(chessboard);
         rookStandardMove = new StandardMove(rookFromPosition, rookToPosition);
-        log.info("Executing castling part 2: moving rook from {} to {}...", rookFromPosition, rookToPosition);
+        log.error("Executing castling part 2: moving rook from {} to {}...", rookFromPosition, rookToPosition);
         rookStandardMove.execute(chessboard);
-        log.info("Castling executed.");
-        log.info("Immediately after castling: {}", chessboard);
+        if (getName().equals(MoveNames.KINGSIDE_CASTLE) &&
+                (chessboard.getPiece(getTo()).getColor()).equals(PlayerColor.BLACK) ) {
+            chessboard.setBlackKingsideCastlingPossibleFromFEN(false);
+            chessboard.setBlackKingPosition(getTo());
+        }
+        if (getName().equals(MoveNames.KINGSIDE_CASTLE) &&
+                (chessboard.getPiece(getTo()).getColor()).equals(PlayerColor.WHITE) ) {
+            chessboard.setWhiteKingsideCastlingPossibleFromFEN(false);
+            chessboard.setWhiteKingPosition(getTo());
+        }
+        if (getName().equals(MoveNames.QUEENSIDE_CASTLE) &&
+                (chessboard.getPiece(getTo()).getColor()).equals(PlayerColor.BLACK) ) {
+            chessboard.setBlackQueensideCastlingPossibleFromFEN(false);
+            chessboard.setBlackKingPosition(getTo());
+        }
+        if (getName().equals(MoveNames.QUEENSIDE_CASTLE) && (chessboard.getPiece(getTo()).getColor()).equals(PlayerColor.WHITE) ) {
+            chessboard.setWhiteQueensideCastlingPossibleFromFEN(false);
+            chessboard.setWhiteKingPosition(getTo());
+        }
+        log.error("Castling executed.");
         return false;
     }
 
     @Override
     public void undo(@NonNull Board chessboard, LocalGameState localGameState) {
-        assert chessboard.isEmpty(rookFromPosition) : "Original rook's from position should be empty before undoing this move.";
-        assert chessboard.isEmpty(getFrom()) : "Original king's from position should be empty before undoing this move.";
-        log.debug("Before undo: King position: ({}, {}); Rook position: ({}, {})", getFrom(), getTo(), rookFromPosition, rookToPosition);
-        kingStandardMove.undo(chessboard, localGameState);
-        rookStandardMove.undo(chessboard, localGameState);
-        Rook rook = (Rook) chessboard.getPiece(getRookFromPosition());
+        assert chessboard.isEmpty(rookFromPosition) : "Original rook's 'from' position should be empty before undoing this move.";
+        assert chessboard.isEmpty(getFrom()) : "Original king's 'from' position should be empty before undoing this move.";
+        log.debug("Before castling undo: king is in {}; rook is in {}.", getTo(), rookToPosition);
+        Rook rook = (Rook) chessboard.getPiece(getRookToPosition());
         King king = chessboard.getKing(rook.getColor());
         chessboard.setPiece(king, getFrom());
-        chessboard.setEmpty(getTo().getRow(), getTo().getColumn());
-        log.debug("After undo: King position: ({}, {}); Rook position: ({}, {})", getFrom(), getTo(), rookFromPosition, rookToPosition);
+        chessboard.setEmpty(getTo());
+        chessboard.setPiece(rook, rookFromPosition);
+        chessboard.setEmpty(rookToPosition);
+        chessboard.setBlackKingsideCastlingPossibleFromFEN(localGameState.isBlackKingsideCastlingPossible());
+        chessboard.setBlackQueensideCastlingPossibleFromFEN(localGameState.isBlackQueensideCastlingPossible());
+        chessboard.setWhiteKingsideCastlingPossibleFromFEN(localGameState.isWhiteKingsideCastlingPossible());
+        chessboard.setWhiteQueensideCastlingPossibleFromFEN(localGameState.isWhiteQueensideCastlingPossible());
+        chessboard.setBlackKingPosition(getFrom());
+        chessboard.setWhiteKingPosition(getFrom());
+        log.debug("After castling undo: king is in {}; rook is in {}.", getFrom(), rookFromPosition);
     }
 
     /**
@@ -86,30 +113,45 @@ public class CastlingMove extends Move {
     @Override
     public boolean isLegal(@NonNull Board chessboard) {
         PlayerColor kingColor = (chessboard.getPiece(getFrom())).getColor();
+        log.error("Checking if castling move {} is legal:", this);
         if (chessboard.isPlayerInCheck(kingColor)) {
-            log.debug("{} for {} is illegal when under check).", getName(), kingColor);
+            log.error("{} for {} is illegal when under check).", getName(), kingColor);
             return false;
         }
         assert !(chessboard.isEmpty(getFrom())) : "There must be a piece in " + getFrom();
         log.debug("kingCastlingSide: {}", kingCastlingSide);
+        LocalGameState localGameState1 = new LocalGameState(chessboard);
         Position firstCastlingKingStep = getFrom().stepTowardsDirection(kingCastlingSide);
-        log.debug("Performing castling king step on a separate board making sure the king is not in check.");
-        Board chessboardCopy = chessboard.copy();
-        new StandardMove(getFrom(), firstCastlingKingStep).execute(chessboardCopy);
-        if (chessboardCopy.isPlayerInCheck(kingColor)) {
-            log.trace("{} is illegal because {} would be in check while passing on the first square of the castling path.",
+        StandardMove kingStep1 = new StandardMove(getFrom(), firstCastlingKingStep);
+        kingStep1.execute(chessboard);
+        if (chessboard.isPlayerInCheck(kingColor)) {
+            log.error("{} is illegal because {} would be in check while passing over the first square of the castling path.",
                     getName(), kingColor);
+            kingStep1.undo(chessboard, localGameState1);
             return false;
         }
         Position secondCastlingKingStep = firstCastlingKingStep.stepTowardsDirection(kingCastlingSide);
-        log.debug("Performing second castling king step on a separate chessboard and checking if there is a discovery check.");
-        new StandardMove(firstCastlingKingStep, secondCastlingKingStep).execute(chessboardCopy);
-        if (chessboardCopy.isPlayerInCheck(kingColor)) {
-            log.trace("{} is illegal because {} would be in check after performing the second step of the castling path.",
+        log.debug("Performing the second castling king step and checking if there is a check.");
+        StandardMove kingStep2 = new StandardMove(firstCastlingKingStep, secondCastlingKingStep);
+        kingStep2.execute(chessboard);
+        if (chessboard.isPlayerInCheck(kingColor)) {
+            log.error("{} is illegal because {} would be in check after performing the second castling step of the path.",
+                    getName(), kingColor);
+            kingStep2.undo(chessboard, localGameState1);
+            kingStep1.undo(chessboard, localGameState1);
+            return false;
+        }
+        StandardMove rookMove = new StandardMove(rookFromPosition, rookToPosition);
+        rookMove.execute(chessboard);
+        if (chessboard.isPlayerInCheck(kingColor)) {
+            log.error("{} is illegal because {} would be in check after performing the final castling rook move.",
                     getName(), kingColor);
             return false;
         }
-        log.debug("Castling move {} is legal.", this);
+        rookMove.undo(chessboard, localGameState1);
+        kingStep2.undo(chessboard, localGameState1);
+        kingStep1.undo(chessboard, localGameState1);
+        log.error("{} is legal.", getName());
         return true;
     }
 }
