@@ -166,6 +166,7 @@ public class Board {
      */
     public void switchCurrentPlayerColor() {
         currentPlayerColor = (currentPlayerColor.equals(PlayerColor.WHITE) ? PlayerColor.BLACK : PlayerColor.WHITE);
+        log.error("Switched color from {} to {}", currentPlayerColor, PlayerColor.getOpponentColor(currentPlayerColor));
     }
 
     /**
@@ -183,14 +184,14 @@ public class Board {
     public Long getNewZobristKey(@NonNull LocalGameState localGameState) {
         Long key = ZobristKeyProvider.getZobristHash(localGameState);
         localGameState.setZobristKey(key);
-        log.error("Created zobrist key {} for local state {}", key, localGameState);
+        log.debug("Created zobrist key {} for local state:\n {}", key, localGameState);
         return key;
     }
 
     public Integer getZobristValue (@NonNull Long zobristKey){
         assert containsZobristKey(zobristKey) : "Zobrist key should exist.";
         Integer value = zobristChessboardStates.get(zobristKey);
-        log.error("Found {} occurences for key {}", value, zobristKey);
+        log.debug("Found {} occurences for key {}", value, zobristKey);
         return value;
     }
 

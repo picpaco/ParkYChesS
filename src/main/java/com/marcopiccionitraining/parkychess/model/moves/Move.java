@@ -35,7 +35,7 @@ public abstract class Move implements Command {
         log.debug("Checking if move {} is legal:", this);
         List<Position> opponentPiecesPositions = chessboard.getPiecesPositionsForColor(
                 PlayerColor.getOpponentColor(pieceMoved.getColor()));
-        log.debug("Get a list of the opponent pieces' positions: {}", opponentPiecesPositions);
+        log.debug("Getting a list of the opponent pieces' positions: {}", opponentPiecesPositions);
         outerLoop:
         for (Position opponentPiecePosition : opponentPiecesPositions) {
             Piece opponentPiece = chessboard.getPiece(opponentPiecePosition);
@@ -69,8 +69,8 @@ public abstract class Move implements Command {
                 }
             }
         }
-        undo (chessboard, localGameState);
         log.error("Move {} is {}", this, (isLegalFlag ? "legal." : "not legal."));
+        undo (chessboard, localGameState);
         return isLegalFlag;
     }
 

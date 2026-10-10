@@ -29,7 +29,7 @@ public class PerftUtils {
      * @see "https://www.chessprogramming.org/Perft_Results"
      */
     public long perft (int startingDepth, int currentDepth, MoveGeneratorStatistics stats) {
-        log.error("{} is entering perft at depth: {}",
+        log.error("{} has just entered perft at depth: {}",
                 gameState.getChessboard().getCurrentPlayerColor(), currentDepth);
         assert startingDepth >= 0 : "Starting depth should be non-negative.";
         assert startingDepth <= Board.MAX_DEPTH : "Starting depth should not be greater than " + Board.MAX_DEPTH;
@@ -38,16 +38,13 @@ public class PerftUtils {
         long totalNumberOfNodes = 0;
         if (currentDepth == 0) {
             log.debug("Number of captures at current depth {}: {}", currentDepth, stats.getNumberOfCaptures());
-            log.error("Switching color from {} to {}", gameState.getChessboard().getCurrentPlayerColor(), PlayerColor.getOpponentColor(
-                    gameState.getChessboard().getCurrentPlayerColor()));
-            gameState.getChessboard().switchCurrentPlayerColor();
+            //    gameState.getChessboard().switchCurrentPlayerColor();
+            //log.error("Switched color from {} to {}", gameState.getChessboard().getCurrentPlayerColor(), PlayerColor.getOpponentColor(
+              //     gameState.getChessboard().getCurrentPlayerColor()));
             return 1L;
         }
         long numberOfNodesFromPosition;
         List<Move> legalMovesForColor = gameState.getLegalMovesForColor(gameState.getChessboard().getCurrentPlayerColor());
-        //FIXME: add the following code to avoid computing legalMovesForColor one more time
-        // remove legalMovesForColor computation in ChessGame constructor and add a conditional here:
-        // if number of moves is zero check for game over.
         log.error("Legal moves for {} at depth {}: {}", gameState.getChessboard().getCurrentPlayerColor(),
                 currentDepth, legalMovesForColor);
         for (Move legalMove : legalMovesForColor) {
@@ -58,15 +55,17 @@ public class PerftUtils {
             log.error("Local state before make move {}: {}", legalMove, localGameStateBeforeMakeMove);
             if (gameState.getChessboard().containsZobristKey(zobristKeyBeforeMakeMove)) {
                 int numberOfOccurrences = gameState.getChessboard().getZobristValue(zobristKeyBeforeMakeMove);
-         //       numberOfOccurrences++;
-                log.error("The current position {} has been reached {} times.", gameState.getChessboard(), numberOfOccurrences);
+                numberOfOccurrences++;
+                log.error("The current position has been reached {} times.", numberOfOccurrences);
                 gameState.getChessboard().saveZobristEntry(zobristKeyBeforeMakeMove, numberOfOccurrences);
             } else {
-                log.error("The current position {} was never reached before.", gameState.getChessboard());
+                //log.error("The current position {} was never reached before.", gameState.getChessboard());
+                log.error("The current position was never reached before.");
                 gameState.getChessboard().saveZobristEntry(zobristKeyBeforeMakeMove, 1);
             }
-            gameState.makeMove(legalMove);
-            log.error("About to switch current depth from {} to {}", currentDepth, currentDepth - 1);
+            gameState.makeMove(legalMovesForColor, legalMove);
+            log.error("About to move from depth {} to {}", currentDepth, currentDepth - 1);
+            //gameState.getChessboard().switchCurrentPlayerColor();
             numberOfNodesFromPosition = perft(startingDepth, currentDepth - 1, stats);
             totalNumberOfNodes = totalNumberOfNodes + numberOfNodesFromPosition;
             stats.addNumberOfCapturesPerDepth(currentDepth, stats.getNumberOfCaptures());
@@ -76,9 +75,9 @@ public class PerftUtils {
             gameState.undo(legalMove, localGameStateBeforeMakeMove);
             LocalGameState localGameStateAfterUndo = new LocalGameState(gameState.getChessboard());
             Long zobristKeyAfterUndo = gameState.getChessboard().getNewZobristKey(localGameStateAfterUndo);
-            assert localGameStateBeforeMakeMove.equals(localGameStateAfterUndo) : "The local game state has not" +
-                    " been restored correctly when making a move and undoing it. " + "Before:" +
-                    localGameStateBeforeMakeMove + "; After: " + localGameStateAfterUndo;
+            assert localGameStateBeforeMakeMove.equals(localGameStateAfterUndo) :
+                    "Local game state not restored correctly when undoing a previously made move." + "\nBefore:" +
+                    localGameStateBeforeMakeMove + "\nAfter: " + localGameStateAfterUndo;
             if (startingDepth == currentDepth) {
                 stats.addMoveNodes(gameState.getChessboard().getCurrentPlayerColor(), legalMove.toString(), numberOfNodesFromPosition);
                 log.trace("Number of captures at depth {}: {}", currentDepth, stats.getNumberOfCaptures());
@@ -103,21 +102,21 @@ public class PerftUtils {
         assert depth > 0 : "Depth should be strictly positive.";
         assert depth <= Board.MAX_DEPTH : "Depth should not be greater than " + Board.MAX_DEPTH;
         long totalNumberOfNodes = 0;
-        List<Move> movesList = gameState.getLegalMovesForColor (gameState.getChessboard().getCurrentPlayerColor());
+        List<Move> legalMovesForColor = gameState.getLegalMovesForColor (gameState.getChessboard().getCurrentPlayerColor());
         log.error("List of legal moves for {} at depth {}", gameState.getChessboard(), depth);
-        long numberOfNodesFromPosition = movesList.size();
+        long numberOfNodesFromPosition = legalMovesForColor.size();
         log.error("{} generated the following {} legal moves at depth {}: {}",
-                gameState.getChessboard().getCurrentPlayerColor(), movesList.size(), depth, movesList);
+                gameState.getChessboard().getCurrentPlayerColor(), legalMovesForColor.size(), depth, legalMovesForColor);
         if (depth == 1) {
             return numberOfNodesFromPosition;
         }
-        for (Move legalMove : movesList) {
+        for (Move legalMove : legalMovesForColor) {
             log.error("Move {} executed by {} at depth {}", legalMove,
                     gameState.getChessboard().getCurrentPlayerColor(), depth);
             log.error("About to invoke ChessGame.makeMove on move {}", legalMove);
             LocalGameState localGameStateBeforeMakeMove = new LocalGameState(gameState.getChessboard());
             log.error("Local state before making move {}: {}", legalMove, localGameStateBeforeMakeMove);
-            gameState.makeMove(legalMove);
+            gameState.makeMove(legalMovesForColor, legalMove);
             //LocalGameState localGameStateImmediatelyAfterMakeMove = new LocalGameState(gameState.getChessboard());
             //log.error("Local state immediately after making move {}: {}", legalMove, localGameStateImmediatelyAfterMakeMove);
             numberOfNodesFromPosition = bulkPerft(depth - 1);

@@ -121,15 +121,20 @@ public class EndOfGameTests {
     @Test
     void endOfGameWithGameStateRepetitionWhiteStarts(){
         ChessGame gameState = new ChessGame(FEN_KING_ROOK_NO_CHECK_POSITION);
+        List<Move> legalMovesForColor  = new ArrayList<>();
+        Move whiteRookFirstMove = new StandardMove(new Position(7,3), new Position(6,3));
+        legalMovesForColor.add(whiteRookFirstMove);
+        Move blackKingFirstMove = new StandardMove(new Position(0,4), new Position(0,5));
+        legalMovesForColor.add(blackKingFirstMove);
+        Move whiteRookSecondMove = new StandardMove(new Position(6,3), new Position(7,3));
+        legalMovesForColor.add(whiteRookSecondMove);
+        Move blackKingSecondMove = new StandardMove(new Position(0,5), new Position(0,4));
+        legalMovesForColor.add(blackKingSecondMove);
         for (int i = 0; i < 3; i++) {
-            Move whiteRookFirstMove = new StandardMove(new Position(7,3), new Position(6,3));
-            gameState.makeMove(whiteRookFirstMove);
-            Move blackKingFirstMove = new StandardMove(new Position(0,4), new Position(0,5));
-            gameState.makeMove(blackKingFirstMove);
-            Move whiteRookSecondMove = new StandardMove(new Position(6,3), new Position(7,3));
-            gameState.makeMove(whiteRookSecondMove);
-            Move blackKingSecondMove = new StandardMove(new Position(0,5), new Position(0,4));
-            gameState.makeMove(blackKingSecondMove);
+            gameState.makeMove(legalMovesForColor, whiteRookFirstMove);
+            gameState.makeMove(legalMovesForColor, blackKingFirstMove);
+            gameState.makeMove(legalMovesForColor, whiteRookSecondMove);
+            gameState.makeMove(legalMovesForColor, blackKingSecondMove);
         }
         assertTrue(gameState.isGameOver(), "Game should be over in this position.");
         assertEquals(GameEndReason.THREEFOLD_REPETITION_DRAW, gameState.getGameResult().gameEndReason(),

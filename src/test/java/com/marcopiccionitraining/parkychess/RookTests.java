@@ -34,13 +34,16 @@ class RookTests {
 	void shortCastlingFromFEN_isIncludedInPseudolegalAndThenLegalMoves(){
 			ChessGame gameState = new ChessGame(FEN_BLACK_ROOK_H8_HAS_NOT_MOVED_FOR_GOOD);
 			King blackKing = (King) gameState.getChessboard().getPiece(0,4);
-			assert blackKing != null : "Black King should be at its starting position.";
+			assertNotNull(blackKing, "Black King should be at its starting position.");
 			log.debug("Chessboard after initializing gameState: {}", gameState.getChessboard());
 			ptu = new PerftUtils(gameState);
 			log.debug("Current color after initialization: {}", gameState.getChessboard().getCurrentPlayerColor());
 			long result = ptu.perft(1, 1, stats);
+			Position blackKingPosition = gameState.getChessboard().getKingPosition(PlayerColor.BLACK);
+			assertEquals(new Position(0,4), blackKingPosition,
+					"Black King position should be e8.");
 			Collection<Move> blackKingPseudolegalMoves = blackKing.getPseudoLegalMoves(
-					gameState.getChessboard().getKingPosition(PlayerColor.BLACK), gameState.getChessboard());
+					blackKingPosition, gameState.getChessboard());
 			log.error("blackKingPseudolegalMoves: {}", blackKingPseudolegalMoves);
 			assertEquals(6, blackKingPseudolegalMoves.size(),"There should be 6 black king pseudolegal moves.");
 			assertEquals(15, gameState.getLegalMovesForColor(PlayerColor.BLACK).size(), "There should be 15 legal moves for Black.");

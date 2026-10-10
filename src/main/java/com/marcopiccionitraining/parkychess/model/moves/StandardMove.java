@@ -121,5 +121,6 @@ import java.util.Objects;
             chessboard.setEmpty(getTo());
             log.debug("Just set {} to empty.", getTo());
         }
+        log.debug("Piece {} is now back on {}.", piece, getFrom());
     }
 }

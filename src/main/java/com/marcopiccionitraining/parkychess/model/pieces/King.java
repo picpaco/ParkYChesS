@@ -45,7 +45,7 @@ public class King extends Piece {
      * 1.2 It is moving to an empty square, or
      * 1.3 It is moving to a square occupied by an enemy piece.
      * Note: It's OK if the king ends up with being under check.
-     * 2. A Castling move is pseudolegal if it allowed by the initial FEN (if applicable), and
+     * 2. A Castling move is pseudolegal if allowed by the initial FEN (if applicable), and
      * 2.1. King and rook which are involved in the castling move are on their home square, and
      * 2.2. The path between king and rook is free of pieces, and
      * 2.3. King and rook have not moved before.
@@ -55,7 +55,7 @@ public class King extends Piece {
         List<Move> pseudoLegalMoves = new ArrayList<>();
         List<Position> kingPseudoLegalPositionsTo = PseudoLegalPiecesPositionsInitializer.
                 getKingPseudoLegalPositions(kingFromPos);
-        log.error("{} King pseudolegal positions from {}: {}", this.getColor(), kingFromPos, kingPseudoLegalPositionsTo);
+        log.debug("{} King pseudolegal 'to' positions from {} (castling excluded):\n {}", this.getColor(), kingFromPos, kingPseudoLegalPositionsTo);
         for (Position kingToPosition : kingPseudoLegalPositionsTo) {
             if (chessboard.isEmpty(kingToPosition) ||
                     !(chessboard.getPiece(kingToPosition).getColor()).equals(getColor())) {
@@ -64,12 +64,12 @@ public class King extends Piece {
         }
         log.debug("Looking for castling moves...");
         if (chessboard.getPiece(kingFromPos).getName().equals(PieceNames.KING)) {
-            log.debug("There is a king on {}", kingFromPos);
+            log.error("There is a king on {}", kingFromPos);
             if (canCastleKingside(kingFromPos, chessboard)) {
                 pseudoLegalMoves.add(new CastlingMove(MoveNames.KINGSIDE_CASTLE, kingFromPos));
-                log.debug("Added kingside castle for {} king in {}.", getColor(), kingFromPos);
+                log.error("Added kingside castle for {} king in {}.", getColor(), kingFromPos);
             } else {
-                log.debug("No kingside castle possible for {} king in {}.", getColor(), kingFromPos);
+                log.error("No kingside castle possible for {} king in {}.", getColor(), kingFromPos);
             }
             if (canCastleQueenside(kingFromPos, chessboard)) {
                 pseudoLegalMoves.add(new CastlingMove(MoveNames.QUEENSIDE_CASTLE, kingFromPos));
@@ -88,6 +88,7 @@ public class King extends Piece {
         boolean isKingsideCastlePossibleFromFEN;
         boolean isKingAtHome;
         Position rookHomePosition;
+        log.error("Is this king flagged as having already moved? {}", isFlaggedAsHavingAlreadyMoved());
         if (isFlaggedAsHavingAlreadyMoved()) {
             return false;
         }

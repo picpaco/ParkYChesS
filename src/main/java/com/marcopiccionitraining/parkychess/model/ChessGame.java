@@ -101,9 +101,10 @@ public class ChessGame {
                 chessboard.getCurrentPlayerColor().equals(PlayerColor.BLACK) :
                 "Player color must be either white or black.";
         log.debug("Color moving first: {}", chessboard.getCurrentPlayerColor());
-        checkGameOver(chessboard, zobristKey);
+        List<Move> legalMovesForColor = getLegalMovesForColor(chessboard.getCurrentPlayerColor());
+        checkGameOver(legalMovesForColor, chessboard, zobristKey);
         if (isGameOver()){
-            log.error ("Game over. Send event to GUI/Console.");
+            log.error ("Game over. Computation may continue if needed.");
         }
         log.error("Finished constructing ChessGame instance.");
     }
@@ -114,11 +115,11 @@ public class ChessGame {
         List<Move> legalMovesForPiece = new ArrayList<>();
         Piece piece = chessboard.getPiece(position);
         List<Move> pseudoLegalMoves = piece.getPseudoLegalMoves(position, chessboard);
-        log.debug("PseudoLegalMoves for {}: {}", position, pseudoLegalMoves);
+        log.error("PseudoLegalMoves for piece {}: {}", piece, pseudoLegalMoves);
         for (Move pseudoLegalMove : pseudoLegalMoves) {
-            log.debug("Analyzing pseudoLegalMove: {} to see if it is legal:", pseudoLegalMove);
+            log.error("Analyzing pseudoLegalMove: {} to see if it is legal:", pseudoLegalMove);
             if (pseudoLegalMove.isLegal(chessboard)){
-                log.debug("PseudoLegalMove: {} is legal.", pseudoLegalMove);
+                log.error("PseudoLegalMove: {} is legal.", pseudoLegalMove);
                 legalMovesForPiece.add(pseudoLegalMove);
             }
         }
@@ -132,7 +133,7 @@ public class ChessGame {
      * @return all the legal moves available to playerColor.
      */
     public List<Move> getLegalMovesForColor (PlayerColor playerColor) {
-        log.error("Finding legal moves for {}...", playerColor);
+        log.error("Computing legal moves for {}...", playerColor);
         List<Move> legalMovesForColor = new ArrayList<>();
         List<Position> piecesPositionsForColor = chessboard.getPiecesPositionsForColor(playerColor);
         log.debug("1. Pieces positions for {}: {}. Loop across them.", playerColor, piecesPositionsForColor);
@@ -160,7 +161,7 @@ public class ChessGame {
                 }
             }
         }
-        log.error("Found the following legal moves for {}: {}", playerColor, legalMovesForColor);
+        log.debug("Found the following legal moves for {}: {}", playerColor, legalMovesForColor);
         return legalMovesForColor;
     }
 
@@ -624,7 +625,7 @@ public class ChessGame {
         }
     }
 
-    public void makeMove (@NonNull Move move) {
+    public void makeMove (@NonNull List<Move> legalMovesForColor, @NonNull Move move) {
         log.debug("About to execute {} move {}", move.getName(), move);
         boolean isCaptureOrPawnMove = move.execute(chessboard);
         if (isCaptureOrPawnMove) {
@@ -658,16 +659,16 @@ public class ChessGame {
         } else {
             chessboard.saveZobristEntry(zobristKeyAfterMakeMove, 1);
         }
-        checkGameOver(chessboard, zobristKeyAfterMakeMove);
+        checkGameOver(legalMovesForColor, chessboard, zobristKeyAfterMakeMove);
         if (isGameOver()) {
             commandHistory.add("Game over");
-            log.error("Game Over. Game result: {}. Analysis continues...", getGameResult());
+            log.error("Game Over. Game result: {}. Analysis can continue if needed.", getGameResult());
         }  else {
             log.error("No game ending condition found.");
         }
-        log.error("Switching color from {} to {}", chessboard.getCurrentPlayerColor(),
-                PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor()));
         chessboard.switchCurrentPlayerColor();
+      //  log.error("Switched color from {} to {}", chessboard.getCurrentPlayerColor(),
+       //         PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor()));
     }
 
     public void undo (@NonNull Move move, LocalGameState localGameStateBeforeMakeMove) {
@@ -685,18 +686,18 @@ public class ChessGame {
                 " can be undone.";
         assert chessboard.getZobristValue(localGameStateBeforeMakeMove.getZobristKey()) >= 1 :
                 "Value associated to key from localGameStateBeforeExecute must be at least 1.";
-      //  log.error("Switching color from {} to {}", chessboard.getCurrentPlayerColor(),
+        getChessboard().switchCurrentPlayerColor();
+      //  log.error("Switched color from {} to {}", chessboard.getCurrentPlayerColor(),
        //         PlayerColor.getOpponentColor (chessboard.getCurrentPlayerColor()));
-        //TODO: check hereabove and hereafter if color switching is really needed here.
-     //   getChessboard().switchCurrentPlayerColor();
         Command poppedNonCaptureNonPawnCommand = pop (partialListOfExecutedMoves);
+        log.debug("poppedNonCaptureNonPawnCommand: {}", poppedNonCaptureNonPawnCommand);
         if(poppedNonCaptureNonPawnCommand != null){
             Move moveToUndoFromListOfExecuted = (Move) poppedNonCaptureNonPawnCommand;
             assert moveToUndoFromListOfExecuted.equals(move) :
                     "Move to undo should be the same as move on top of stack of executed moves." ;
-            if (isGameOver()) {
-                log.error("Send 'game over' event to GUI, console, and/or evaluation engine.");
-            }
+    //        if (isGameOver()) {
+    //            log.error("Send 'game over' event to GUI, console, and/or evaluation engine.");
+    //        }
             move.undo (chessboard, localGameStateBeforeMakeMove);
             numberOfNonCaptureNonPawnMoves--;
             log.error("Decrementing numberOfNonCaptureNonPawnMoves counter to {}.", numberOfNonCaptureNonPawnMoves);
@@ -705,13 +706,13 @@ public class ChessGame {
             commandHistory.add (move + " undone");
         } else {
             commandHistory.add ("Undo not possible.");
-            log.debug("There is no move to undo.");
+            log.error("There is no move to undo.");
         }
     }
 
-    public void checkGameOver(Board chessboard, Long zobristKey) {
+    public void checkGameOver(List<Move> legalMovesForColor, Board chessboard, Long zobristKey) {
         log.error("Looking for checkmates, stalemates, and different kinds of draws...");
-        List<Move> legalMovesForColor = getLegalMovesForColor(chessboard.getCurrentPlayerColor());
+      //  List<Move> legalMovesForColor = getLegalMovesForColor(chessboard.getCurrentPlayerColor());
         if (legalMovesForColor.isEmpty()) {
             if (chessboard.isPlayerInCheck(chessboard.getCurrentPlayerColor())) {
                 gameResult = new GameResult(PlayerColor.getOpponentColor(chessboard.getCurrentPlayerColor()),

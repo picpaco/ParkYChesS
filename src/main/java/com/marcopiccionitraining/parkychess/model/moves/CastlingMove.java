@@ -88,8 +88,10 @@ public class CastlingMove extends Move {
         Rook rook = (Rook) chessboard.getPiece(getRookToPosition());
         King king = chessboard.getKing(rook.getColor());
         chessboard.setPiece(king, getFrom());
+        king.setFlaggedAsHavingAlreadyMoved(localGameState.isKingFlaggedAsHavingAlreadyMoved());
         chessboard.setEmpty(getTo());
         chessboard.setPiece(rook, rookFromPosition);
+        rook.setFlaggedAsHavingAlreadyMoved(localGameState.isRookFlaggedAsHavingAlreadyMoved());
         chessboard.setEmpty(rookToPosition);
         chessboard.setBlackKingsideCastlingPossibleFromFEN(localGameState.isBlackKingsideCastlingPossible());
         chessboard.setBlackQueensideCastlingPossibleFromFEN(localGameState.isBlackQueensideCastlingPossible());
@@ -124,6 +126,7 @@ public class CastlingMove extends Move {
         Position firstCastlingKingStep = getFrom().stepTowardsDirection(kingCastlingSide);
         StandardMove kingStep1 = new StandardMove(getFrom(), firstCastlingKingStep);
         kingStep1.execute(chessboard);
+        LocalGameState localGameState2 = new LocalGameState(chessboard);
         if (chessboard.isPlayerInCheck(kingColor)) {
             log.error("{} is illegal because {} would be in check while passing over the first square of the castling path.",
                     getName(), kingColor);
@@ -137,7 +140,7 @@ public class CastlingMove extends Move {
         if (chessboard.isPlayerInCheck(kingColor)) {
             log.error("{} is illegal because {} would be in check after performing the second castling step of the path.",
                     getName(), kingColor);
-            kingStep2.undo(chessboard, localGameState1);
+            kingStep2.undo(chessboard, localGameState2);
             kingStep1.undo(chessboard, localGameState1);
             return false;
         }
@@ -149,7 +152,7 @@ public class CastlingMove extends Move {
             return false;
         }
         rookMove.undo(chessboard, localGameState1);
-        kingStep2.undo(chessboard, localGameState1);
+        kingStep2.undo(chessboard, localGameState2);
         kingStep1.undo(chessboard, localGameState1);
         log.error("{} is legal.", getName());
         return true;

@@ -30,7 +30,10 @@ public class LocalGameState {
     private final Piece pieceCapturedLast;
 
     @Getter
-    private final boolean isPieceFlaggedAsHavingAlreadyMoved;
+    private boolean isKingFlaggedAsHavingAlreadyMoved;
+
+    @Getter
+    private boolean isRookFlaggedAsHavingAlreadyMoved;
 
     @Getter
     private final boolean isBlackKingsideCastlingPossible;
@@ -61,23 +64,14 @@ public class LocalGameState {
             pieceMovedLast = chessboard.getPiece(chessboard.getLastExecutedMove().getTo());
         }
         pieceCapturedLast = chessboard.getLastCapturedPiece();
-        isPieceFlaggedAsHavingAlreadyMoved = chessboard.isPieceMovedLastFlaggedAsHavingAlreadyMoved();
+        isKingFlaggedAsHavingAlreadyMoved = chessboard.isPieceMovedLastFlaggedAsHavingAlreadyMoved();
+        isRookFlaggedAsHavingAlreadyMoved = chessboard.isPieceMovedLastFlaggedAsHavingAlreadyMoved();
         isBlackKingsideCastlingPossible = chessboard.isBlackKingsideCastlingPossibleFromFEN();
         isBlackQueensideCastlingPossible = chessboard.isBlackQueensideCastlingPossibleFromFEN();
         isWhiteKingsideCastlingPossible = chessboard.isWhiteKingsideCastlingPossibleFromFEN();
         isWhiteQueensideCastlingPossible = chessboard.isWhiteQueensideCastlingPossibleFromFEN();
         pawnSkippedPosition = chessboard.getPawnSkippedPosition(chessboard.getCurrentPlayerColor());
         halfMoveCounter = chessboard.getHalfMoveCounter();
-     //   zobristKey = ZobristKeyProvider.getZobristHash(this);
-     /*   if (chessboard.containsZobristKey(zobristKey)) {
-            int numberOfOccurrences = chessboard.getZobristValue(zobristKey);
-            log.error("The current position {} was already reached {} times.", chessboard, numberOfOccurrences);
-            numberOfOccurrences++;
-            chessboard.saveZobristEntry(zobristKey, numberOfOccurrences);
-        } else {
-            log.error("The current position {} was never reached before.", chessboard);
-            chessboard.saveZobristEntry(zobristKey, 1);
-        }*/
     }
 
     public boolean isBlackToMove() {
@@ -93,7 +87,7 @@ public class LocalGameState {
         if (!(o instanceof LocalGameState that)) return false;
         return
                 Objects.equals(piecesPositions, that.piecesPositions) &&
-                //        Objects.deepEquals(currentPlayerColor, that.currentPlayerColor) &&
+                        Objects.equals(currentPlayerColor, that.currentPlayerColor) &&
                    //     Objects.deepEquals(pieceMovedLast, that.pieceMovedLast) &&
                         Objects.deepEquals(pieceCapturedLast, that.pieceCapturedLast) &&
                         isBlackKingsideCastlingPossible == that.isBlackKingsideCastlingPossible &&
@@ -108,7 +102,7 @@ public class LocalGameState {
     @Override
     public int hashCode() {
         return Objects.hash(piecesPositions, currentPlayerColor, pieceMovedLast,
-                pieceCapturedLast, isPieceFlaggedAsHavingAlreadyMoved,
+                pieceCapturedLast, isKingFlaggedAsHavingAlreadyMoved, isRookFlaggedAsHavingAlreadyMoved,
                 isBlackKingsideCastlingPossible, isWhiteKingsideCastlingPossible,
                 isBlackQueensideCastlingPossible, isWhiteQueensideCastlingPossible,
                 pawnSkippedPosition, halfMoveCounter, zobristKey);
@@ -117,12 +111,14 @@ public class LocalGameState {
     @Override @NonNull
     public String toString(){
         @NonNull StringBuilder result = new StringBuilder("{");
-        result.append("Pieces positions: ").append(piecesPositions);
-        result.append(", move to: ").append(currentPlayerColor);
-        result.append(", last moved piece: ").append(pieceMovedLast != null ? pieceMovedLast : "-");
-        result.append(", last captured piece: ").append(pieceCapturedLast != null ? pieceCapturedLast : "-");
-       // result.append(", piece already moved: ").append(isPieceFlaggedAsHavingAlreadyMoved);
-        result.append(", castle rights: ");
+        result.append("Pieces at ").append(piecesPositions).append("; ");
+        result.append(currentPlayerColor).append(" moves; ");
+        result.append("has piece moved? ");
+        result.append(isKingFlaggedAsHavingAlreadyMoved ? " Yes" : " No; ");
+        result.append(isRookFlaggedAsHavingAlreadyMoved ? " Yes" : " No; ");
+        result.append(pieceMovedLast != null ? pieceMovedLast : "-").append(" was moved last; ");
+        result.append(pieceCapturedLast != null ? pieceCapturedLast : "-").append(" was captured last; ");
+        result.append("\ncastle rights: ");
         if (isBlackKingsideCastlingPossible) {
             result.append('k');
         }
@@ -140,9 +136,8 @@ public class LocalGameState {
             result.append('-');
         }
         result.append("; skip: ").append(pawnSkippedPosition != null ? pawnSkippedPosition.toString() : "- ");
-        result.append("; half moves: ").append(halfMoveCounter);
         result.append("; zobrist key: ").append(zobristKey);
-     //   result.append(" zobrist key: ").append(zobristKey);
+        result.append("; half moves: ").append(halfMoveCounter);
         result.append("}");
         return result.toString();
     }
